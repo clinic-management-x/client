@@ -54,8 +54,9 @@ const DrawerSlideBar = () => {
       onClose={() => {
         dispatch(insertOpenDrawer(false));
       }}
+      sx={{ zIndex: 9999 }}
     >
-      <div className="w-[250px] bg-white dark:bg-[#212121] h-full">
+      <div className="w-[250px]  bg-white dark:bg-[#212121] h-full">
         {slidebarData.map((data) => (
           <div
             key={data.id}

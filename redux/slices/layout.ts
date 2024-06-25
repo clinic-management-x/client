@@ -4,11 +4,13 @@ import { RootState } from "../store";
 interface InitialState {
   selectedTab: string;
   openDrawer: boolean;
+  showMobileSearchBar: boolean;
 }
 
 const initialState: InitialState = {
   selectedTab: "Dashboard",
   openDrawer: false,
+  showMobileSearchBar: false,
 };
 
 export const layoutSlice = createSlice({
@@ -21,14 +23,27 @@ export const layoutSlice = createSlice({
     insertOpenDrawer: (state: InitialState, action: PayloadAction<any>) => {
       state.openDrawer = action.payload;
     },
+    insertShowMobileSearchBar: (
+      state: InitialState,
+      action: PayloadAction<any>
+    ) => {
+      state.showMobileSearchBar = action.payload;
+    },
   },
 });
 
-export const { insertSelectedTab, insertOpenDrawer } = layoutSlice.actions;
+export const {
+  insertSelectedTab,
+  insertOpenDrawer,
+  insertShowMobileSearchBar,
+} = layoutSlice.actions;
 
 export const getSelectedTab = (state: RootState) =>
   state.layoutSlice.selectedTab;
 
 export const getOpenDrawer = (state: RootState) => state.layoutSlice.openDrawer;
+
+export const getShowMobileSearchBar = (state: RootState) =>
+  state.layoutSlice.showMobileSearchBar;
 
 export default layoutSlice.reducer;

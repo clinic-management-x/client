@@ -9,7 +9,7 @@ const ThemeSwitcherButton = () => {
   const currentTheme = theme === "system" ? systemTheme : theme;
 
   return (
-    <div className="absolute right-20 md:right-4">
+    <div className="fixed right-20 md:right-4">
       {currentTheme === "dark" ? (
         <div
           onClick={() => setTheme("light")}

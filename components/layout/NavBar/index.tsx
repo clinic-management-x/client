@@ -7,7 +7,7 @@ import styled from "styled-components";
 
 const NavBar = () => {
   return (
-    <div className="w-full border-b border-gray-300 dark:border-black h-[80px] bg-white dark:bg-black">
+    <div className="w-full border-b border-gray-300 z-[999] dark:border-black h-[80px] fixed bg-white dark:bg-black">
       <div className="mt-4">
         {" "}
         <ThemeSwitcherButton />
