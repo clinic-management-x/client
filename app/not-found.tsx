@@ -1,6 +1,6 @@
 "use client";
 import PrimaryButton from "@/components/buttons/PrimaryButton";
-import { redirect, useRouter } from "next/navigation";
+import { redirect, useRouter, useSearchParams } from "next/navigation";
 
 export default function NotFound() {
   const router = useRouter();

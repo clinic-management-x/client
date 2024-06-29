@@ -11,10 +11,12 @@ import {
 import storage from "redux-persist/lib/storage";
 import userSlice from "./slices/user";
 import layoutSlice from "./slices/layout";
+import doctorSlice from "./slices/doctors";
 
 const reducer = combineReducers({
   userSlice: userSlice,
   layoutSlice: layoutSlice,
+  doctorSlice: doctorSlice,
 });
 
 const persistConfig = {

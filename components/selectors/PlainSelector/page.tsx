@@ -6,13 +6,15 @@ interface DataItem {
   _id?: string; // This allows _id to be either string or number
   name: string;
 }
+
 interface Props<T extends DataItem, S> {
   dataArr: T[];
   title: string;
   handleChange: (e: any, value: any) => void;
   selectedValue: S;
 }
-const BasicSelector = <T extends DataItem, S>({
+
+const PlainSelector = <T extends DataItem, S>({
   dataArr,
   title,
   handleChange,
@@ -21,10 +23,10 @@ const BasicSelector = <T extends DataItem, S>({
   const { theme } = useTheme();
   return (
     <div>
-      <FormControl sx={{ m: "auto", minWidth: 150 }}>
+      <FormControl fullWidth>
         <InputLabel
           id="demo-simple-select-helper-label"
-          className=" text-primaryBlue-300"
+          className="text-gray-500 dark:text-[#D1D5DB]"
         >
           {title}
         </InputLabel>
@@ -35,22 +37,27 @@ const BasicSelector = <T extends DataItem, S>({
           onChange={(e, value: any) => {
             handleChange(e, value?.props?.children);
           }}
-          size="small"
           className=""
           sx={{
             color: theme === "dark" ? "#D1D5DB" : "#6B7280",
             ".MuiOutlinedInput-notchedOutline": {
-              borderColor: "#0F80AA",
+              borderColor: "#9CA3AF",
             },
             "&:hover .MuiOutlinedInput-notchedOutline": {
-              borderColor: "#0096c7",
+              borderColor: "#9CA3AF",
+            },
+            "&:focused .MuiOutlinedInput-notchedOutline": {
+              borderColor: "#9CA3AF",
+            },
+            ".MuiSvgIcon-root ": {
+              fill: "#9CA3AF !important",
             },
           }}
         >
-          <MenuItem value="All">
-            <em>All</em>
-          </MenuItem>
-          {dataArr?.map((data, index) => (
+          {/* <MenuItem value="">
+            <em>None</em>
+          </MenuItem> */}
+          {dataArr.map((data, index) => (
             <MenuItem key={index} value={data._id}>
               {data.name}
             </MenuItem>
@@ -61,4 +68,4 @@ const BasicSelector = <T extends DataItem, S>({
   );
 };
 
-export default BasicSelector;
+export default PlainSelector;
