@@ -27,19 +27,20 @@ import dayjs, { Dayjs } from "dayjs";
 import { uploadFile } from "@/datafetch/fileupload/upload.api";
 import toast from "react-hot-toast";
 import BasicDoctorInfo from "../BasicInfo/page";
+import { calculateMinutes, calculateTime } from "@/utils/calculations";
 
 interface Props {
   open: boolean;
   handleClose: () => void;
 }
-const days = [
-  { name: "Monday", id: 0 },
-  { name: "Tuesday", id: 1 },
-  { name: "Wednesday", id: 2 },
-  { name: "Thursday", id: 3 },
-  { name: "Friday", id: 4 },
-  { name: "Saturday", id: 5 },
-  { name: "Sunday", id: 6 },
+const days: { name: string; _id?: number }[] = [
+  { name: "Monday", _id: 0 },
+  { name: "Tuesday", _id: 1 },
+  { name: "Wednesday", _id: 2 },
+  { name: "Thursday", _id: 3 },
+  { name: "Friday", _id: 4 },
+  { name: "Saturday", _id: 5 },
+  { name: "Sunday", _id: 6 },
 ];
 const defaultInfo = {
   name: "",
@@ -52,14 +53,26 @@ const defaultInfo = {
   mobile: "",
   doctorFee: 0,
   email: "",
-  avatarUrl: "",
+};
+
+const defaultNewSchedule = {
+  _id: 0,
+  startDay: 0,
+  endDay: 0,
+  startTime: 0,
+  endTime: 0,
 };
 
 const CreateDoctorDialog = ({ open, handleClose }: Props) => {
   const [previewUrl, setPreviewUrl] = useState("");
   const [showTimeSelector, setShowTimeSelector] = useState(false);
-  const [basicDoctorInfo, setBasicDoctorInfo] = useState(defaultInfo);
-
+  const [basicDoctorInfo, setBasicDoctorInfo] =
+    useState<DoctorType>(defaultInfo);
+  const [newSchedule, setNewSchedule] =
+    useState<ScheduleType>(defaultNewSchedule);
+  const [schedules, setSchedules] = useState<ScheduleType[]>([]);
+  const [startTime, setStartTime] = useState<Dayjs | null>(dayjs());
+  const [endTime, setEndTime] = useState<Dayjs | null>(dayjs());
   const handleFileDrop = useCallback(async (acceptedFiles: Blob[]) => {
     const formData = new FormData();
     formData.append("file", acceptedFiles[0]);
@@ -141,13 +154,25 @@ const CreateDoctorDialog = ({ open, handleClose }: Props) => {
               <Box className="flex flex-col md:flex-row md:justify-between w-full">
                 <Box className="flex flex-col space-y-2">
                   <PlainSelector
-                    selectedValue={""}
-                    handleChange={() => {}}
+                    selectedValue={newSchedule.startDay}
+                    handleChange={(e, value) => {
+                      setNewSchedule({
+                        ...newSchedule,
+                        startDay: +e.target.value,
+                      });
+                    }}
                     dataArr={days}
                     title="Start Day"
                   />
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <CustomTimePicker />
+                    <CustomTimePicker
+                      selectedValue={startTime}
+                      handleChange={(value) => {
+                        const time = calculateMinutes(value);
+                        setNewSchedule({ ...newSchedule, startTime: time });
+                        setStartTime(value);
+                      }}
+                    />
                   </LocalizationProvider>
                 </Box>
                 <Box className="flex items-center justify-center my-2 md:my-0 dark:text-gray-400 text-gray-500">
@@ -155,13 +180,25 @@ const CreateDoctorDialog = ({ open, handleClose }: Props) => {
                 </Box>
                 <Box className="flex flex-col space-y-2">
                   <PlainSelector
-                    selectedValue={""}
-                    handleChange={() => {}}
+                    selectedValue={newSchedule.endDay}
+                    handleChange={(e) => {
+                      setNewSchedule({
+                        ...newSchedule,
+                        endDay: +e.target.value,
+                      });
+                    }}
                     dataArr={days}
                     title="End Day"
                   />
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <CustomTimePicker />
+                    <CustomTimePicker
+                      selectedValue={endTime}
+                      handleChange={(value) => {
+                        const time = calculateMinutes(value);
+                        setNewSchedule({ ...newSchedule, endTime: time });
+                        setEndTime(value);
+                      }}
+                    />
                   </LocalizationProvider>
                 </Box>
               </Box>
@@ -169,30 +206,56 @@ const CreateDoctorDialog = ({ open, handleClose }: Props) => {
                 <CrossButton
                   handleClick={() => {
                     setShowTimeSelector(false);
+                    setStartTime(null);
+                    setEndTime(null);
+                    setNewSchedule(defaultNewSchedule);
                   }}
                 />
-                <CheckButton handleClick={() => {}} />
+                <CheckButton
+                  handleClick={() => {
+                    setSchedules([
+                      ...schedules,
+                      { ...newSchedule, _id: schedules.length + 1 },
+                    ]);
+                    setStartTime(null);
+                    setEndTime(null);
+                    setNewSchedule(defaultNewSchedule);
+                    setShowTimeSelector(false);
+                  }}
+                />
               </Box>
             </Box>
           ) : (
             <></>
           )}
+          {schedules.map((schedule, index) => (
+            <Box
+              key={index}
+              className="mt-2 w-full md:w-[80%] relative h-auto md:h-[50px] md:p-7 md:ml-4 bg-stone-100 dark:bg-[#3C3C3C] dark:border-gray-400 border-[1px] rounded-lg border-gray-300 flex flex-col md:flex-row items-center justify-between space-y-2 md:space-y-0"
+            >
+              <Typography className="font-bold text-gray-500 dark:text-gray-400">
+                {days.find((day) => day._id === schedule.startDay)?.name},{" "}
+                {calculateTime(schedule.startTime)}
+              </Typography>
+              <Typography className="text-[15px text-gray-500 dark:text-gray-400">
+                To
+              </Typography>
+              <Typography className="font-bold text-gray-500 dark:text-gray-400">
+                {days.find((day) => day._id === schedule.endDay)?.name},{" "}
+                {calculateTime(schedule.endTime)}
+              </Typography>
 
-          <Box className="mt-2 w-full md:w-[80%] relative h-auto md:h-[50px] md:p-7 md:ml-4 bg-stone-100 dark:bg-[#3C3C3C] dark:border-gray-400 border-[1px] rounded-lg border-gray-300 flex flex-col md:flex-row items-center justify-between space-y-2 md:space-y-0">
-            <Typography className="font-bold text-gray-500 dark:text-gray-400">
-              Tuesday, 5pm
-            </Typography>
-            <Typography className="text-[15px text-gray-500 dark:text-gray-400">
-              To
-            </Typography>
-            <Typography className="font-bold text-gray-500 dark:text-gray-400">
-              Tuesday, 5pm
-            </Typography>
-
-            <Box className=" flex items-center absolute  bottom-0 right-0 md:bottom-0 md:right-0 md:relative">
-              <TrashButton handleClick={() => {}} />
+              <Box className=" flex items-center absolute  bottom-0 right-0 md:bottom-0 md:right-0 md:relative">
+                <TrashButton
+                  handleClick={() => {
+                    setSchedules(
+                      schedules.filter((data) => data._id !== schedule._id)
+                    );
+                  }}
+                />
+              </Box>
             </Box>
-          </Box>
+          ))}
         </Box>
       </DialogContent>
       <DialogActions className="dark:bg-[#3C3C3C] w-full">

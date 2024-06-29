@@ -3,7 +3,7 @@ import { useTheme } from "next-themes";
 import React from "react";
 
 interface DataItem {
-  _id?: string; // This allows _id to be either string or number
+  _id?: string | number; // This allows _id to be either string or number
   name: string;
 }
 

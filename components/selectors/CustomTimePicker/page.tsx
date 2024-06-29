@@ -1,13 +1,19 @@
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
-import dayjs from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 import { useTheme } from "next-themes";
 import React from "react";
 
-const CustomTimePicker = () => {
+interface Props {
+  handleChange: (newValue: Dayjs | null) => void;
+  selectedValue: Dayjs | null;
+}
+
+const CustomTimePicker = ({ handleChange, selectedValue }: Props) => {
   const { theme } = useTheme();
   return (
     <TimePicker
       defaultValue={dayjs("2022-04-17T15:30")}
+      onChange={(newValue) => handleChange(newValue)}
       slotProps={{
         popper: {
           sx: {

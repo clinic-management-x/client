@@ -26,7 +26,7 @@ export const createDoctor = async (
       mobile: string;
       doctorFee: number;
       email: string;
-      avatarUrl: string;
+      avatarUrl?: string;
     };
   }
 ) => {

@@ -19,7 +19,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
         <SWRConfig
           value={{
             onError: (error, key) => {
-              if (error.response.status === 404) {
+              if (error?.response?.status === 404) {
                 router.push("/not-found");
               }
             },
