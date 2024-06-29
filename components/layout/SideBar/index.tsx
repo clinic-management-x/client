@@ -64,7 +64,7 @@ const SideBar = () => {
   const selectedTab = useSelector(getSelectedTab);
 
   return (
-    <div className=" min-w-[225px]  border-gray-300 dark:border-black border-r-[1px] h-screen pt-2 bg-white dark:bg-[#171717]">
+    <div className=" max-w-[225px] lg:min-w-[275px]  border-gray-300 dark:border-black border-r-[1px] fixed h-screen pt-2 bg-white dark:bg-[#171717]">
       <div className="h-auto  border-[2px] rounded-lg text-center border-primaryBlue-200  m-2  text-black mb-2">
         <Image src={logo} alt="" width={250} height={200} />
       </div>
@@ -88,7 +88,7 @@ const SideBar = () => {
           </div>
         );
       })}
-      <div className="  text-center absolute bottom-2 pl-14  w-[17%] h-[50px] text-gray-500 ">
+      <div className="  text-center fixed bottom-2 pl-14  w-[17%] h-[50px] text-gray-500 ">
         <Link
           href={"/login"}
           className="flex items-center hover:text-primaryBlue-300 hover:text-lg"

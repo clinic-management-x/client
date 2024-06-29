@@ -14,7 +14,7 @@ const config: Config = {
         primaryBlue: {
           100: "#ade8f4",
           200: "#48cae4",
-          300: "#0096c7",
+          300: "#0F80AA",
           400: "#0077b6",
           700: "#03045e",
         },
