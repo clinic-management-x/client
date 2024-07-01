@@ -14,16 +14,15 @@ import {
 } from "@/redux/slices/layout";
 import config from "@/utils/config";
 import { doctorEndPoint } from "@/utils/endpoints";
-import { Divider, IconButton, Skeleton, Typography } from "@mui/material";
+import { IconButton } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { FaTrashAlt } from "react-icons/fa";
 import { FiSearch } from "react-icons/fi";
 import { RxCross1 } from "react-icons/rx";
 import { useDispatch, useSelector } from "react-redux";
 import useSWR from "swr";
 import SkeletonFrame from "./skeleton";
-import Image from "next/image";
-const defaultAvatar = require("../../../public/defaultAvatar.jpg");
+import DoctorCard from "./doctorcard";
+import Link from "next/link";
 
 const DisplayDoctors = () => {
   const dispatch = useDispatch();
@@ -32,6 +31,7 @@ const DisplayDoctors = () => {
   const [doctors, setDoctors] = useState([]);
   const [selectedFilter, setSelectedFilter] = useState("All");
   const [typeSearch, setTypeSearch] = useState("");
+
   const { data, isLoading, isValidating } = useSWR(
     `${config.apiBaseUrl}/${doctorEndPoint}`,
     getDoctors
@@ -129,33 +129,9 @@ const DisplayDoctors = () => {
         ) : (
           doctors?.map((doctor: DoctorType, index: number) => {
             return (
-              <div
-                className=" w-full h-auto bg-gray-100 relative dark:bg-[#3C3C3C] rounded-lg flex flex-col"
-                key={doctor._id}
-              >
-                <div className="h-[130px] w-full">
-                  <div className="w-[100px] h-[100px] object-scale-down m-auto mt-2 rounded-full">
-                    <Image
-                      src={doctor.avatarUrl ? doctor.avatarUrl : defaultAvatar}
-                      alt=""
-                      width={150}
-                      height={150}
-                      className="w-[100px] h-[100px] rounded-full"
-                    />
-                  </div>
-
-                  <IconButton className="absolute bottom-0 right-0">
-                    <FaTrashAlt className="text-error" size={18} />
-                  </IconButton>
-                </div>
-                <Divider />
-                <div className="flex flex-col ml-2 md:ml-6 text-gray-600 dark:text-gray-300 space-y-3 my-3">
-                  <Typography>{doctor.name}</Typography>
-                  <Typography>{doctor.speciality.name}</Typography>
-
-                  <Typography>{doctor.mobile}</Typography>
-                </div>
-              </div>
+              <Link key={index} href={`/backoffice/doctors/${doctor._id}`}>
+                <DoctorCard doctor={doctor} key={index} />
+              </Link>
             );
           })
         )}

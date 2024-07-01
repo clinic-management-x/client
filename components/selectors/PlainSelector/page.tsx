@@ -57,7 +57,7 @@ const PlainSelector = <T extends DataItem, S>({
           {/* <MenuItem value="">
             <em>None</em>
           </MenuItem> */}
-          {dataArr.map((data, index) => (
+          {dataArr?.map((data, index) => (
             <MenuItem key={index} value={data._id}>
               {data.name}
             </MenuItem>

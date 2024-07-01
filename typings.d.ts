@@ -30,4 +30,5 @@ interface DoctorType {
   };
   schedules?: ScheduleType[];
   _id?: string;
+  __v?: string;
 }

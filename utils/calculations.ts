@@ -1,9 +1,9 @@
 import dayjs, { Dayjs } from "dayjs";
 
-export const calculateMinutes = (value: Dayjs | null) => {
+export const calculateMinutes = (value: Dayjs | null, day: number) => {
   const hour = dayjs(value).format("H");
   const minutes = dayjs(value).minute();
-  const totalMinutes = +hour * 60 + minutes;
+  const totalMinutes = day * 1440 + +hour * 60 + minutes;
   return totalMinutes;
 };
 

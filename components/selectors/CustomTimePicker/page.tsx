@@ -1,3 +1,4 @@
+import { calculateMinutes } from "@/utils/calculations";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import dayjs, { Dayjs } from "dayjs";
 import { useTheme } from "next-themes";
@@ -10,9 +11,10 @@ interface Props {
 
 const CustomTimePicker = ({ handleChange, selectedValue }: Props) => {
   const { theme } = useTheme();
+
   return (
     <TimePicker
-      defaultValue={dayjs("2022-04-17T15:30")}
+      defaultValue={selectedValue}
       onChange={(newValue) => handleChange(newValue)}
       slotProps={{
         popper: {
