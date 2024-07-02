@@ -21,6 +21,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import useSWR from "swr";
 import useSWRMutation from "swr/mutation";
+import { current } from "@reduxjs/toolkit";
 
 const EditDoctorPage = ({ id }: { id: string }) => {
   const [doctor, setDoctor] = useState<DoctorType>(defaultInfo);
@@ -32,7 +33,8 @@ const EditDoctorPage = ({ id }: { id: string }) => {
   const [startTime, setStartTime] = useState<Dayjs | null>(null);
   const [endTime, setEndTime] = useState<Dayjs | null>(null);
   const [showEditButtonBox, setShowEditButtonBox] = useState(false);
-  const { data, isLoading, isValidating } = useSWR(
+  const [dropNewUrl, setDropNewUrl] = useState(false);
+  const { data, isLoading, isValidating, mutate } = useSWR(
     `${config.apiBaseUrl}/${doctorEndPoint}/${id}`,
     getDoctor
   );
@@ -44,35 +46,28 @@ const EditDoctorPage = ({ id }: { id: string }) => {
 
   useEffect(() => {
     if (data) {
-      setDoctor({ ...data, mobile: data.mobile.substring("4") });
-      setPreviewUrl(data.avatarUrl);
+      console.log("tick");
+      const doctordata = { ...data, mobile: data.mobile.substring(4) };
+      !dropNewUrl ? setPreviewUrl(data.avatarUrl) : "";
       setSchedules(data.schedules);
+      delete doctordata.avatarUrl;
+      setDoctor(doctordata);
     }
   }, [data]);
 
-  useEffect(() => {
-    if (doctor && data) {
-      setShowEditButtonBox(
-        !_.isEqual(
-          {
-            ...doctor,
-            mobile: "+959" + doctor.mobile,
-          },
-          data
-        )
-      );
-    }
-  }, [doctor]);
-
   const handleFileDrop = useCallback(async (acceptedFiles: Blob[]) => {
+    setDropNewUrl(true);
     const formData = new FormData();
     formData.append("file", acceptedFiles[0]);
     formData.append("purpose", "DOCTOR_AVATAR");
-    const data = await uploadFile(formData);
+    const filedata = await uploadFile(formData);
+    mutate();
     setShowEditButtonBox(true);
-    setPreviewUrl(data.presignedUrl);
-    setDoctor({ ...doctor, avatarUrl: data.url });
+    setPreviewUrl(filedata.presignedUrl);
+    console.log(">>>", doctor, { ...doctor, avatarUrl: filedata.url });
+    setDoctor({ ...doctor, avatarUrl: filedata.url });
   }, []);
+  console.log("doc", doctor);
 
   const clearScheduleData = () => {
     setStartTime(null);
@@ -83,21 +78,13 @@ const EditDoctorPage = ({ id }: { id: string }) => {
 
   const handleUpdate = async () => {
     try {
-      const doctorData = {
-        ...doctor,
-        mobile: "+959" + doctor.mobile,
-        speciality: doctor.speciality._id,
-      };
-      delete doctorData["schedules"];
-      delete doctorData["_id"];
-      delete doctorData["__v"];
-      delete doctorData["avatarUrl"];
-      delete doctorData["clinic"];
-      const response = await trigger(doctorData);
+      const response = await trigger(doctor);
+
       if (response) {
+        mutate();
         toast.success("Successfully added.");
         setShowEditButtonBox(false);
-        setDoctor(response);
+        setDoctor({ ...response, mobile: data.mobile.substring("4") });
         setPreviewUrl(response.avatarUrl);
       }
     } catch (error) {
@@ -123,6 +110,7 @@ const EditDoctorPage = ({ id }: { id: string }) => {
         <BasicDoctorInfo
           basicDoctorInfo={doctor}
           setBasicDoctorInfo={setDoctor}
+          setShowEditBox={setShowEditButtonBox}
         />
       </Box>
       <Box
@@ -141,9 +129,11 @@ const EditDoctorPage = ({ id }: { id: string }) => {
             },
           }}
           onClick={() => {
-            setShowEditButtonBox(false);
             setPreviewUrl(data.avatarUrl);
-            setDoctor({ ...data, mobile: data.mobile.substring("4") });
+            const doctordata = { ...data, mobile: data.mobile.substring(4) };
+            delete doctordata.avatarUrl;
+            setDoctor(doctordata);
+            setShowEditButtonBox(false);
           }}
         >
           Cancel

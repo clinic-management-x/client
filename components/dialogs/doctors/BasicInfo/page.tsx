@@ -21,9 +21,14 @@ import useSWR from "swr";
 interface Props {
   basicDoctorInfo: DoctorType;
   setBasicDoctorInfo: (data: DoctorType) => void;
+  setShowEditBox?: (data: boolean) => void;
 }
 
-const BasicDoctorInfo = ({ basicDoctorInfo, setBasicDoctorInfo }: Props) => {
+const BasicDoctorInfo = ({
+  basicDoctorInfo,
+  setBasicDoctorInfo,
+  setShowEditBox,
+}: Props) => {
   const { data: specialities } = useSWR(
     `${config.apiBaseUrl}/${doctorEndPoint}/specialities`,
     getSpecialities
@@ -41,6 +46,7 @@ const BasicDoctorInfo = ({ basicDoctorInfo, setBasicDoctorInfo }: Props) => {
                 ...basicDoctorInfo,
                 name: e.target.value,
               });
+              setShowEditBox && setShowEditBox(true);
             }}
           />
         </div>
@@ -55,6 +61,7 @@ const BasicDoctorInfo = ({ basicDoctorInfo, setBasicDoctorInfo }: Props) => {
                   ...basicDoctorInfo,
                   dateOfBirth: newValue?.toISOString() as string,
                 });
+                setShowEditBox && setShowEditBox(true);
               }}
             />
           </LocalizationProvider>
@@ -83,6 +90,7 @@ const BasicDoctorInfo = ({ basicDoctorInfo, setBasicDoctorInfo }: Props) => {
                         ...basicDoctorInfo,
                         gender: data.id,
                       });
+                      setShowEditBox && setShowEditBox(true);
                     }}
                   />
                 }
@@ -103,6 +111,7 @@ const BasicDoctorInfo = ({ basicDoctorInfo, setBasicDoctorInfo }: Props) => {
                 ...basicDoctorInfo,
                 mobile: e.target.value,
               });
+              setShowEditBox && setShowEditBox(true);
             }}
           />
         </div>
@@ -115,6 +124,7 @@ const BasicDoctorInfo = ({ basicDoctorInfo, setBasicDoctorInfo }: Props) => {
                 ...basicDoctorInfo,
                 email: e.target.value,
               });
+              setShowEditBox && setShowEditBox(true);
             }}
           />
         </div>
@@ -133,6 +143,7 @@ const BasicDoctorInfo = ({ basicDoctorInfo, setBasicDoctorInfo }: Props) => {
                   name: value,
                 },
               });
+              setShowEditBox && setShowEditBox(true);
             }}
             selectedValue={basicDoctorInfo.speciality._id}
           />
@@ -147,6 +158,7 @@ const BasicDoctorInfo = ({ basicDoctorInfo, setBasicDoctorInfo }: Props) => {
                 ...basicDoctorInfo,
                 doctorFee: +e.target.value,
               });
+              setShowEditBox && setShowEditBox(true);
             }}
           />
         </div>

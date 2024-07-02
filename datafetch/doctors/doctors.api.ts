@@ -48,19 +48,20 @@ export const updateDoctor = async (
   {
     arg,
   }: {
-    arg: {
-      name: string;
-      dateOfBirth: string;
-      gender: string;
-      speciality: string;
-      mobile: string;
-      doctorFee: number;
-      email: string;
-      avatarUrl?: string;
-    };
+    arg: DoctorType;
   }
 ) => {
-  console.log("arg", arg);
-  const response = await baseApi.patch(url, arg);
+  const doctorData = {
+    ...arg,
+    mobile: "+959" + arg.mobile,
+    speciality: arg.speciality._id,
+  };
+  delete doctorData["schedules"];
+  delete doctorData["_id"];
+  delete doctorData["__v"];
+  delete doctorData["clinic"];
+
+  const response = await baseApi.patch(url, doctorData);
+
   return response.data;
 };
