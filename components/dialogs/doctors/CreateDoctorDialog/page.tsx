@@ -15,10 +15,10 @@ import toast from "react-hot-toast";
 import BasicDoctorInfo from "../BasicInfo/page";
 import { calculateMinutes } from "@/utils/calculations";
 import { sortSchedules } from "@/utils/sorting";
-import { checkInvalidSchedule } from "@/utils/schedule";
 import CreateScheduleDialog from "../CreateScheduleDialog/page";
 import ScheduleListItem from "../ScheduleListItem/ScheduleListItem";
 import { defaultInfo, defaultNewSchedule } from "@/utils/staticData";
+import { areSchedulesOverlapping } from "@/utils/schedule";
 
 interface Props {
   open: boolean;
@@ -54,10 +54,8 @@ const CreateDoctorDialog = ({ open, handleClose }: Props) => {
     try {
       const schedulesArr = schedules?.map((data) => {
         return {
-          startTime: data.startTime,
-          endTime: data.endTime,
-          startDay: data.startDay,
-          endDay: data.endDay,
+          start: data.start,
+          end: data.end,
         };
       });
 
@@ -144,36 +142,36 @@ const CreateDoctorDialog = ({ open, handleClose }: Props) => {
                 setNewSchedule({
                   ...newSchedule,
                   startDay: +e.target.value,
-                  startTime: calculateMinutes(startTime, +e.target.value),
+                  start: calculateMinutes(startTime, +e.target.value),
                 });
               }}
               handleEndDayChange={(e) => {
                 setNewSchedule({
                   ...newSchedule,
                   endDay: +e.target.value,
-                  endTime: calculateMinutes(endTime, +e.target.value),
+                  end: calculateMinutes(endTime, +e.target.value),
                 });
               }}
               handleStartTimeChange={(value) => {
                 setNewSchedule({
                   ...newSchedule,
-                  startTime: calculateMinutes(value, newSchedule.startDay),
+                  start: calculateMinutes(value, Number(newSchedule.startDay)),
                 });
                 setStartTime(value);
               }}
               handleEndTimeChange={(value) => {
                 setNewSchedule({
                   ...newSchedule,
-                  endTime: calculateMinutes(value, newSchedule.endDay),
+                  end: calculateMinutes(value, Number(newSchedule.endDay)),
                 });
                 setEndTime(value);
               }}
               handleCheck={() => {
-                if (checkInvalidSchedule(newSchedule, schedules)) {
+                if (areSchedulesOverlapping([...schedules, newSchedule])) {
                   return toast.error("Schedules overlapped.");
                 } else if (
                   newSchedule.startDay === newSchedule.endDay &&
-                  newSchedule.startTime > newSchedule.endTime
+                  newSchedule.start > newSchedule.end
                 ) {
                   return toast.error("Start time must be less than end time.");
                 }

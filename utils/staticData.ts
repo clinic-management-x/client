@@ -24,8 +24,8 @@ export const defaultInfo = {
 
 export const defaultNewSchedule = {
   _id: 0,
-  startDay: 0,
+  start: 0,
   endDay: 0,
   startTime: 0,
-  endTime: 0,
+  end: 0,
 };

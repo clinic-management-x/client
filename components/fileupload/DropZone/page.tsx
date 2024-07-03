@@ -40,7 +40,7 @@ const DropZone = ({ previewUrl, handleFileDrop, handleRemove }: Props) => {
           )}
         </Dropzone>
       ) : (
-        <div className=" min-h-[300px] flex items-center justify-center">
+        <div className=" min-h-[300px] md:min-h-[200px] flex items-center justify-center">
           <Image
             src={previewUrl}
             alt=""

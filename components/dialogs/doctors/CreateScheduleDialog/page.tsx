@@ -32,7 +32,7 @@ const CreateScheduleDialog = ({
   handleClose,
 }: Props) => {
   return (
-    <Box className="relative w-full md:w-[80%] border-[1px] mb-1 flex flex-col  justify-around p-2 md:p-4 md:ml-4 dark:bg-[#3C3C3C] dark:border-gray-400 bg-stone-100 rounded-lg border-gray-300">
+    <Box className="relative w-full md:w-[80%] border-[1px] my-2 flex flex-col  justify-around p-2 md:p-4 md:ml-4 dark:bg-[#3C3C3C] dark:border-gray-400 bg-stone-100 rounded-lg border-gray-300">
       <Box className="flex flex-col md:flex-row md:justify-between w-full">
         <Box className="flex flex-col space-y-2">
           <PlainSelector

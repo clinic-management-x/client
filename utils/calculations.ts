@@ -13,3 +13,10 @@ export const calculateTime = (time: number) => {
   const timeData = dayjs().set("hour", hour).set("minute", minutesLeft);
   return timeData.format("h:mm A");
 };
+
+export const calculateDayjs = (time: number) => {
+  const hour = Math.trunc(time / 60);
+  const minutesLeft = time - hour * 60;
+  const timeData = dayjs().set("hour", hour).set("minute", minutesLeft);
+  return timeData;
+};

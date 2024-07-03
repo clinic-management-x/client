@@ -7,10 +7,10 @@ interface SidebarType {
 
 interface ScheduleType {
   _id?: number;
-  startDay: number;
-  startTime: number;
-  endDay: number;
-  endTime: number;
+  startDay?: number;
+  start: number;
+  endDay?: number;
+  end: number;
   clinic?: string;
   doctor?: string;
 }

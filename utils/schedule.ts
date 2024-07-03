@@ -1,28 +1,28 @@
-export const checkInvalidSchedule = (
-  newSchedule: ScheduleType,
-  schedules: ScheduleType[]
-) => {
-  const notValid = schedules.find((schedule) => {
-    if (schedule.startTime < schedule.endTime) {
-      return (
-        (newSchedule.startTime >= schedule.startTime &&
-          newSchedule.endTime <= schedule.endTime) ||
-        (newSchedule.startTime >= schedule.startTime &&
-          newSchedule.startTime <= schedule.endTime) ||
-        (newSchedule.endTime <= schedule.endTime &&
-          newSchedule.endTime >= schedule.startTime)
-      );
-    } else {
-      return (
-        (newSchedule.startTime >= 0 &&
-          newSchedule.startTime <= schedule.endTime) ||
-        (newSchedule.endTime >= 0 && newSchedule.endTime <= schedule.endTime) ||
-        (newSchedule.startTime >= schedule.startTime &&
-          newSchedule.startTime <= 1440 * 7) ||
-        (newSchedule.endTime >= schedule.startTime &&
-          newSchedule.endTime <= 1440 * 7)
-      );
-    }
+export const areSchedulesOverlapping = (schedules: ScheduleType[]) => {
+  const emptySchedule = schedules.find(
+    (schedule) => schedule.start === schedule.end
+  );
+  if (emptySchedule) return true;
+
+  // Should have at most 1 boundary schedule
+  const boundaries = schedules.filter(
+    (schedule) => schedule.start > schedule.end
+  );
+  if (boundaries.length > 1) return true;
+
+  // Make schedules ascending by start
+  schedules.sort((x, y) => {
+    return x.start < y.start ? -1 : 1;
   });
-  return notValid;
+
+  let current = schedules[0];
+  for (let i = 1; i < schedules.length; i++) {
+    const schedule = schedules[i];
+    if (schedule.start < current.end) return true;
+    current = schedule;
+  }
+
+  if (boundaries.length > 0 && schedules[0].start < current.end) return true;
+
+  return false;
 };
