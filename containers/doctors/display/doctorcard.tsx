@@ -23,7 +23,7 @@ const DoctorCard = ({ doctor }: Props) => {
       <Divider />
       <div className="flex flex-col ml-2 md:ml-6 text-gray-600 dark:text-gray-300 space-y-3 my-3">
         <Typography>{doctor.name}</Typography>
-        <Typography>{doctor.speciality.name}</Typography>
+        <Typography>{doctor?.speciality?.name}</Typography>
 
         <Typography>{doctor.mobile}</Typography>
       </div>

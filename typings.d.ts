@@ -6,7 +6,7 @@ interface SidebarType {
 }
 
 interface ScheduleType {
-  _id?: number;
+  _id?: number | string;
   startDay?: number;
   start: number;
   endDay?: number;

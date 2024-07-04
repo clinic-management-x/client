@@ -9,10 +9,20 @@ interface Props {
   schedule: ScheduleType;
   handleRemove: () => void;
   handleEdit?: () => void;
+  edit?: boolean;
 }
-const ScheduleListItem = ({ schedule, handleRemove, handleEdit }: Props) => {
+const ScheduleListItem = ({
+  schedule,
+  handleRemove,
+  handleEdit,
+  edit,
+}: Props) => {
   return (
-    <Box className="mt-2 w-full md:w-[80%] relative h-auto md:h-[50px] md:p-7 md:ml-4 bg-stone-100 dark:bg-[#3C3C3C] dark:border-gray-400 border-[1px] rounded-lg border-gray-300 flex flex-col md:flex-row items-center justify-between space-y-2 md:space-y-0">
+    <Box
+      className={`mt-2 w-full ${
+        edit ? "md:w-[100%] lg:w-[80%] md:pl-2 " : "md:w-[80%]  md:p-7 md:ml-4"
+      }  relative h-auto md:h-[50px] bg-stone-100 dark:bg-[#3C3C3C] dark:border-gray-400 border-[1px] rounded-lg border-gray-300 flex flex-col md:flex-row items-center justify-between space-y-2 md:space-y-0`}
+    >
       <Typography className="font-bold text-gray-500 dark:text-gray-400">
         {
           days.find((day) => day._id === Math.ceil(schedule.start / 1440 - 1))

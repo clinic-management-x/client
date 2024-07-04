@@ -19,6 +19,7 @@ interface Props {
   handleEndTimeChange: (value: Dayjs | null) => void;
   handleClose: () => void;
   handleCheck: () => void;
+  edit?: boolean;
 }
 const CreateScheduleDialog = ({
   newSchedule,
@@ -30,9 +31,14 @@ const CreateScheduleDialog = ({
   handleEndTimeChange,
   handleCheck,
   handleClose,
+  edit,
 }: Props) => {
   return (
-    <Box className="relative w-full md:w-[80%] border-[1px] my-2 flex flex-col  justify-around p-2 md:p-4 md:ml-4 dark:bg-[#3C3C3C] dark:border-gray-400 bg-stone-100 rounded-lg border-gray-300">
+    <Box
+      className={`relative w-full ${
+        edit ? " md:w-[100%] lg:w-[80%]" : " md:w-[80%]  md:p-4 md:ml-4"
+      } border-[1px] my-2 flex flex-col  justify-around p-2 dark:bg-[#3C3C3C] dark:border-gray-400 bg-stone-100 rounded-lg border-gray-300`}
+    >
       <Box className="flex flex-col md:flex-row md:justify-between w-full">
         <Box className="flex flex-col space-y-2">
           <PlainSelector

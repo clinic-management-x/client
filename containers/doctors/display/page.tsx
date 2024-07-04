@@ -32,10 +32,12 @@ const DisplayDoctors = () => {
   const [selectedFilter, setSelectedFilter] = useState("All");
   const [typeSearch, setTypeSearch] = useState("");
 
-  const { data, isLoading, isValidating } = useSWR(
-    `${config.apiBaseUrl}/${doctorEndPoint}`,
-    getDoctors
-  );
+  const {
+    data,
+    isLoading,
+    isValidating,
+    mutate: mutateDoctors,
+  } = useSWR(`${config.apiBaseUrl}/${doctorEndPoint}`, getDoctors);
 
   const { data: specialities } = useSWR(
     `${config.apiBaseUrl}/${doctorEndPoint}/specialities`,

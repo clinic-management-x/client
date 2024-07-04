@@ -65,3 +65,38 @@ export const updateDoctor = async (
 
   return response.data;
 };
+
+export const updateSchedule = async (
+  url: string,
+  { arg }: { arg: ScheduleType }
+) => {
+  const response = await baseApi.patch(url, { start: arg.start, end: arg.end });
+
+  return response.data;
+};
+
+export const createSchedules = async (
+  url: string,
+  { arg }: { arg: { schedules: ScheduleType[]; doctor: string } }
+) => {
+  const payload = {
+    ...arg,
+    schedules: arg.schedules.map((schedule) => {
+      return { start: schedule.start, end: schedule.end };
+    }),
+  };
+  console.log("dfjalksf", payload);
+  const response = await baseApi.post(url, payload);
+
+  return response.data;
+};
+
+export const deleteSchedule = async (url: string) => {
+  const response = await baseApi.delete(url);
+  return response.data;
+};
+
+export const deleteDoctor = async (url: string) => {
+  const response = await baseApi.delete(url);
+  return response.data;
+};

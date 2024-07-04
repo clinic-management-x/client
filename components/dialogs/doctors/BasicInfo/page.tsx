@@ -38,8 +38,8 @@ const BasicDoctorInfo = ({
   const [dob, setDob] = useState<Dayjs | null>(dayjs());
   return (
     <Box
-      className={`w-full md:w-[70%] ${
-        edit ? "md:w-[100%] md:mt-0 lg:mt-2 lg:w-[70%] mt-0" : " mt-4"
+      className={`w-full  ${
+        edit ? "md:w-[100%] md:mt-0 lg:mt-2 lg:w-[70%] mt-0" : "md:w-[70%] mt-4"
       } mr-2`}
     >
       <Box className="  flex flex-col   md:grid md:grid-cols-3 gap-2">
