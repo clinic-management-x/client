@@ -38,7 +38,7 @@ const DeleteDoctorDialog = ({
         <Typography variant="caption" className="my-4">
           To confirm this, type "DELETE".
         </Typography>
-        <Box className="my-4 flex flex-col md:flex-row space-y-2 justify-start items-start  md:items-center md:justify-between">
+        <Box className="my-4 flex flex-col md:flex-row space-y-2 justify-start items-start mb-6  md:items-center md:justify-between">
           <TextField
             value={confirmText}
             onChange={(e) => setConfirmText(e.target.value)}
@@ -47,10 +47,10 @@ const DeleteDoctorDialog = ({
             sx={{
               minWidth: 160,
               height: 40,
-              bgcolor: "#e63946",
+              bgcolor: confirmText !== "DELETE" ? "#E5E5E5" : "#e63946",
               color: "white",
               ":hover": {
-                bgcolor: "#e63946",
+                bgcolor: confirmText !== "DELETE" ? "#E5E5E5" : "#e63946",
                 color: "white",
               },
             }}

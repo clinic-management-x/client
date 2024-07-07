@@ -30,6 +30,7 @@ const config: Config = {
         darkLabel: "#9CA3AF",
         whiteText: "#4B5563",
         whiteLabel: "#6B7280",
+        disableColor: "#E5E5E5",
       },
       screens: {},
       backgroundImage: {},

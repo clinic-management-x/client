@@ -22,7 +22,7 @@ const reducer = combineReducers({
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["userSlice"],
+  whitelist: ["userSlice", "doctorSlice"],
 };
 
 const persistedReducer = persistReducer(persistConfig, reducer);

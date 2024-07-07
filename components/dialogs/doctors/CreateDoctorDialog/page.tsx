@@ -45,7 +45,7 @@ const CreateDoctorDialog = ({ open, handleClose }: Props) => {
     setBasicDoctorInfo({ ...basicDoctorInfo, avatarUrl: data.url });
   }, []);
 
-  const { trigger } = useSWRMutation(
+  const { trigger, isMutating: createMutating } = useSWRMutation(
     `${config.apiBaseUrl}/${doctorEndPoint}`,
     createDoctor
   );
@@ -74,7 +74,6 @@ const CreateDoctorDialog = ({ open, handleClose }: Props) => {
         handleClose();
       }
     } catch (error) {
-      console.log("error", error);
       toast.error("Something went wrong.");
     }
   };
@@ -84,6 +83,12 @@ const CreateDoctorDialog = ({ open, handleClose }: Props) => {
     setNewSchedule(defaultNewSchedule);
     setShowTimeSelector(false);
   };
+  const closeDialog = () => {
+    setBasicDoctorInfo(defaultInfo);
+    setSchedules([]);
+    handleClose();
+    setPreviewUrl("");
+  };
 
   return (
     <Dialog
@@ -91,24 +96,14 @@ const CreateDoctorDialog = ({ open, handleClose }: Props) => {
       maxWidth="md"
       scroll="paper"
       open={open}
-      onClose={() => {
-        setBasicDoctorInfo(defaultInfo);
-        setSchedules([]);
-        handleClose;
-      }}
+      onClose={closeDialog}
     >
       <DialogContent
         dividers={true}
         className="flex flex-col dark:bg-[#3C3C3C]"
       >
         <Box className="flex flex-col md:flex-row">
-          <CloseButton
-            handleClose={() => {
-              setBasicDoctorInfo(defaultInfo);
-              setSchedules([]);
-              handleClose();
-            }}
-          />
+          <CloseButton handleClose={closeDialog} />
           <Box className="relative w-full md:w-[30%] mt-4">
             <DropZone
               handleFileDrop={handleFileDrop}
@@ -213,6 +208,7 @@ const CreateDoctorDialog = ({ open, handleClose }: Props) => {
               basicDoctorInfo.mobile.length < 9 ||
               basicDoctorInfo.speciality._id == ""
             }
+            isLoading={createMutating}
           />
         </div>
       </DialogActions>
