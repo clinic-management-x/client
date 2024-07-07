@@ -8,7 +8,7 @@ interface Props {
 
 const CloseButton = ({ handleClose }: Props) => {
   return (
-    <IconButton onClick={handleClose} className="absolute toop-0 right-0">
+    <IconButton onClick={handleClose} className="absolute top-0 right-0">
       <RxCross1 className="text-[#9CA3AF] dark:text-gray-400" />
     </IconButton>
   );

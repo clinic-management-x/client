@@ -5,11 +5,21 @@ interface SidebarType {
   link: string;
 }
 
+interface ScheduleType {
+  _id?: number | string;
+  startDay?: number;
+  start: number;
+  endDay?: number;
+  end: number;
+  clinic?: string;
+  doctor?: string;
+}
+
 interface DoctorType {
   clinic?: string;
   doctorFee: number;
   dateOfBirth: string;
-  avatarUrl: string;
+  avatarUrl?: string;
   email: string;
   gender: string;
   mobile: string;
@@ -18,5 +28,7 @@ interface DoctorType {
     name: string;
     _id: string;
   };
+  schedules?: ScheduleType[];
   _id?: string;
+  __v?: string;
 }

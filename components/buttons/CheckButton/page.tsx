@@ -9,6 +9,7 @@ interface Props {
 const CheckButton = ({ handleClick }: Props) => {
   return (
     <Button
+      onClick={handleClick}
       className="w-12 h-8 rounded-md border-success hover:border-success hover:bg-success/10"
       variant="outlined"
     >

@@ -21,16 +21,27 @@ import useSWR from "swr";
 interface Props {
   basicDoctorInfo: DoctorType;
   setBasicDoctorInfo: (data: DoctorType) => void;
+  setShowEditBox?: (data: boolean) => void;
+  edit?: boolean;
 }
 
-const BasicDoctorInfo = ({ basicDoctorInfo, setBasicDoctorInfo }: Props) => {
+const BasicDoctorInfo = ({
+  basicDoctorInfo,
+  setBasicDoctorInfo,
+  setShowEditBox,
+  edit,
+}: Props) => {
   const { data: specialities } = useSWR(
     `${config.apiBaseUrl}/${doctorEndPoint}/specialities`,
     getSpecialities
   );
   const [dob, setDob] = useState<Dayjs | null>(dayjs());
   return (
-    <Box className="w-full md:w-[70%] mr-2 mt-4">
+    <Box
+      className={`w-full  ${
+        edit ? "md:w-[100%] md:mt-0 lg:mt-2 lg:w-[70%] mt-0" : "md:w-[70%] mt-4"
+      } mr-2`}
+    >
       <Box className="  flex flex-col   md:grid md:grid-cols-3 gap-2">
         <div className="flex flex-col mx-2">
           <LabelTypography title=" Name" />
@@ -41,6 +52,7 @@ const BasicDoctorInfo = ({ basicDoctorInfo, setBasicDoctorInfo }: Props) => {
                 ...basicDoctorInfo,
                 name: e.target.value,
               });
+              setShowEditBox && setShowEditBox(true);
             }}
           />
         </div>
@@ -55,6 +67,7 @@ const BasicDoctorInfo = ({ basicDoctorInfo, setBasicDoctorInfo }: Props) => {
                   ...basicDoctorInfo,
                   dateOfBirth: newValue?.toISOString() as string,
                 });
+                setShowEditBox && setShowEditBox(true);
               }}
             />
           </LocalizationProvider>
@@ -83,6 +96,7 @@ const BasicDoctorInfo = ({ basicDoctorInfo, setBasicDoctorInfo }: Props) => {
                         ...basicDoctorInfo,
                         gender: data.id,
                       });
+                      setShowEditBox && setShowEditBox(true);
                     }}
                   />
                 }
@@ -103,6 +117,7 @@ const BasicDoctorInfo = ({ basicDoctorInfo, setBasicDoctorInfo }: Props) => {
                 ...basicDoctorInfo,
                 mobile: e.target.value,
               });
+              setShowEditBox && setShowEditBox(true);
             }}
           />
         </div>
@@ -115,6 +130,7 @@ const BasicDoctorInfo = ({ basicDoctorInfo, setBasicDoctorInfo }: Props) => {
                 ...basicDoctorInfo,
                 email: e.target.value,
               });
+              setShowEditBox && setShowEditBox(true);
             }}
           />
         </div>
@@ -133,6 +149,7 @@ const BasicDoctorInfo = ({ basicDoctorInfo, setBasicDoctorInfo }: Props) => {
                   name: value,
                 },
               });
+              setShowEditBox && setShowEditBox(true);
             }}
             selectedValue={basicDoctorInfo.speciality._id}
           />
@@ -147,6 +164,7 @@ const BasicDoctorInfo = ({ basicDoctorInfo, setBasicDoctorInfo }: Props) => {
                 ...basicDoctorInfo,
                 doctorFee: +e.target.value,
               });
+              setShowEditBox && setShowEditBox(true);
             }}
           />
         </div>

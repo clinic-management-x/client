@@ -3,7 +3,7 @@ import { useTheme } from "next-themes";
 import React from "react";
 
 interface DataItem {
-  _id?: string; // This allows _id to be either string or number
+  _id?: string | number; // This allows _id to be either string or number
   name: string;
 }
 
@@ -57,7 +57,7 @@ const PlainSelector = <T extends DataItem, S>({
           {/* <MenuItem value="">
             <em>None</em>
           </MenuItem> */}
-          {dataArr.map((data, index) => (
+          {dataArr?.map((data, index) => (
             <MenuItem key={index} value={data._id}>
               {data.name}
             </MenuItem>
