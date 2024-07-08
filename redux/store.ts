@@ -1,3 +1,4 @@
+"use client";
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import {
   FLUSH,
@@ -7,11 +8,13 @@ import {
   REGISTER,
   REHYDRATE,
   persistReducer,
+  persistStore,
 } from "redux-persist";
-import storage from "redux-persist/lib/storage";
+//import storage from "redux-persist/lib/storage";
 import userSlice from "./slices/user";
 import layoutSlice from "./slices/layout";
 import doctorSlice from "./slices/doctors";
+import storage from "./storage";
 
 const reducer = combineReducers({
   userSlice: userSlice,
@@ -25,10 +28,11 @@ const persistConfig = {
   whitelist: ["userSlice", "doctorSlice"],
 };
 
-const persistedReducer = persistReducer(persistConfig, reducer);
+export const persistedReducer = persistReducer(persistConfig, reducer);
 
 export const store = configureStore({
   reducer: persistedReducer,
+  devTools: true,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
@@ -36,6 +40,7 @@ export const store = configureStore({
       },
     }),
 });
+export const persistor = persistStore(store);
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;

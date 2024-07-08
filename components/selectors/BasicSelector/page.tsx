@@ -19,6 +19,7 @@ const BasicSelector = <T extends DataItem, S>({
   selectedValue,
 }: Props<T, S>) => {
   const { theme } = useTheme();
+
   return (
     <div>
       <FormControl sx={{ m: "auto", minWidth: 150 }}>
@@ -47,9 +48,6 @@ const BasicSelector = <T extends DataItem, S>({
             },
           }}
         >
-          <MenuItem value="All">
-            <em>All</em>
-          </MenuItem>
           {dataArr?.map((data, index) => (
             <MenuItem key={index} value={data._id}>
               {data.name}

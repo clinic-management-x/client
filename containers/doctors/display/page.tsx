@@ -25,55 +25,48 @@ import SkeletonFrame from "./skeleton";
 import DoctorCard from "./doctorcard";
 import Link from "next/link";
 import { useTheme } from "next-themes";
+import { getUserData } from "@/redux/slices/user";
 
 const DisplayDoctors = () => {
   const dispatch = useDispatch();
   const theme = useTheme();
   const page = useSelector(getPageNumber);
+  const [selectedSpecialityName, setSelectedSpecialityName] = useState("all");
   const showMobileSearchBar = useSelector(getShowMobileSearchBar);
   const [doctors, setDoctors] = useState([]);
-  const [selectedFilter, setSelectedFilter] = useState("All");
   const [typeSearch, setTypeSearch] = useState("");
   const [open, setOpen] = useState(false);
   const [skip, setSkip] = useState((page - 1) * 8);
+  const [search, setSearch] = useState("");
+  const [specialityId, setSpecialityId] = useState("");
+
+  const searchQuery = specialityId
+    ? `${
+        config.apiBaseUrl
+      }/${doctorEndPoint}?limit=${8}&skip=${skip}&search=${search}&speciality=${specialityId}`
+    : `${
+        config.apiBaseUrl
+      }/${doctorEndPoint}?limit=${8}&skip=${skip}&search=${search}`;
 
   const {
     data,
     isLoading,
-    isValidating,
     mutate: mutateDoctors,
-  } = useSWR(
-    `${config.apiBaseUrl}/${doctorEndPoint}?limit=${8}&skip=${skip}`,
-    getDoctors
-  );
+  } = useSWR(searchQuery, getDoctors);
 
   const { data: specialities } = useSWR(
     `${config.apiBaseUrl}/${doctorEndPoint}/specialities`,
     getSpecialities
   );
 
-  const filterBySpeciality = (value: string) => {
-    return value === "All"
-      ? data
-      : data.filter((doctor: DoctorType) => doctor.speciality._id === value);
-  };
-
-  const handleTypeFilter = (e: any) => {
-    const doctorsArr = filterBySpeciality(selectedFilter);
-    e.target.value !== ""
-      ? setDoctors(
-          doctorsArr.filter((doctor: DoctorType) =>
-            doctor.name.toLowerCase().includes(e.target.value.toLowerCase())
-          )
-        )
-      : setDoctors(doctorsArr);
-    setTypeSearch(e.target.value);
-  };
-
   useEffect(() => {
-    const doctorsArr = filterBySpeciality(selectedFilter);
-    setDoctors(doctorsArr);
+    setDoctors(data);
   }, [data]);
+
+  const hanldeSearchChange = (e: any) => {
+    setTypeSearch(e.target.value);
+    e.target.value === "" ? setSearch("") : "";
+  };
 
   return (
     <section className="flex flex-col overflow-y-scroll">
@@ -104,19 +97,27 @@ const DisplayDoctors = () => {
             <div className="hidden md:block ">
               <SearchBar
                 selectedValue={typeSearch}
-                handleChange={handleTypeFilter}
+                handleClick={(value) => {
+                  setSearch(value);
+                }}
+                handleChange={hanldeSearchChange}
               />
             </div>
 
             <BasicSelector
-              selectedValue={selectedFilter}
+              selectedValue={selectedSpecialityName}
               handleChange={(e, value) => {
-                const doctorArr = filterBySpeciality(e.target.value);
-                setDoctors(doctorArr);
-                setSelectedFilter(e.target.value);
+                e.target.value === "all"
+                  ? setSpecialityId("")
+                  : setSpecialityId(e.target.value);
+                setSelectedSpecialityName(e.target.value);
               }}
               title="Speciality"
-              dataArr={specialities}
+              dataArr={
+                specialities
+                  ? [{ _id: "all", name: "All" }, ...specialities]
+                  : []
+              }
             />
           </div>
         </div>
@@ -127,10 +128,15 @@ const DisplayDoctors = () => {
         >
           <SearchBar
             selectedValue={typeSearch}
-            handleChange={handleTypeFilter}
+            handleClick={(value) => {
+              setSearch(value);
+            }}
+            handleChange={hanldeSearchChange}
           />
           <IconButton
             onClick={() => {
+              setSearch("");
+              setTypeSearch("");
               dispatch(insertShowMobileSearchBar(false));
             }}
           >
@@ -172,9 +178,9 @@ const DisplayDoctors = () => {
               },
             }}
             className="space-x-2 dark:text-darkText"
-            onChange={(e, page) => {
-              dispatch(insertPageNumber(page));
-              setSkip((page - 1) * 8);
+            onChange={(e, pagenumber) => {
+              dispatch(insertPageNumber(pagenumber));
+              setSkip((pagenumber - 1) * 8);
             }}
           />
         </div>

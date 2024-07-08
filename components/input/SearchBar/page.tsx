@@ -1,14 +1,16 @@
-import { InputAdornment, TextField } from "@mui/material";
+import { IconButton, InputAdornment, TextField } from "@mui/material";
 import { useTheme } from "next-themes";
 import React from "react";
 import { FiSearch } from "react-icons/fi";
 
 interface Props {
   selectedValue: string;
+  handleClick: (e: any) => void;
   handleChange: (e: any) => void;
 }
-const SearchBar = ({ selectedValue, handleChange }: Props) => {
+const SearchBar = ({ selectedValue, handleClick, handleChange }: Props) => {
   const { theme } = useTheme();
+
   return (
     <TextField
       value={selectedValue}
@@ -31,7 +33,9 @@ const SearchBar = ({ selectedValue, handleChange }: Props) => {
         },
         endAdornment: (
           <InputAdornment position="end">
-            <FiSearch size={24} className="text-primaryBlue-300" />
+            <IconButton onClick={() => handleClick(selectedValue)}>
+              <FiSearch size={24} className="text-primaryBlue-300" />
+            </IconButton>
           </InputAdornment>
         ),
       }}
