@@ -6,7 +6,7 @@ interface initialState {
 }
 
 const initialState: initialState = {
-  userData: {},
+  userData: { id: 1 },
 };
 
 export const userSlice = createSlice({

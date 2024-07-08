@@ -29,6 +29,7 @@ export const doctorSlice = createSlice({
     ) => {
       state.doctorsArrMutate = action.payload;
     },
+
     insertPageNumber: (state: InitialState, action: PayloadAction<any>) => {
       state.page = action.payload;
     },
@@ -38,6 +39,7 @@ export const doctorSlice = createSlice({
 export const {
   insertOpenCreateDoctorDialog,
   insertDoctorsArrMutate,
+
   insertPageNumber,
 } = doctorSlice.actions;
 
@@ -45,6 +47,7 @@ export const getOpenCreateDoctorDialog = (state: RootState) =>
   state.doctorSlice.openCreateDoctorDialog;
 export const getDoctorsArrMutate = (state: RootState) =>
   state.doctorSlice.doctorsArrMutate;
+
 export const getPageNumber = (state: RootState) => state.doctorSlice.page;
 
 export default doctorSlice.reducer;
