@@ -7,7 +7,13 @@ const baseApi = axios.create({
   withCredentials: true,
   headers: {
     ContentType: "Application/json",
-    Authorization: `Bearer ${`eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NjdhYzNmNmFhYmQwYmIzZGViZjI0ODQiLCJ1c2VybmFtZSI6ImNoYXJsaWVAZ21haWwuY29tIiwiZW1haWwiOiJjaGFybGllQGdtYWlsLmNvbSIsIm5vbmNlIjoiNzAxZDlhYzYtNDYxYS00MTgzLWIyY2EtZTJiMmU0MjgzYTk3IiwiaWF0IjoxNzE5NTg4NzUxLCJleHAiOjE3MjczNjQ3NTF9.5ZE8SKAiFepHUAyedbfLnfd8F57nhISXbMrUruGdlRo`}`,
+    Authorization: `Bearer ${`eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NjdhYzNmNmFhYmQwYmIzZGViZjI0ODQiLCJ1c2VybmFtZSI6ImNoYXJsaWVAZ21haWwuY29tIiwiZW1haWwiOiJjaGFybGllQGdtYWlsLmNvbSIsIm5vbmNlIjoiOTljZThhN2YtODEwNy00MjkwLWFlNmYtYWQ2ODBlN2E1YmQ1IiwiaWF0IjoxNzIwOTQzNzMzLCJleHAiOjE3MjA5NDczMzN9.vxf-hBUinHksbLczj9IfuoYbh_Ed55zVw0HS3JVDBkM`}`,
+  },
+
+  data: {
+    clinic: {
+      _id: "667acfe354f68c44290b24cc",
+    },
   },
 });
 

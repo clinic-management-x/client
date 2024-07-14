@@ -27,7 +27,6 @@ import SkeletonPage from "./skeleton";
 
 const EditDoctorPage = ({ id }: { id: string }) => {
   const router = useRouter();
-  const mutateDoctors = useSelector(getDoctorsArrMutate);
   const [doctor, setDoctor] = useState<DoctorType>(defaultInfo);
   const [previewUrl, setPreviewUrl] = useState("");
   const [schedules, setSchedules] = useState<ScheduleType[]>([]);
@@ -106,7 +105,7 @@ const EditDoctorPage = ({ id }: { id: string }) => {
                   handleRemove={() => {
                     setPreviewUrl("");
                     setShowEditButtonBox(true);
-                    delete doctor.avatarUrl;
+                    setDoctor({ ...doctor, avatarUrl: "" });
                   }}
                 />
               </Box>
