@@ -6,9 +6,10 @@ interface Props {
   value: string | number;
   handleChange: (e: any) => void;
   type?: string;
+  className?: string;
 }
 
-const CustomTextField = ({ value, handleChange, type }: Props) => {
+const CustomTextField = ({ value, handleChange, type, className }: Props) => {
   const { theme } = useTheme();
   return (
     <>
@@ -76,6 +77,7 @@ const CustomTextField = ({ value, handleChange, type }: Props) => {
               color: theme === "dark" ? "#D1D5DB" : "#6B7280",
             },
           }}
+          className={className}
           sx={{
             "& .MuiOutlinedInput-root": {
               "& fieldset": {

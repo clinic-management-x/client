@@ -1,10 +1,10 @@
+"use client";
+
 import baseApi from "../base.api";
 
 export const getDoctors = async (url: string) => {
   const response = await baseApi.get(url);
-  if (response.statusText !== "OK") {
-    console.log("res", response);
-  }
+
   return response.data.data;
 };
 

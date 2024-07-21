@@ -25,7 +25,7 @@ import SkeletonFrame from "./skeleton";
 import DoctorCard from "./doctorcard";
 import Link from "next/link";
 import { useTheme } from "next-themes";
-import { getUserData } from "@/redux/slices/user";
+import { useRouter } from "next/navigation";
 
 const DisplayDoctors = () => {
   const dispatch = useDispatch();
@@ -52,6 +52,7 @@ const DisplayDoctors = () => {
     data,
     isLoading,
     mutate: mutateDoctors,
+    error,
   } = useSWR(searchQuery, getDoctors);
 
   const { data: specialities } = useSWR(

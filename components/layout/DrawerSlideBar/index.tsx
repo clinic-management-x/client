@@ -1,13 +1,16 @@
 "use client";
+import baseApi from "@/datafetch/base.api";
 import {
   getOpenDrawer,
   getSelectedTab,
   insertOpenDrawer,
   insertSelectedTab,
 } from "@/redux/slices/layout";
+import config from "@/utils/config";
 import { Drawer } from "@mui/material";
 import Link from "next/link";
-import React from "react";
+import { usePathname } from "next/navigation";
+import React, { useEffect } from "react";
 import { CiLogout } from "react-icons/ci";
 import { FaUserDoctor } from "react-icons/fa6";
 import { GiMedicines } from "react-icons/gi";
@@ -43,9 +46,14 @@ const slidebarData: SidebarType[] = [
 ];
 
 const DrawerSlideBar = () => {
+  const pathname = usePathname();
   const dispatch = useDispatch();
   const openDrawer = useSelector(getOpenDrawer);
   const selectedTab = useSelector(getSelectedTab);
+
+  useEffect(() => {
+    dispatch(insertSelectedTab(pathname.split("/")[2]));
+  }, [pathname]);
 
   return (
     <Drawer
@@ -62,12 +70,12 @@ const DrawerSlideBar = () => {
             key={data.id}
             onClick={() => {
               dispatch(insertOpenDrawer(false));
-              dispatch(insertSelectedTab(data.title));
+              dispatch(insertSelectedTab(data.title.toLowerCase()));
             }}
             className={`w-[90%] h-[50px] m-auto rounded-lg pl-6   p-2 ${
               data.id === 1 ? "mt-4" : ""
             } ${
-              data.title === selectedTab
+              data.title.toLowerCase() === selectedTab
                 ? "bg-primaryBlue-200 dark:bg-transparent text-white border-2 border-white dark:border-primaryBlue-300 dark:text-primaryBlue-300"
                 : "text-gray-500 hover:text-primaryBlue-300 hover:text-lg"
             } `}
@@ -82,6 +90,11 @@ const DrawerSlideBar = () => {
         <Link
           href={"/login"}
           className="flex items-center hover:text-primaryBlue-300 hover:text-lg"
+          onClick={async () => {
+            await baseApi.post(`${config.apiBaseUrl}/auth/logout`);
+            localStorage.removeItem("access-x");
+            localStorage.removeItem("refresh-x");
+          }}
         >
           <CiLogout size={28} />
           <div className="ml-2">Logout</div>

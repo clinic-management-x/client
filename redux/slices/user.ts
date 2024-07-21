@@ -3,20 +3,30 @@ import { RootState } from "../store";
 
 interface initialState {
   userData: any;
+  hasClinic: boolean;
 }
 
 const initialState: initialState = {
-  userData: { id: 1 },
+  userData: null,
+  hasClinic: false,
 };
 
 export const userSlice = createSlice({
   name: "userSlice",
   initialState,
-  reducers: {},
+  reducers: {
+    insertUser: (state: initialState, action: PayloadAction<any>) => {
+      state.userData = action.payload;
+    },
+    insertHasClinic: (state: initialState, action: PayloadAction<any>) => {
+      state.hasClinic = action.payload;
+    },
+  },
 });
 
-export const {} = userSlice.actions;
+export const { insertUser, insertHasClinic } = userSlice.actions;
 
 export const getUserData = (state: RootState) => state.userSlice.userData;
+export const getHasClinic = (state: RootState) => state.userSlice.hasClinic;
 
 export default userSlice.reducer;

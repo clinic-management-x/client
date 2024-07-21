@@ -8,7 +8,7 @@ interface InitialState {
 }
 
 const initialState: InitialState = {
-  selectedTab: "Dashboard",
+  selectedTab: "dashboard",
   openDrawer: false,
   showMobileSearchBar: false,
 };
