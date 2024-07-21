@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { CiLogout } from "react-icons/ci";
@@ -12,6 +12,11 @@ import { FaUserDoctor } from "react-icons/fa6";
 import { HiMiniUsers } from "react-icons/hi2";
 import { GiMedicines } from "react-icons/gi";
 import { IoSettingsOutline } from "react-icons/io5";
+import { usePathname } from "next/navigation";
+import { getHasClinic } from "@/redux/slices/user";
+import { apiBaseUrl } from "next-auth/client/_utils";
+import baseApi from "@/datafetch/base.api";
+import config from "@/utils/config";
 const logo = require("../../../public/logo.jpeg");
 
 const sidebarData: SidebarType[] = [
@@ -62,6 +67,12 @@ const sidebarData: SidebarType[] = [
 const SideBar = () => {
   const dispatch = useDispatch();
   const selectedTab = useSelector(getSelectedTab);
+  const pathname = usePathname();
+  const hasClinic = useSelector(getHasClinic);
+
+  useEffect(() => {
+    dispatch(insertSelectedTab(pathname.split("/")[2]));
+  }, [pathname]);
 
   return (
     <div className=" max-w-[225px] lg:min-w-[275px]  border-gray-300 dark:border-black border-r-[1px] fixed h-screen pt-2 bg-white dark:bg-[#171717]">
@@ -73,15 +84,21 @@ const SideBar = () => {
           <div
             key={data.id}
             onClick={() => {
-              dispatch(insertSelectedTab(data.title));
+              if (!hasClinic) {
+                return;
+              }
+              dispatch(insertSelectedTab(data.title.toLowerCase()));
             }}
             className={`w-[90%] h-[50px] m-auto rounded-lg pl-6   p-2 ${
-              data.title === selectedTab
+              data.title.toLowerCase() === selectedTab
                 ? "bg-primaryBlue-200 dark:bg-transparent text-white border-2 border-white dark:border-primaryBlue-300 dark:text-primaryBlue-300"
                 : "text-gray-500 hover:text-primaryBlue-300 hover:text-lg"
             } `}
           >
-            <Link href={data.link} className="flex items-center">
+            <Link
+              href={!hasClinic ? "/backoffice/settings" : data.link}
+              className="flex items-center"
+            >
               {data.icon}
               <div className="ml-4">{data.title}</div>
             </Link>
@@ -91,6 +108,11 @@ const SideBar = () => {
       <div className="  text-center fixed bottom-2 pl-14  w-[17%] h-[50px] text-gray-500 ">
         <Link
           href={"/login"}
+          onClick={async () => {
+            await baseApi.post(`${config.apiBaseUrl}/auth/logout`);
+            localStorage.removeItem("access-x");
+            localStorage.removeItem("refresh-x");
+          }}
           className="flex items-center hover:text-primaryBlue-300 hover:text-lg"
         >
           <CiLogout size={28} />

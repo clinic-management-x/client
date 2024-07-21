@@ -10,35 +10,52 @@ import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import { SWRConfig } from "swr";
 import Loader from "./loader";
+import { SessionProvider } from "next-auth/react";
 
 export default function Providers({ children }: { children: React.ReactNode }) {
   const router = useRouter();
+
   return (
-    <Provider store={store}>
-      <PersistGate loading={<Loader />} persistor={persistor}>
-        <ThemeProvider
-          defaultTheme="light"
-          enableSystem={true}
-          attribute="class"
-        >
-          <SWRConfig
-            value={{
-              onError: (error, key) => {
-                if (error?.response?.status === 404) {
-                  router.push("/not-found");
-                }
-              },
-            }}
+    <SessionProvider>
+      <Provider store={store}>
+        <PersistGate loading={<Loader />} persistor={persistor}>
+          <ThemeProvider
+            defaultTheme="light"
+            enableSystem={true}
+            attribute="class"
           >
-            <Toaster
-              position="top-right"
-              reverseOrder={false}
-              containerStyle={{ zIndex: 99999999 }}
-            />
-            <StyledEngineProvider injectFirst>{children}</StyledEngineProvider>
-          </SWRConfig>
-        </ThemeProvider>
-      </PersistGate>
-    </Provider>
+            <SWRConfig
+              value={{
+                onError: (error, key) => {
+                  const noClincError = error?.response?.data?.response;
+                  if (noClincError) {
+                    if (
+                      noClincError.statusCode == 404 &&
+                      noClincError.message === "Clinic not found"
+                    ) {
+                      localStorage.setItem("clinic", "absent");
+                      router.push("/backoffice/settings");
+                    }
+                  }
+
+                  if (error?.response?.status === 404) {
+                    router.push("/not-found");
+                  }
+                },
+              }}
+            >
+              <Toaster
+                position="top-right"
+                reverseOrder={false}
+                containerStyle={{ zIndex: 99999999 }}
+              />
+              <StyledEngineProvider injectFirst>
+                {children}
+              </StyledEngineProvider>
+            </SWRConfig>
+          </ThemeProvider>
+        </PersistGate>
+      </Provider>
+    </SessionProvider>
   );
 }

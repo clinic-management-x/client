@@ -3,13 +3,15 @@ import { useTheme } from "next-themes";
 import React from "react";
 import { HiOutlineMoon, HiOutlineSun } from "react-icons/hi2";
 
-const ThemeSwitcherButton = () => {
+const ThemeSwitcherButton = ({ isAuth }: { isAuth?: boolean }) => {
   const { systemTheme, theme, setTheme } = useTheme();
 
   const currentTheme = theme === "system" ? systemTheme : theme;
 
   return (
-    <div className="fixed right-20 md:right-4">
+    <div
+      className={`fixed ${isAuth ? "right-4 top-2" : "right-20 md:right-4"} `}
+    >
       {currentTheme === "dark" ? (
         <div
           onClick={() => setTheme("light")}

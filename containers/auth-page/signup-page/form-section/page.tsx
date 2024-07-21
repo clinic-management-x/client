@@ -2,35 +2,74 @@
 import {
   Box,
   Button,
+  CircularProgress,
   Divider,
-  FormControl,
-  IconButton,
-  InputAdornment,
-  InputLabel,
-  OutlinedInput,
-  TextField,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
-import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
-import { MdOutlineMailOutline } from "react-icons/md";
-import { FcGoogle } from "react-icons/fc";
+import React, { useEffect, useState } from "react";
 import ThemeSwitcherButton from "@/components/buttons/ThemeSwitcherButton";
+import { z } from "zod";
+import toast from "react-hot-toast";
+import config from "@/utils/config";
+import useSWRMutation from "swr/mutation";
+import { authEndPoint } from "@/utils/endpoints";
+import { createUser } from "@/datafetch/auth/auth.api";
+import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
+import Link from "next/link";
+import GoogleAuth from "../../oauth/page";
+import MainForm, { UserInfo } from "../../main-form/page";
 
 const SignUpSection = () => {
+  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
+  const [userInfo, setUserInfo] = useState<UserInfo>({
+    email: "",
+    password: "",
+  });
+  const [errors, setErrors] = useState<any>(null);
 
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
+  useEffect(() => {
+    const formData = z.object({
+      email: z.string().email({ message: "Invalid email address" }),
+      password: z.string().min(8, { message: "Must be at least 8 words" }),
+    });
 
-  const handleMouseDownPassword = (
-    event: React.MouseEvent<HTMLButtonElement>
-  ) => {
-    event.preventDefault();
+    const result = formData.safeParse(userInfo);
+
+    if (!result.success) {
+      setErrors(result.error.format());
+    } else {
+      setErrors(null);
+    }
+  }, [userInfo]);
+
+  const { trigger, isMutating } = useSWRMutation(
+    `${config.apiBaseUrl}/${authEndPoint}/register`,
+    createUser
+  );
+
+  const handleSignUp = async () => {
+    try {
+      const response = await trigger({
+        email: userInfo.email as string,
+        password: userInfo.password,
+      });
+
+      if (response) {
+        toast.success("Account creation is successful.");
+        router.push("/login");
+      }
+    } catch (error: any) {
+      const errorMsg = error?.response?.data?.message;
+      errorMsg ? toast.error(errorMsg) : toast.error("Something went wrong.");
+    }
   };
+
   return (
     <div className="w-full lg:w-[50%] m-auto text-whiteText  rounded-lg flex flex-col items-center dark:text-darkText h-screen">
       <div className="mt-2">
-        <ThemeSwitcherButton />
+        <ThemeSwitcherButton isAuth={true} />
       </div>
       <Typography variant="h4" className="font-bold mt-8">
         Sign up
@@ -38,75 +77,24 @@ const SignUpSection = () => {
       <Typography variant="body1" className="mt-4">
         Welcome to Techocare. Explore the best service.
       </Typography>
-      <Box className="flex flex-col space-y-2 mt-8">
-        <Typography variant="body1" className="">
-          Email
-        </Typography>
-        <TextField
-          className="w-[300px]"
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <MdOutlineMailOutline className="dark:text-white" />
-              </InputAdornment>
-            ),
-          }}
-          sx={{
-            "& .MuiOutlinedInput-root": {
-              "& fieldset": {
-                borderColor: "#9CA3AF",
-                backgroundColor: "#C7C7C7F",
-              },
-              "&:hover fieldset": {
-                borderColor: "#9CA3AF",
-              },
-              "&.Mui-focused fieldset": {
-                borderColor: "#9CA3AF",
-              },
-            },
-          }}
-        />
-        <Typography variant="body1" className="">
-          Password
-        </Typography>
-        <FormControl
-          className="w-[300px]"
-          variant="outlined"
-          sx={{
-            ":root": {
-              "& $notchedOutline": {
-                borderColor: "red",
-              },
-              "&:hover $notchedOutline": {
-                borderColor: "blue",
-              },
-              "&$focused $notchedOutline": {
-                borderColor: "green",
-              },
-            },
-          }}
-        >
-          <OutlinedInput
-            id="outlined-adornment-password"
-            type={showPassword ? "text" : "password"}
-            endAdornment={
-              <InputAdornment position="end">
-                <IconButton
-                  aria-label="toggle password visibility"
-                  onClick={() => setShowPassword((show) => !show)}
-                  onMouseDown={handleMouseDownPassword}
-                  edge="end"
-                  className="dark:text-white "
-                >
-                  {showPassword ? <IoEyeOutline /> : <IoEyeOffOutline />}
-                </IconButton>
-              </InputAdornment>
-            }
-          />
-        </FormControl>
-      </Box>
-      <Button className="w-[300px] mt-8 h-[50px]" variant="contained">
-        Sign up
+      <MainForm
+        userInfo={userInfo}
+        setUserInfo={setUserInfo}
+        showPassword={showPassword}
+        setShowPassword={setShowPassword}
+        errors={errors}
+        signIn={false}
+      />
+      <Button
+        className="w-[300px] mt-8 h-[50px]"
+        variant="contained"
+        onClick={handleSignUp}
+      >
+        {isMutating ? (
+          <CircularProgress color="inherit" size={30} />
+        ) : (
+          "Sign Up"
+        )}
       </Button>
 
       <Divider sx={{ width: "80%", my: 6 }} className="">
@@ -115,12 +103,13 @@ const SignUpSection = () => {
           Or
         </Typography>
       </Divider>
-      <Box className="flex items-center justify-center space-x-2  w-[300px] border-[1px]  border-[#9CA3AF] h-[60px] rounded ">
-        <FcGoogle size={28} />
-        <Typography variant="body1" className="font-semibold">
-          Sign in with google
-        </Typography>
-      </Box>
+      <GoogleAuth />
+      <div className="flex items-center mt-4 space-x-2">
+        <Typography>Already have an account?</Typography>
+        <Link href={"/login"}>
+          <Typography className="underline text-blue-700">Sign in</Typography>
+        </Link>
+      </div>
     </div>
   );
 };

@@ -12,7 +12,9 @@ const CreateButton = ({ handleClick, disabled, isLoading }: Props) => {
   return (
     <Button
       variant="contained"
-      className="bg-primaryBlue-400 w-[120px]"
+      className={`bg-primaryBlue-400 w-[120px] ${
+        disabled ? "bg-yellow-500" : ""
+      }`}
       startIcon={isLoading ? <></> : <FaPlus size={14} />}
       onClick={handleClick}
       disabled={disabled}

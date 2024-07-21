@@ -19,8 +19,6 @@ import useSWRMutation from "swr/mutation";
 import { useRouter } from "next/navigation";
 import DetailEditCancelButton from "@/components/buttons/DetailEditCancelButton/page";
 import DeleteDoctorDialog from "@/components/dialogs/doctors/DeleteDoctorDialog/page";
-import { useSelector } from "react-redux";
-import { getDoctorsArrMutate } from "@/redux/slices/doctors";
 import BackButton from "@/components/buttons/BackButton/page";
 import Schedules from "./schedules";
 import SkeletonPage from "./skeleton";
