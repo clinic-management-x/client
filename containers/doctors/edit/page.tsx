@@ -61,6 +61,7 @@ const EditDoctorPage = ({ id }: { id: string }) => {
     const formData = new FormData();
     formData.append("file", acceptedFiles[0]);
     formData.append("purpose", "DOCTOR_AVATAR");
+
     const filedata = await uploadFile(formData);
     setShowEditButtonBox(true);
     setPreviewUrl(filedata.presignedUrl);

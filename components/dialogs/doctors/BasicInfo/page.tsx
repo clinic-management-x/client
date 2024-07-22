@@ -86,7 +86,7 @@ const BasicDoctorInfo = ({
               <FormControlLabel
                 key={data.id}
                 value={data.id}
-                className="dark:text-[#D1D5DB]"
+                className="dark:text-[#D1D5DB] text-whiteText"
                 control={
                   <Radio
                     checked={data.id === basicDoctorInfo.gender}

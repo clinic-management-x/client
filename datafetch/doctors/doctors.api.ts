@@ -85,7 +85,7 @@ export const createSchedules = async (
       return { start: schedule.start, end: schedule.end };
     }),
   };
-  console.log("dfjalksf", payload);
+
   const response = await baseApi.post(url, payload);
 
   return response.data;

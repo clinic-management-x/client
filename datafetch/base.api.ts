@@ -27,12 +27,6 @@ const baseApi = axios.create({
   headers: {
     ContentType: "Application/json",
   },
-
-  data: {
-    clinic: {
-      _id: "667acfe354f68c44290b24cc",
-    },
-  },
 });
 
 baseApi.interceptors.request.use(
@@ -41,7 +35,6 @@ baseApi.interceptors.request.use(
     const token = decryptData(access);
 
     config.headers = new AxiosHeaders({
-      "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     });
     return config;
