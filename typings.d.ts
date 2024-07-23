@@ -32,3 +32,16 @@ interface DoctorType {
   _id?: string;
   __v?: string;
 }
+
+interface StaffType {
+  clinic?: string;
+  dateOfBirth: string;
+  avatarUrl?: string;
+  email: string;
+  gender: string;
+  mobile: string;
+  name: string;
+  address?: string;
+  _id?: string;
+  __v?: string;
+}

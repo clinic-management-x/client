@@ -13,19 +13,19 @@ import {
 //import storage from "redux-persist/lib/storage";
 import userSlice from "./slices/user";
 import layoutSlice from "./slices/layout";
-import doctorSlice from "./slices/doctors";
+import workersSlice from "./slices/workers";
 import storage from "./storage";
 
 const reducer = combineReducers({
   userSlice: userSlice,
   layoutSlice: layoutSlice,
-  doctorSlice: doctorSlice,
+  workersSlice: workersSlice,
 });
 
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["userSlice", "doctorSlice"],
+  whitelist: ["userSlice", "layoutSlice"],
 };
 
 export const persistedReducer = persistReducer(persistConfig, reducer);

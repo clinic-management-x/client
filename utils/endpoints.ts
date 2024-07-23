@@ -5,3 +5,5 @@ export const fileUploadEndPoint = "files/upload";
 export const authEndPoint = "auth";
 
 export const clinicEndPoint = "clinics";
+
+export const staffEndPoint = "staffs";

@@ -3,18 +3,18 @@ import { RootState } from "../store";
 
 interface InitialState {
   openCreateDoctorDialog: boolean;
-  doctorsArrMutate: any;
+  openCreateStaffDialog: boolean;
   page: number;
 }
 
 const initialState: InitialState = {
   openCreateDoctorDialog: false,
-  doctorsArrMutate: null,
+  openCreateStaffDialog: false,
   page: 1,
 };
 
-export const doctorSlice = createSlice({
-  name: "doctorSlice",
+export const workersSlice = createSlice({
+  name: " wrokersSlice",
   initialState,
   reducers: {
     insertOpenCreateDoctorDialog: (
@@ -23,13 +23,12 @@ export const doctorSlice = createSlice({
     ) => {
       state.openCreateDoctorDialog = action.payload;
     },
-    insertDoctorsArrMutate: (
+    insertOpenCreateStaffDialog: (
       state: InitialState,
       action: PayloadAction<any>
     ) => {
-      state.doctorsArrMutate = action.payload;
+      state.openCreateStaffDialog = action.payload;
     },
-
     insertPageNumber: (state: InitialState, action: PayloadAction<any>) => {
       state.page = action.payload;
     },
@@ -38,16 +37,16 @@ export const doctorSlice = createSlice({
 
 export const {
   insertOpenCreateDoctorDialog,
-  insertDoctorsArrMutate,
-
+  insertOpenCreateStaffDialog,
   insertPageNumber,
-} = doctorSlice.actions;
+} = workersSlice.actions;
 
 export const getOpenCreateDoctorDialog = (state: RootState) =>
-  state.doctorSlice.openCreateDoctorDialog;
-export const getDoctorsArrMutate = (state: RootState) =>
-  state.doctorSlice.doctorsArrMutate;
+  state.workersSlice.openCreateDoctorDialog;
 
-export const getPageNumber = (state: RootState) => state.doctorSlice.page;
+export const getOpenStaffDialog = (state: RootState) =>
+  state.workersSlice.openCreateStaffDialog;
 
-export default doctorSlice.reducer;
+export const getPageNumber = (state: RootState) => state.workersSlice.page;
+
+export default workersSlice.reducer;
