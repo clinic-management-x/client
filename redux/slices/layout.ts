@@ -5,12 +5,14 @@ interface InitialState {
   selectedTab: string;
   openDrawer: boolean;
   showMobileSearchBar: boolean;
+  mutateStaffs: any;
 }
 
 const initialState: InitialState = {
   selectedTab: "dashboard",
   openDrawer: false,
   showMobileSearchBar: false,
+  mutateStaffs: null,
 };
 
 export const layoutSlice = createSlice({
@@ -29,6 +31,9 @@ export const layoutSlice = createSlice({
     ) => {
       state.showMobileSearchBar = action.payload;
     },
+    insertMutateStaff: (state: InitialState, action: PayloadAction<any>) => {
+      state.mutateStaffs = action.payload;
+    },
   },
 });
 
@@ -36,6 +41,7 @@ export const {
   insertSelectedTab,
   insertOpenDrawer,
   insertShowMobileSearchBar,
+  insertMutateStaff,
 } = layoutSlice.actions;
 
 export const getSelectedTab = (state: RootState) =>
@@ -45,5 +51,8 @@ export const getOpenDrawer = (state: RootState) => state.layoutSlice.openDrawer;
 
 export const getShowMobileSearchBar = (state: RootState) =>
   state.layoutSlice.showMobileSearchBar;
+
+export const getMutateStaffs = (state: RootState) =>
+  state.layoutSlice.mutateStaffs;
 
 export default layoutSlice.reducer;

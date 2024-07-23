@@ -1,5 +1,3 @@
-"use client";
-
 import baseApi from "../base.api";
 
 export const getDoctors = async (url: string) => {

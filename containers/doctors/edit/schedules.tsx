@@ -1,6 +1,6 @@
 import AddButton from "@/components/buttons/AddButton/page";
 import DetailEditCancelButton from "@/components/buttons/DetailEditCancelButton/page";
-import DeleteDialog from "@/components/dialogs/Delete";
+import DeleteDialog from "@/components/dialogs/delete";
 import CreateScheduleDialog from "@/components/dialogs/doctors/CreateScheduleDialog/page";
 import ScheduleListItem from "@/components/dialogs/doctors/ScheduleListItem/ScheduleListItem";
 import LabelTypography from "@/components/typography/LabelTypography/page";

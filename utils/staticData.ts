@@ -22,6 +22,15 @@ export const defaultInfo = {
   email: "",
 };
 
+export const defaultStaffInfo = {
+  name: "",
+  dateOfBirth: dayjs().toISOString(),
+  gender: "M",
+  address: "",
+  mobile: "",
+  email: "",
+};
+
 export const defaultNewSchedule = {
   _id: 0,
   start: 0,

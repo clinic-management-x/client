@@ -23,9 +23,10 @@ import { areSchedulesOverlapping } from "@/utils/schedule";
 interface Props {
   open: boolean;
   handleClose: () => void;
+  mutate: any;
 }
 
-const CreateDoctorDialog = ({ open, handleClose }: Props) => {
+const CreateDoctorDialog = ({ open, handleClose, mutate }: Props) => {
   const [previewUrl, setPreviewUrl] = useState("");
   const [showTimeSelector, setShowTimeSelector] = useState(false);
   const [basicDoctorInfo, setBasicDoctorInfo] =
@@ -36,14 +37,14 @@ const CreateDoctorDialog = ({ open, handleClose }: Props) => {
   const [startTime, setStartTime] = useState<Dayjs | null>(null);
   const [endTime, setEndTime] = useState<Dayjs | null>(null);
 
-  const handleFileDrop = useCallback(async (acceptedFiles: Blob[]) => {
+  const handleFileDrop = async (acceptedFiles: Blob[]) => {
     const formData = new FormData();
     formData.append("file", acceptedFiles[0]);
     formData.append("purpose", "DOCTOR_AVATAR");
     const data = await uploadFile(formData);
     setPreviewUrl(data.presignedUrl);
     setBasicDoctorInfo({ ...basicDoctorInfo, avatarUrl: data.url });
-  }, []);
+  };
 
   const { trigger, isMutating: createMutating } = useSWRMutation(
     `${config.apiBaseUrl}/${doctorEndPoint}`,
@@ -67,6 +68,7 @@ const CreateDoctorDialog = ({ open, handleClose }: Props) => {
       };
       const response = await trigger(doctorData);
       if (response) {
+        mutate();
         toast.success("Successfully added.");
         setPreviewUrl("");
         setBasicDoctorInfo(defaultInfo);

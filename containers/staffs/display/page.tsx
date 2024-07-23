@@ -1,58 +1,49 @@
 "use client";
 import CreateButton from "@/components/buttons/CreateButton/page";
-import CreateDoctorDialog from "@/components/dialogs/doctors/CreateDoctorDialog/page";
 import SearchBar from "@/components/input/SearchBar/page";
-import BasicSelector from "@/components/selectors/BasicSelector/page";
-import { getDoctors, getSpecialities } from "@/datafetch/doctors/doctors.api";
-import { getPageNumber, insertPageNumber } from "@/redux/slices/workers";
+import SkeletonFrame from "@/containers/doctors/display/skeleton";
+import { getStaffs } from "@/datafetch/staffs/staffs.api";
 import {
   getShowMobileSearchBar,
+  insertMutateStaff,
   insertShowMobileSearchBar,
 } from "@/redux/slices/layout";
+import { getPageNumber, insertPageNumber } from "@/redux/slices/workers";
 import config from "@/utils/config";
-import { doctorEndPoint } from "@/utils/endpoints";
+import { staffEndPoint } from "@/utils/endpoints";
 import { Box, IconButton, Pagination } from "@mui/material";
+import { useTheme } from "next-themes";
+import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { FiSearch } from "react-icons/fi";
 import { RxCross1 } from "react-icons/rx";
 import { useDispatch, useSelector } from "react-redux";
 import useSWR from "swr";
-import SkeletonFrame from "./skeleton";
-import DoctorCard from "./doctorcard";
-import Link from "next/link";
-import { useTheme } from "next-themes";
-import { useRouter } from "next/navigation";
+import StaffCard from "./staffcard";
+import CreateStaffDialog from "@/components/dialogs/staffs/CreateStaffDialog/page";
 
-const DisplayDoctors = () => {
-  const dispatch = useDispatch();
+const DisplayStaffs = () => {
   const theme = useTheme();
+  const dispatch = useDispatch();
   const page = useSelector(getPageNumber);
-  const [selectedSpecialityName, setSelectedSpecialityName] = useState("all");
   const showMobileSearchBar = useSelector(getShowMobileSearchBar);
-  const [doctors, setDoctors] = useState([]);
-  const [typeSearch, setTypeSearch] = useState("");
-  const [open, setOpen] = useState(false);
   const [skip, setSkip] = useState((page - 1) * 8);
+  const [staffs, setStaffs] = useState<StaffType[]>([]);
+  const [open, setOpen] = useState(false);
+  const [typeSearch, setTypeSearch] = useState("");
   const [search, setSearch] = useState("");
-  const [specialityId, setSpecialityId] = useState("");
 
-  const searchQuery = specialityId
-    ? `${
-        config.apiBaseUrl
-      }/${doctorEndPoint}?limit=${8}&skip=${skip}&search=${search}&speciality=${specialityId}`
-    : `${
-        config.apiBaseUrl
-      }/${doctorEndPoint}?limit=${8}&skip=${skip}&search=${search}`;
-
-  const { data, isLoading, mutate } = useSWR(searchQuery, getDoctors);
-
-  const { data: specialities } = useSWR(
-    `${config.apiBaseUrl}/${doctorEndPoint}/specialities`,
-    getSpecialities
+  const { data, isLoading, mutate } = useSWR(
+    `${
+      config.apiBaseUrl
+    }/${staffEndPoint}?limit=${8}&skip=${skip}&search=${search}`,
+    getStaffs
   );
 
   useEffect(() => {
-    setDoctors(data);
+    if (data) {
+      setStaffs(data);
+    }
   }, [data]);
 
   const hanldeSearchChange = (e: any) => {
@@ -95,22 +86,6 @@ const DisplayDoctors = () => {
                 handleChange={hanldeSearchChange}
               />
             </div>
-
-            <BasicSelector
-              selectedValue={selectedSpecialityName}
-              handleChange={(e, value) => {
-                e.target.value === "all"
-                  ? setSpecialityId("")
-                  : setSpecialityId(e.target.value);
-                setSelectedSpecialityName(e.target.value);
-              }}
-              title="Speciality"
-              dataArr={
-                specialities
-                  ? [{ _id: "all", name: "All" }, ...specialities]
-                  : []
-              }
-            />
           </div>
         </div>
         <div
@@ -139,10 +114,16 @@ const DisplayDoctors = () => {
           {isLoading ? (
             <SkeletonFrame />
           ) : (
-            doctors?.map((doctor: DoctorType, index: number) => {
+            staffs?.map((staff: StaffType, index: number) => {
               return (
-                <Link key={index} href={`/backoffice/doctors/${doctor._id}`}>
-                  <DoctorCard doctor={doctor} key={index} />
+                <Link
+                  key={index}
+                  href={`/backoffice/staffs/${staff._id}`}
+                  onClick={() => {
+                    dispatch(insertMutateStaff(mutate));
+                  }}
+                >
+                  <StaffCard staff={staff} key={index} />
                 </Link>
               );
             })
@@ -170,7 +151,7 @@ const DisplayDoctors = () => {
             }}
           />
         </div>
-        <CreateDoctorDialog
+        <CreateStaffDialog
           open={open}
           handleClose={() => {
             setOpen(false);
@@ -182,4 +163,4 @@ const DisplayDoctors = () => {
   );
 };
 
-export default DisplayDoctors;
+export default DisplayStaffs;
