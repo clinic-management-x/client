@@ -91,7 +91,7 @@ const SkeletonPage = () => {
                       : "dark:bg-transparent bg-[#FFFFFF]"
                   } max-h-[20px] `}
                 >
-                  <TableCell>{index + 1}</TableCell>
+                  <TableCell></TableCell>
                   <TableCell>
                     <Skeleton width={50} height={50} className=" rounded" />
                   </TableCell>

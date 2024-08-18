@@ -50,7 +50,7 @@ const slidebarData: SidebarType[] = [
         id: 30,
         icon: <MdBusiness size={26} />,
         title: "Supplier",
-        link: "/backoffice/inventory/supplier",
+        link: "/backoffice/inventory/suppliers",
       },
       {
         id: 31,

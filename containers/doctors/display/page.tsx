@@ -18,10 +18,8 @@ import { RxCross1 } from "react-icons/rx";
 import { useDispatch, useSelector } from "react-redux";
 import useSWR from "swr";
 import SkeletonFrame from "./skeleton";
-import DoctorCard from "./doctorcard";
-import Link from "next/link";
 import { useTheme } from "next-themes";
-import { useRouter } from "next/navigation";
+import DoctorsTable from "./doctorsTable";
 
 const DisplayDoctors = () => {
   const dispatch = useDispatch();
@@ -136,18 +134,8 @@ const DisplayDoctors = () => {
             <RxCross1 className="text-primaryBlue-300" />
           </IconButton>
         </div>
-        <div className="w-full h-full mt-4  grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 px-4 overflow-scroll">
-          {isLoading ? (
-            <SkeletonFrame />
-          ) : (
-            doctors?.map((doctor: DoctorType, index: number) => {
-              return (
-                <Link key={index} href={`/backoffice/doctors/${doctor._id}`}>
-                  <DoctorCard doctor={doctor} key={index} />
-                </Link>
-              );
-            })
-          )}
+        <div className="w-full h-full mt-4   px-2 overflow-scroll">
+          {isLoading ? <SkeletonFrame /> : <DoctorsTable doctors={doctors} />}
         </div>
         <div className="mt-8 w-full m-auto flex items-center justify-center ">
           <Pagination

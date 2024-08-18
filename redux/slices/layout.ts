@@ -10,7 +10,7 @@ interface InitialState {
 }
 
 const initialState: InitialState = {
-  selectedTab: "dashboard",
+  selectedTab: "",
   selectedSubcategoryTab: "",
   openDrawer: false,
   showMobileSearchBar: false,
