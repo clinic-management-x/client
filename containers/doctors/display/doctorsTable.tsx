@@ -1,5 +1,4 @@
-"use client";
-import { contactDataArr } from "@/components/dialogs/suppliers/ContactCreate/page";
+import React, { useState } from "react";
 import {
   Box,
   Collapse,
@@ -12,22 +11,25 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
+import dayjs from "dayjs";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useState } from "react";
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
+import { days } from "@/utils/staticData";
+import { calculateTime } from "@/utils/calculations";
 
-const supplierDefaultImage = require("../../../public/supplier.png");
+const defaultAvatar = require("../../../public/defaultAvatar.jpg");
 
 interface Props {
-  suppliers: SupplierType[];
+  doctors: DoctorType[];
 }
 
-const SuppliersTable = ({ suppliers }: Props) => {
+const DoctorsTable = ({ doctors }: Props) => {
   const [open, setOpen] = useState<{ id: string; open: boolean }>({
     id: "",
     open: false,
   });
+
   return (
     <TableContainer className=" border-[0.5px] rounded" sx={{ ml: 2 }}>
       <Table aria-label="collapsible table">
@@ -49,6 +51,23 @@ const SuppliersTable = ({ suppliers }: Props) => {
                 className=" font-semibold text-whiteText dark:text-darkText"
               >
                 Name
+              </Typography>
+            </TableCell>
+            <TableCell>
+              <Typography
+                variant="body1"
+                className=" font-semibold text-whiteText dark:text-darkText"
+              >
+                Date of Birth
+              </Typography>
+            </TableCell>
+            <TableCell>
+              {" "}
+              <Typography
+                variant="body1"
+                className=" font-semibold text-whiteText dark:text-darkText"
+              >
+                Gender
               </Typography>
             </TableCell>
             <TableCell>
@@ -75,7 +94,7 @@ const SuppliersTable = ({ suppliers }: Props) => {
                 variant="body1"
                 className=" font-semibold text-whiteText dark:text-darkText"
               >
-                Address
+                Speciality
               </Typography>
             </TableCell>
             <TableCell>
@@ -84,13 +103,13 @@ const SuppliersTable = ({ suppliers }: Props) => {
                 variant="body1"
                 className=" font-semibold text-whiteText dark:text-darkText"
               >
-                Contacts
+                Service Fees
               </Typography>
             </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {suppliers?.map((supplier, index) => {
+          {doctors?.map((doctor, index) => {
             return (
               <>
                 <TableRow
@@ -108,16 +127,16 @@ const SuppliersTable = ({ suppliers }: Props) => {
                       aria-label="expand row"
                       size="small"
                       onClick={() =>
-                        open.id === supplier._id
+                        open.id === doctor._id
                           ? setOpen({
-                              id: supplier._id || "",
+                              id: doctor._id || "",
                               open: !open.open,
                             })
-                          : setOpen({ id: supplier._id || "", open: true })
+                          : setOpen({ id: doctor._id || "", open: true })
                       }
-                      className=" text-whiteText dark:text-darkText"
+                      className={` text-whiteText dark:text-darkText`}
                     >
-                      {open.open && open.id === supplier._id ? (
+                      {open.open && open.id === doctor._id ? (
                         <MdKeyboardArrowUp />
                       ) : (
                         <MdKeyboardArrowDown />
@@ -126,7 +145,7 @@ const SuppliersTable = ({ suppliers }: Props) => {
                   </TableCell>
                   <TableCell>
                     <Image
-                      src={supplier.avatarUrl || supplierDefaultImage}
+                      src={doctor.avatarUrl || defaultAvatar}
                       alt=""
                       width={200}
                       height={200}
@@ -139,39 +158,41 @@ const SuppliersTable = ({ suppliers }: Props) => {
                     className=" text-whiteText dark:text-darkText"
                   >
                     <Link
-                      href={`/backoffice/inventory/suppliers/${supplier._id}`}
+                      href={`/backoffice/doctors/${doctor._id}`}
                       className=" underline underline-offset-1"
                     >
-                      {supplier.name}
+                      {doctor.name}
                     </Link>
                   </TableCell>
                   <TableCell className=" text-whiteText dark:text-darkText">
-                    {supplier.mobile}
+                    {dayjs(doctor.dateOfBirth).format("DD/MM/YYYY")}
                   </TableCell>
                   <TableCell className=" text-whiteText dark:text-darkText">
-                    {supplier.email}
+                    {doctor.gender}
                   </TableCell>
                   <TableCell className=" text-whiteText dark:text-darkText">
-                    {supplier.address}
+                    {doctor.mobile}
                   </TableCell>
                   <TableCell className=" text-whiteText dark:text-darkText">
-                    <div className="flex items-center space-x-1">
-                      {supplier.contacts?.map((contact) => {
-                        const currentContact = contactDataArr.find(
-                          (data) => data.name === contact.name
-                        );
-                        return currentContact?.icon;
-                      })}
-                    </div>
+                    {doctor.email}
+                  </TableCell>
+                  <TableCell className=" text-whiteText dark:text-darkText">
+                    {doctor.speciality.name}
+                  </TableCell>
+                  <TableCell className=" text-whiteText dark:text-darkText">
+                    {doctor.doctorFee}
                   </TableCell>
                 </TableRow>
-                <TableRow>
+                <TableRow
+
+                //className={`${doctor.schedules?.length ? "" : "hidden"}`}
+                >
                   <TableCell
                     style={{ paddingBottom: 0, paddingTop: 0 }}
-                    colSpan={7}
+                    colSpan={9}
                   >
                     <Collapse
-                      in={open.id == supplier._id && open.open}
+                      in={open.id == doctor._id && open.open}
                       timeout="auto"
                       unmountOnExit
                     >
@@ -182,13 +203,13 @@ const SuppliersTable = ({ suppliers }: Props) => {
                           component="div"
                           className="font-semibold text-whiteText dark:text-darkText"
                         >
-                          Medical Representatives
+                          Schedules
                         </Typography>
                       </Box>
                       <Table
                         size="small"
                         aria-label="purchases"
-                        className="border-[1px] border-gray-300 max-w-[800px] rounded-full mb-2"
+                        className="border-[1px] border-gray-300 w-[300px] ma  mb-2"
                       >
                         <TableHead>
                           <TableRow>
@@ -198,7 +219,7 @@ const SuppliersTable = ({ suppliers }: Props) => {
                                 variant="subtitle2"
                                 className=" font-semibold text-whiteText dark:text-darkText"
                               >
-                                Name
+                                Start
                               </Typography>
                             </TableCell>
                             <TableCell>
@@ -207,68 +228,68 @@ const SuppliersTable = ({ suppliers }: Props) => {
                                 variant="subtitle2"
                                 className=" font-semibold text-whiteText dark:text-darkText"
                               >
-                                Mobile Number
-                              </Typography>
-                            </TableCell>
-                            <TableCell>
-                              {" "}
-                              <Typography
-                                variant="subtitle2"
-                                className=" font-semibold text-whiteText dark:text-darkText"
-                              >
-                                Email
-                              </Typography>
-                            </TableCell>
-                            <TableCell>
-                              {" "}
-                              <Typography
-                                variant="subtitle2"
-                                className=" font-semibold text-whiteText dark:text-darkText"
-                              >
-                                Contacts
+                                End
                               </Typography>
                             </TableCell>
                           </TableRow>
                         </TableHead>
                         <TableBody>
-                          {supplier?.medRepresentatives?.map((mr, index) => {
-                            return (
-                              <TableRow
-                                sx={{ "& > *": { borderBottom: "unset" } }}
-                                className={`${
-                                  index % 2 == 0
-                                    ? "bg-[#DEEFFF] dark:bg-[#292929]"
-                                    : "dark:bg-transparent bg-[#FFFFFF]"
-                                }`}
-                              >
-                                <TableCell
-                                  component="th"
-                                  scope="row"
-                                  className=" text-whiteText dark:text-darkText"
+                          {doctor?.schedules?.length ? (
+                            doctor?.schedules?.map((schedule, index) => {
+                              return (
+                                <TableRow
+                                  sx={{ "& > *": { borderBottom: "unset" } }}
+                                  className={`${
+                                    index % 2 == 0
+                                      ? "bg-[#DEEFFF] dark:bg-[#292929]"
+                                      : "dark:bg-transparent bg-[#FFFFFF]"
+                                  }`}
                                 >
-                                  {mr.name}
-                                </TableCell>
-                                <TableCell className=" text-whiteText dark:text-darkText">
-                                  {mr.mobile}
-                                </TableCell>
-                                <TableCell className=" text-whiteText dark:text-darkText">
-                                  {mr.email}
-                                </TableCell>
-
-                                <TableCell>
-                                  <div className="flex items-center space-x-1">
-                                    {mr.contacts?.map((contact) => {
-                                      const currentContact =
-                                        contactDataArr.find(
-                                          (data) => data.name === contact.name
-                                        );
-                                      return currentContact?.icon;
-                                    })}
-                                  </div>
-                                </TableCell>
-                              </TableRow>
-                            );
-                          })}
+                                  <TableCell
+                                    component="th"
+                                    scope="row"
+                                    className=" text-whiteText dark:text-darkText"
+                                  >
+                                    {
+                                      days.find(
+                                        (day) =>
+                                          day._id ===
+                                          Math.ceil(schedule.start / 1440 - 1)
+                                      )?.name
+                                    }
+                                    , {calculateTime(schedule.start)}
+                                  </TableCell>
+                                  <TableCell className=" text-whiteText dark:text-darkText">
+                                    {
+                                      days.find(
+                                        (day) =>
+                                          day._id ===
+                                          Math.ceil(schedule.end / 1440 - 1)
+                                      )?.name
+                                    }
+                                    , {calculateTime(schedule.end)}
+                                  </TableCell>
+                                </TableRow>
+                              );
+                            })
+                          ) : (
+                            <TableRow
+                              sx={{ "& > *": { borderBottom: "unset" } }}
+                              className={`${
+                                index % 2 == 0
+                                  ? "bg-[#DEEFFF] dark:bg-[#292929]"
+                                  : "dark:bg-transparent bg-[#FFFFFF]"
+                              }`}
+                            >
+                              <TableCell
+                                align="center"
+                                className="text-whiteText dark:text-darkText"
+                              >
+                                No Schedule
+                              </TableCell>
+                              <TableCell align="center"></TableCell>
+                            </TableRow>
+                          )}
                         </TableBody>
                       </Table>
                     </Collapse>
@@ -283,4 +304,4 @@ const SuppliersTable = ({ suppliers }: Props) => {
   );
 };
 
-export default SuppliersTable;
+export default DoctorsTable;
