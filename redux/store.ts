@@ -15,11 +15,13 @@ import userSlice from "./slices/user";
 import layoutSlice from "./slices/layout";
 import workersSlice from "./slices/workers";
 import storage from "./storage";
+import supplierSlice from "./slices/supplier";
 
 const reducer = combineReducers({
   userSlice: userSlice,
   layoutSlice: layoutSlice,
   workersSlice: workersSlice,
+  supplierSlice: supplierSlice,
 });
 
 const persistConfig = {

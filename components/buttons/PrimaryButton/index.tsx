@@ -1,13 +1,15 @@
 "use client";
 import Spinner from "@/components/loaders/Spinner";
+import { Button, CircularProgress } from "@mui/material";
 import React, { FC } from "react";
-import { useFormStatus } from "react-dom";
 
 interface PrimaryButtonProps {
   text: string;
   className?: string;
   type?: "button" | "submit" | "reset";
   onClick?: () => void;
+  loading: boolean;
+  disabled: boolean;
 }
 
 const PrimaryButton: FC<PrimaryButtonProps> = ({
@@ -15,16 +17,21 @@ const PrimaryButton: FC<PrimaryButtonProps> = ({
   className,
   type,
   onClick,
+  loading,
+  disabled,
 }) => {
-  const { pending } = useFormStatus();
   return (
-    <button
+    <Button
       onClick={onClick}
       type={type}
-      className={`bg-primaryColor flex justify-center items-center w-[130px] p-2 md:p-4 md:w-[170px] md:h-[52px] text-sm md:text-md text-white ${className} `}
+      variant="contained"
+      disabled={disabled}
+      className={` ${
+        disabled ? " opacity-50" : "bg-primaryBlue-400"
+      }  flex justify-center items-center w-[130px]  md:w-[170px] md:h-[52px] text-sm md:text-md text-white ${className} `}
     >
-      {pending ? <Spinner></Spinner> : text}
-    </button>
+      {loading ? <CircularProgress color="inherit" size={30} /> : text}
+    </Button>
   );
 };
 

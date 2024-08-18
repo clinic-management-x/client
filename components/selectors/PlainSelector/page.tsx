@@ -5,6 +5,7 @@ import React from "react";
 interface DataItem {
   _id?: string | number; // This allows _id to be either string or number
   name: string;
+  icon?: any;
 }
 
 interface Props<T extends DataItem, S> {
@@ -59,7 +60,10 @@ const PlainSelector = <T extends DataItem, S>({
           </MenuItem> */}
           {dataArr?.map((data, index) => (
             <MenuItem key={index} value={data._id}>
-              {data.name}
+              <div className="flex items-center space-x-4">
+                <div>{data.icon ? data.icon : ""}</div>
+                <div>{data.name}</div>
+              </div>
             </MenuItem>
           ))}
         </Select>

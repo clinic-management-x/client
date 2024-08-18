@@ -18,10 +18,10 @@ import useSWR, { KeyedMutator } from "swr";
 import useSWRMutation from "swr/mutation";
 import { useRouter } from "next/navigation";
 import DetailEditCancelButton from "@/components/buttons/DetailEditCancelButton/page";
-import DeleteDoctorDialog from "@/components/dialogs/doctors/DeleteDoctorDialog/page";
 import BackButton from "@/components/buttons/BackButton/page";
 import Schedules from "./schedules";
 import SkeletonPage from "./skeleton";
+import DeleteMajorInfo from "@/components/dialogs/delete/DeleteMajorInfo";
 
 const EditDoctorPage = ({ id }: { id: string }) => {
   const router = useRouter();
@@ -135,7 +135,7 @@ const EditDoctorPage = ({ id }: { id: string }) => {
             />
 
             <Typography
-              className="text-slate-500 dark:text-darkText underline ml-2 lg:ml-40 mt-10"
+              className="text-slate-500 dark:text-darkText underline ml-2 lg:ml-20 mt-10"
               onClick={() => {
                 setOpenDeleteDoctorDialog(true);
               }}
@@ -144,13 +144,12 @@ const EditDoctorPage = ({ id }: { id: string }) => {
             </Typography>
           </>
         )}
-
-        <DeleteDoctorDialog
+        <DeleteMajorInfo
           open={openDeleteDoctorDialog}
           handleClose={() => {
             setOpenDeleteDoctorDialog(false);
           }}
-          handleDelete={async () => {
+          handleDelete={() => async () => {
             try {
               setDeleteLoading(true);
               const data = await deleteDoctor(
@@ -169,6 +168,9 @@ const EditDoctorPage = ({ id }: { id: string }) => {
             }
           }}
           loading={deleteLoading}
+          text1="Doctor"
+          text2="Deleting the doctor will remove all of the doctor's information from
+          our databse.This cannot be undone."
         />
       </Box>
     </section>

@@ -1,14 +1,27 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { CiLogout } from "react-icons/ci";
 import { useDispatch, useSelector } from "react-redux";
-import { getSelectedTab, insertSelectedTab } from "@/redux/slices/layout";
-import { MdAccountCircle, MdDashboard } from "react-icons/md";
+import {
+  getSelectedSubcategoryTab,
+  getSelectedTab,
+  insertSelectedSubcategoryTab,
+  insertSelectedTab,
+} from "@/redux/slices/layout";
+import {
+  MdAccountCircle,
+  MdAddAlert,
+  MdBusiness,
+  MdDashboard,
+  MdKeyboardArrowDown,
+  MdOutlineInventory2,
+  MdOutlineKeyboardArrowUp,
+} from "react-icons/md";
 import { RiCalendarScheduleLine } from "react-icons/ri";
-import { FaUserDoctor } from "react-icons/fa6";
+import { FaCartPlus, FaUserDoctor } from "react-icons/fa6";
 import { HiMiniUsers } from "react-icons/hi2";
 import { GiMedicines } from "react-icons/gi";
 import { IoSettingsOutline } from "react-icons/io5";
@@ -46,9 +59,34 @@ const sidebarData: SidebarType[] = [
   },
   {
     id: 5,
-    icon: <GiMedicines size={28} />,
-    title: "Medicine",
-    link: "/backoffice/medicine",
+    icon: <MdOutlineInventory2 size={28} />,
+    title: "Inventory",
+    subCategories: [
+      {
+        id: 50,
+        icon: <MdBusiness size={26} />,
+        title: "Supplier",
+        link: "/backoffice/inventory/suppliers",
+      },
+      {
+        id: 51,
+        icon: <GiMedicines size={26} />,
+        title: "Medicine",
+        link: "/backoffice/inventory/medicine",
+      },
+      {
+        id: 52,
+        icon: <FaCartPlus size={26} />,
+        title: "Order",
+        link: "/backoffice/inventory/order",
+      },
+      {
+        id: 54,
+        icon: <MdAddAlert size={26} />,
+        title: "Alert",
+        link: "/backoffice/inventory/alert",
+      },
+    ],
   },
   {
     id: 6,
@@ -67,8 +105,10 @@ const sidebarData: SidebarType[] = [
 const SideBar = () => {
   const dispatch = useDispatch();
   const selectedTab = useSelector(getSelectedTab);
+  const selectedSubcategoryTab = useSelector(getSelectedSubcategoryTab);
   const pathname = usePathname();
   const hasClinic = useSelector(getHasClinic);
+  const [showSubCategories, setShowSubCategories] = useState(false);
 
   useEffect(() => {
     dispatch(insertSelectedTab(pathname.split("/")[2]));
@@ -81,30 +121,90 @@ const SideBar = () => {
       </div>
       {sidebarData.map((data) => {
         return (
-          <div
-            key={data.id}
-            onClick={() => {
-              if (!hasClinic) {
-                return;
-              }
-              dispatch(insertSelectedTab(data.title.toLowerCase()));
-            }}
-            className={`w-[90%] h-[50px] m-auto rounded-lg pl-6   p-2 ${
-              data.title.toLowerCase() === selectedTab
-                ? "bg-primaryBlue-200 dark:bg-transparent text-white border-2 border-white dark:border-primaryBlue-300 dark:text-primaryBlue-300"
-                : "text-gray-500 hover:text-primaryBlue-300 hover:text-lg"
-            } `}
-          >
-            <Link
-              href={!hasClinic ? "/backoffice/settings" : data.link}
-              className="flex items-center"
+          <div key={data.id}>
+            <div
+              onClick={() => {
+                if (!hasClinic) {
+                  return;
+                }
+                if (data.link) {
+                  dispatch(insertSelectedTab(data.title.toLowerCase()));
+                  dispatch(insertSelectedSubcategoryTab(""));
+                } else {
+                  setShowSubCategories(!showSubCategories);
+                }
+              }}
+              className={`w-[90%] h-[50px] m-auto rounded-lg pl-6   p-2 ${
+                data.title.toLowerCase() === selectedTab
+                  ? "bg-primaryBlue-300 dark:bg-primaryBlue-400 text-white border-2 border-white dark:border-primaryBlue-400 dark:text-gray-300"
+                  : "text-gray-500 hover:text-primaryBlue-300 hover:text-lg"
+              } `}
             >
-              {data.icon}
-              <div className="ml-4">{data.title}</div>
-            </Link>
+              {data.link ? (
+                <Link
+                  href={
+                    !hasClinic
+                      ? "/backoffice/settings"
+                      : data.link
+                      ? data.link
+                      : ""
+                  }
+                  className="flex items-center"
+                >
+                  {data.icon}
+                  <div className="ml-4">{data.title}</div>
+                </Link>
+              ) : (
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center">
+                    {data.icon}
+                    <div className="ml-4">{data.title}</div>
+                  </div>
+                  <div className={`${data.link ? "hidden" : "flex"}`}>
+                    {" "}
+                    {showSubCategories ? (
+                      <MdOutlineKeyboardArrowUp size={28} />
+                    ) : (
+                      <MdKeyboardArrowDown size={28} />
+                    )}{" "}
+                  </div>
+                </div>
+              )}
+            </div>
+            {showSubCategories ? (
+              data.subCategories?.map((subcategory) => (
+                <div
+                  key={subcategory.id}
+                  onClick={() => {
+                    if (!hasClinic) {
+                      return;
+                    }
+
+                    dispatch(
+                      insertSelectedSubcategoryTab(
+                        subcategory.title.toLowerCase()
+                      )
+                    );
+                  }}
+                  className={`w-[80%] h-[45px]  rounded-lg text-center pl-6 mx-auto mt-2 mb-3 p-2 ${
+                    subcategory.title.toLowerCase() === selectedSubcategoryTab
+                      ? " dark:bg-transparent text-primaryBlue-300 dark:text-primaryBlue-400 border-2  border-primaryBlue-300 dark:border-primaryBlue-400 "
+                      : "text-gray-500 hover:text-primaryBlue-300 hover:text-lg"
+                  } `}
+                >
+                  <Link href={subcategory.link} className="flex items-center">
+                    {subcategory.icon}
+                    <div className="ml-4">{subcategory.title}</div>
+                  </Link>
+                </div>
+              ))
+            ) : (
+              <></>
+            )}
           </div>
         );
       })}
+
       <div className="  text-center fixed bottom-2 pl-14  w-[17%] h-[50px] text-gray-500 ">
         <Link
           href={"/login"}

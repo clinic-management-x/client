@@ -74,6 +74,7 @@ const DisplayDoctors = () => {
               handleClick={() => {
                 setOpen(true);
               }}
+              showIcon={true}
             />
           </div>
           <div className="w-[60%] flex items-center justify-end mr-4  ">
@@ -151,7 +152,7 @@ const DisplayDoctors = () => {
         <div className="mt-8 w-full m-auto flex items-center justify-center ">
           <Pagination
             size="large"
-            count={10}
+            count={Math.ceil(doctors?.length / 8)}
             defaultPage={page}
             color="primary"
             sx={{

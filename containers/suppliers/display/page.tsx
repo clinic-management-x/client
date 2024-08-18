@@ -1,54 +1,52 @@
 "use client";
 import CreateButton from "@/components/buttons/CreateButton/page";
+import CreateSupplierDialog from "@/components/dialogs/suppliers/CreateSupplierDialog/page";
 import SearchBar from "@/components/input/SearchBar/page";
-import { getStaffs } from "@/datafetch/staffs/staffs.api";
+import { getSuppliers } from "@/datafetch/supplier/supplier.api";
 import {
   getShowMobileSearchBar,
   insertShowMobileSearchBar,
 } from "@/redux/slices/layout";
-import { getPageNumber, insertPageNumber } from "@/redux/slices/workers";
 import config from "@/utils/config";
-import { staffEndPoint } from "@/utils/endpoints";
+import { supplierEndPoint } from "@/utils/endpoints";
 import { Box, IconButton, Pagination } from "@mui/material";
-import { useTheme } from "next-themes";
-import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { FiSearch } from "react-icons/fi";
 import { RxCross1 } from "react-icons/rx";
 import { useDispatch, useSelector } from "react-redux";
 import useSWR from "swr";
-import CreateStaffDialog from "@/components/dialogs/staffs/CreateStaffDialog/page";
-import StaffsTable from "./staffsTable";
+import SuppliersTable from "./suppliersTable";
+import { getPageNumber, insertPageNumber } from "@/redux/slices/workers";
+import { useTheme } from "next-themes";
 import SkeletonPage from "./skeleton";
 
-const DisplayStaffs = () => {
+const DispalySuppliers = () => {
   const theme = useTheme();
   const dispatch = useDispatch();
   const page = useSelector(getPageNumber);
   const showMobileSearchBar = useSelector(getShowMobileSearchBar);
-  const [skip, setSkip] = useState((page - 1) * 8);
-  const [staffs, setStaffs] = useState<StaffType[]>([]);
   const [open, setOpen] = useState(false);
-  const [typeSearch, setTypeSearch] = useState("");
+  const [skip, setSkip] = useState(0);
   const [search, setSearch] = useState("");
-
-  const { data, isLoading, mutate } = useSWR(
-    `${
-      config.apiBaseUrl
-    }/${staffEndPoint}?limit=${8}&skip=${skip}&search=${search}`,
-    getStaffs
-  );
-
-  useEffect(() => {
-    if (data) {
-      setStaffs(data);
-    }
-  }, [data]);
-
+  const [typeSearch, setTypeSearch] = useState("");
+  const [suppliers, setSuppliers] = useState<SupplierType[]>([]);
   const hanldeSearchChange = (e: any) => {
     setTypeSearch(e.target.value);
     e.target.value === "" ? setSearch("") : "";
   };
+
+  const { data, isLoading, mutate } = useSWR(
+    `${
+      config.apiBaseUrl
+    }/${supplierEndPoint}?limit=${8}&skip=${skip}&search=${search}`,
+    getSuppliers
+  );
+
+  useEffect(() => {
+    if (data) {
+      setSuppliers(data);
+    }
+  }, [data]);
 
   return (
     <section className="flex flex-col overflow-y-scroll">
@@ -110,13 +108,16 @@ const DisplayStaffs = () => {
             <RxCross1 className="text-primaryBlue-300" />
           </IconButton>
         </div>
-        <div className="w-full h-full mt-4   px-2 overflow-scroll">
-          {isLoading ? <SkeletonPage /> : <StaffsTable staffs={staffs} />}
-        </div>
+
+        {isLoading ? (
+          <SkeletonPage />
+        ) : (
+          <SuppliersTable suppliers={suppliers} />
+        )}
         <div className="mt-8 w-full m-auto flex items-center justify-center ">
           <Pagination
             size="large"
-            count={Math.ceil(staffs?.length / 8)}
+            count={Math.ceil(suppliers?.length / 8)}
             defaultPage={page}
             color="primary"
             sx={{
@@ -135,7 +136,7 @@ const DisplayStaffs = () => {
             }}
           />
         </div>
-        <CreateStaffDialog
+        <CreateSupplierDialog
           open={open}
           handleClose={() => {
             setOpen(false);
@@ -147,4 +148,4 @@ const DisplayStaffs = () => {
   );
 };
 
-export default DisplayStaffs;
+export default DispalySuppliers;

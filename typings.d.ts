@@ -1,8 +1,9 @@
 interface SidebarType {
   id: number;
   title: string;
+  subCategories?: { id: number; title: string; icon: any; link: string }[];
   icon: any;
-  link: string;
+  link?: string;
 }
 
 interface ScheduleType {
@@ -44,4 +45,38 @@ interface StaffType {
   address?: string;
   _id?: string;
   __v?: string;
+}
+
+interface SupplierType {
+  clinic?: string;
+  avatarUrl?: string;
+  _id?: string;
+  __v?: string;
+  mobile: string;
+  email: string;
+  name: string;
+  address?: string;
+  contacts?: { name?: string; value: string }[];
+  medRepresentatives?: MedicalRepresentativeType[];
+}
+
+interface EditSupplierType {
+  avatarUrl?: string;
+  mobile?: string;
+  email?: string;
+  name?: string;
+  address?: string;
+  contacts?: { name?: string; value: string }[];
+  medRepresentatives?: MedicalRepresentativeType[];
+}
+
+interface MedicalRepresentativeType {
+  clinic?: string;
+  _id?: string;
+  __v?: string;
+  mobile: string;
+  email: string;
+  name: string;
+  contacts?: { name?: string; value: string }[];
+  supplierCompany?: string;
 }

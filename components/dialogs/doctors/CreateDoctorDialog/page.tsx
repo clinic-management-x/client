@@ -211,6 +211,7 @@ const CreateDoctorDialog = ({ open, handleClose, mutate }: Props) => {
               basicDoctorInfo.speciality._id == ""
             }
             isLoading={createMutating}
+            showIcon={true}
           />
         </div>
       </DialogActions>

@@ -25,7 +25,7 @@ const SearchBar = ({ selectedValue, handleClick, handleChange }: Props) => {
           borderColor: "#0096c7",
         },
       }}
-      className="w-[300px] md:w-[240px] lg:w-[350px] "
+      className="w-[300px] md:w-[240px] lg:w-[350px] hover:border-[#0096c7] "
       //className="rounded-lg"
       InputProps={{
         style: {
