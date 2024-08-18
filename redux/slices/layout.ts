@@ -3,6 +3,7 @@ import { RootState } from "../store";
 
 interface InitialState {
   selectedTab: string;
+  selectedSubcategoryTab: string;
   openDrawer: boolean;
   showMobileSearchBar: boolean;
   mutateStaffs: any;
@@ -10,6 +11,7 @@ interface InitialState {
 
 const initialState: InitialState = {
   selectedTab: "dashboard",
+  selectedSubcategoryTab: "",
   openDrawer: false,
   showMobileSearchBar: false,
   mutateStaffs: null,
@@ -21,6 +23,12 @@ export const layoutSlice = createSlice({
   reducers: {
     insertSelectedTab: (state: InitialState, action: PayloadAction<any>) => {
       state.selectedTab = action.payload;
+    },
+    insertSelectedSubcategoryTab: (
+      state: InitialState,
+      action: PayloadAction<any>
+    ) => {
+      state.selectedSubcategoryTab = action.payload;
     },
     insertOpenDrawer: (state: InitialState, action: PayloadAction<any>) => {
       state.openDrawer = action.payload;
@@ -39,6 +47,7 @@ export const layoutSlice = createSlice({
 
 export const {
   insertSelectedTab,
+  insertSelectedSubcategoryTab,
   insertOpenDrawer,
   insertShowMobileSearchBar,
   insertMutateStaff,
@@ -46,6 +55,9 @@ export const {
 
 export const getSelectedTab = (state: RootState) =>
   state.layoutSlice.selectedTab;
+
+export const getSelectedSubcategoryTab = (state: RootState) =>
+  state.layoutSlice.selectedSubcategoryTab;
 
 export const getOpenDrawer = (state: RootState) => state.layoutSlice.openDrawer;
 

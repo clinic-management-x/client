@@ -7,3 +7,5 @@ export const authEndPoint = "auth";
 export const clinicEndPoint = "clinics";
 
 export const staffEndPoint = "staffs";
+
+export const supplierEndPoint = "suppliers";

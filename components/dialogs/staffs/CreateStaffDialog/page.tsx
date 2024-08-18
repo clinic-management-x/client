@@ -102,6 +102,7 @@ const CreateStaffDialog = ({ open, handleClose, mutate }: Props) => {
               basicStaffInfo.name === "" || basicStaffInfo.mobile.length < 9
             }
             isLoading={createMutating}
+            showIcon={true}
           />
         </div>
       </DialogActions>

@@ -19,9 +19,9 @@ import { defaultStaffInfo } from "@/utils/staticData";
 import toast from "react-hot-toast";
 import BasicInfo from "@/components/dialogs/staffs/BasicInfo/page";
 import DetailEditCancelButton from "@/components/buttons/DetailEditCancelButton/page";
-import DeleteStaffDialog from "@/components/dialogs/staffs/DeleteStaffDialog/page";
 import { useSelector } from "react-redux";
 import { getMutateStaffs } from "@/redux/slices/layout";
+import DeleteMajorInfo from "@/components/dialogs/delete/DeleteMajorInfo";
 
 const EditStaffPage = ({ id }: { id: string }) => {
   const router = useRouter();
@@ -74,7 +74,7 @@ const EditStaffPage = ({ id }: { id: string }) => {
 
         toast.success("Successfully added.");
         setShowEditButtonBox(false);
-        setStaff({ ...response, mobile: data.mobile.substring("4") });
+        setStaff({ ...response, mobile: data.mobile.substring(4) });
       }
     } catch (error) {
       toast.error("Something went wrong.");
@@ -127,20 +127,19 @@ const EditStaffPage = ({ id }: { id: string }) => {
             />
 
             <Typography
-              className="text-slate-500 dark:text-darkText underline ml-2 lg:ml-40 mt-10"
+              className="text-slate-500 dark:text-darkText underline ml-2 lg:ml-20 mt-10"
               onClick={() => {
                 setOpenDeleteStaffDialog(true);
               }}
             >
               Delete Staff?
             </Typography>
-
-            <DeleteStaffDialog
+            <DeleteMajorInfo
               open={openDeleteStaffDialog}
               handleClose={() => {
                 setOpenDeleteStaffDialog(false);
               }}
-              handleDelete={async () => {
+              handleDelete={() => async () => {
                 try {
                   setDeleteLoading(true);
                   const data = await deleteStaff(
@@ -159,6 +158,9 @@ const EditStaffPage = ({ id }: { id: string }) => {
                 }
               }}
               loading={deleteLoading}
+              text1="Staff"
+              text2="Deleting the staff will remove all of the staff's information from
+          our databse.This cannot be undone."
             />
           </>
         )}

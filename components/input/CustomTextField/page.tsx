@@ -7,9 +7,16 @@ interface Props {
   handleChange: (e: any) => void;
   type?: string;
   className?: string;
+  placeholder?: string;
 }
 
-const CustomTextField = ({ value, handleChange, type, className }: Props) => {
+const CustomTextField = ({
+  value,
+  handleChange,
+  type,
+  className,
+  placeholder,
+}: Props) => {
   const { theme } = useTheme();
   return (
     <>
@@ -70,6 +77,7 @@ const CustomTextField = ({ value, handleChange, type, className }: Props) => {
         />
       ) : (
         <TextField
+          placeholder={placeholder}
           value={value}
           onChange={(e) => handleChange(e)}
           InputProps={{

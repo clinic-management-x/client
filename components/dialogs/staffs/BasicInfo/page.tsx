@@ -49,7 +49,7 @@ const BasicInfo = ({
           />
         </div>
         <div className="flex flex-col mx-2 ">
-          <LabelTypography title="Age" />
+          <LabelTypography title="Date of Birth" />
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <CustomDatePicker
               value={dob}

@@ -1,3 +1,4 @@
+"use client";
 import CloseButton from "@/components/buttons/CloseButton/page";
 import {
   Box,
@@ -15,13 +16,17 @@ interface Props {
 
   handleDelete: () => void;
   loading: boolean;
+  text1: string;
+  text2: string;
 }
 
-const DeleteDoctorDialog = ({
+const DeleteMajorInfo = ({
   open,
   handleClose,
   handleDelete,
   loading,
+  text1,
+  text2,
 }: Props) => {
   const [confirmText, setConfirmText] = useState("");
   return (
@@ -29,11 +34,10 @@ const DeleteDoctorDialog = ({
       <Box className="px-10 mt-6">
         <CloseButton handleClose={handleClose} />
         <Typography className=" dark:text-darkText text-[30px]">
-          Delete Account?
+          Delete {text1}?
         </Typography>
         <Typography variant="body2" className="text-[16px] my-4">
-          Deleting the account will remove all of the doctor's information from
-          our databse.This cannot be undone.
+          {text2}
         </Typography>
         <Typography variant="caption" className="my-4">
           To confirm this, type "DELETE".
@@ -60,7 +64,7 @@ const DeleteDoctorDialog = ({
             {loading ? (
               <CircularProgress color="inherit" size={30} />
             ) : (
-              "Delete Doctor"
+              `Delete ${text1}`
             )}
           </Button>
         </Box>
@@ -69,4 +73,4 @@ const DeleteDoctorDialog = ({
   );
 };
 
-export default DeleteDoctorDialog;
+export default DeleteMajorInfo;

@@ -1,4 +1,5 @@
 import dayjs from "dayjs";
+import { FaViber } from "react-icons/fa";
 
 export const days: { name: string; _id?: number }[] = [
   { name: "Monday", _id: 0 },
@@ -9,6 +10,7 @@ export const days: { name: string; _id?: number }[] = [
   { name: "Saturday", _id: 5 },
   { name: "Sunday", _id: 6 },
 ];
+
 export const defaultInfo = {
   name: "",
   dateOfBirth: dayjs().toISOString(),
@@ -29,6 +31,20 @@ export const defaultStaffInfo = {
   address: "",
   mobile: "",
   email: "",
+};
+
+export const defaultSupplierInfo = {
+  name: "",
+  email: "",
+  mobile: "",
+  address: "",
+};
+
+export const defaultMRInfo = {
+  name: "",
+  email: "",
+  mobile: "",
+  contacts: [],
 };
 
 export const defaultNewSchedule = {

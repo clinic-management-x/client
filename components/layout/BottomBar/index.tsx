@@ -21,7 +21,7 @@ const bottomData = [
     link: "/backoffice/appointments",
   },
   {
-    id: 2,
+    id: 3,
     icon: <MdAccountCircle size={34} />,
     title: "Account",
     link: "/backoffice/account",
