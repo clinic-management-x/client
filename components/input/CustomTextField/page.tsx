@@ -20,7 +20,7 @@ const CustomTextField = ({
   const { theme } = useTheme();
   return (
     <>
-      {type === "fees" ? (
+      {type === "fees" || type === "number" ? (
         <TextField
           value={value}
           onChange={(e) => handleChange(e)}

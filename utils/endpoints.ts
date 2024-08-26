@@ -9,3 +9,5 @@ export const clinicEndPoint = "clinics";
 export const staffEndPoint = "staffs";
 
 export const supplierEndPoint = "suppliers";
+
+export const medicineEndPoint = "medicines";

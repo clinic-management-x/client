@@ -27,11 +27,11 @@ import { GiMedicines } from "react-icons/gi";
 import { IoSettingsOutline } from "react-icons/io5";
 import { usePathname } from "next/navigation";
 import { getHasClinic } from "@/redux/slices/user";
-import { apiBaseUrl } from "next-auth/client/_utils";
 import baseApi from "@/datafetch/base.api";
 import config from "@/utils/config";
-const logo = require("../../../public/logo.jpeg");
-
+import { useTheme } from "next-themes";
+const logo = require("../../../public/logo1.jpeg");
+const darkLogo = require("../../../public/logo2.jpeg");
 const sidebarData: SidebarType[] = [
   {
     id: 1,
@@ -103,6 +103,7 @@ const sidebarData: SidebarType[] = [
 ];
 
 const SideBar = () => {
+  const theme = useTheme();
   const dispatch = useDispatch();
   const selectedTab = useSelector(getSelectedTab);
   const selectedSubcategoryTab = useSelector(getSelectedSubcategoryTab);
@@ -115,9 +116,14 @@ const SideBar = () => {
   }, [pathname]);
 
   return (
-    <div className=" max-w-[225px] lg:min-w-[275px] z-[9999999]  border-gray-300 dark:border-black border-r-[1px] fixed h-screen pt-2 bg-white dark:bg-[#171717]">
-      <div className="h-auto  border-[2px] rounded-lg text-center border-primaryBlue-200  m-2  text-black mb-2">
-        <Image src={logo} alt="" width={250} height={200} />
+    <div className=" max-w-[225px] lg:min-w-[275px] z-[999]  border-gray-300 dark:border-black border-r-[1px] fixed h-screen pt-2 bg-white dark:bg-[#171717]">
+      <div className="h-auto  border-[0.5px] rounded text-center border-primaryBlue-400  m-2  text-black mb-2">
+        <Image
+          src={theme.theme === "dark" ? darkLogo : logo}
+          alt=""
+          width={250}
+          height={200}
+        />
       </div>
       {sidebarData.map((data) => {
         return (

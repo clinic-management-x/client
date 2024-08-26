@@ -80,3 +80,52 @@ interface MedicalRepresentativeType {
   contacts?: { name?: string; value: string }[];
   supplierCompany?: string;
 }
+
+interface MedicineTypeCreate {
+  brandName: string;
+  genericDrug: string;
+  activeIngredients: {
+    activeIngredient: string;
+    strength: number;
+    unit: string;
+  }[];
+  routeOfAdministration: string;
+  stockQuantity: number;
+  stockQuantityUnit: string;
+  miniumAlertQuantity: number;
+  minimumAlertQuantityUnit: string;
+  sellPrices: {
+    price: number;
+    unit: string;
+  }[];
+  imageUrls: string[];
+}
+
+interface ActiveIngridient {
+  _id: string;
+  activeIngredient: {
+    _id: string;
+    activeIngredientName: string;
+  };
+  strength: number;
+  unit: string;
+  __v: 0;
+}
+interface MedicineTypeStandard {
+  brandName: string;
+  genericDrug: {
+    _id: string;
+    genericName: string;
+  };
+  activeIngredients: ActiveIngridient[];
+  routeOfAdministration: string;
+  stockQuantity: number;
+  stockQuantityUnit: string;
+  miniumAlertQuantity: number;
+  minimumAlertQuantityUnit: string;
+  sellPrices: {
+    price: number;
+    unit: string;
+  }[];
+  imageUrls: [];
+}
