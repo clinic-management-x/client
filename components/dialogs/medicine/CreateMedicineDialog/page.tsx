@@ -8,6 +8,7 @@ import CustomTextField from "@/components/input/CustomTextField/page";
 import PlainSelector from "@/components/selectors/PlainSelector/page";
 import LabelTypography from "@/components/typography/LabelTypography/page";
 import {
+  createMedicine,
   getActiveIngridients,
   getGenericDrugNames,
 } from "@/datafetch/medicines/medicines.api";
@@ -33,13 +34,16 @@ import IngredientCreate from "../IngredientCreate/page";
 import SellUnitCreate from "../SellUnitCreate/page";
 import SellUnitDisplay from "../SellUnitDisplay/page";
 import ImageUploads from "../ImageUploads/page";
+import useSWRMutation from "swr/mutation";
+import toast from "react-hot-toast";
 
 interface Props {
   open: boolean;
   handleClose: () => void;
+  mutate: any;
 }
 
-const CreateMedicineDialog = ({ open, handleClose }: Props) => {
+const CreateMedicineDialog = ({ open, handleClose, mutate }: Props) => {
   const [genericDrugs, setGenericDrugs] = useState<
     { _id: string; genericName: string }[]
   >([]);
@@ -54,9 +58,9 @@ const CreateMedicineDialog = ({ open, handleClose }: Props) => {
   const [showSellUnits, setShowSellUnits] = useState(false);
   const [stockUnit, setStockUnit] = useState("");
   const [alertUnit, setAlertUnit] = useState("");
-  const [routeId, setRouteId] = useState("");
+  const [routeId, setRouteId] = useState(0);
 
-  const { data: genericDrugData, mutate } = useSWR(
+  const { data: genericDrugData } = useSWR(
     `${config.apiBaseUrl}/${medicineEndPoint}/generic-drugs?search=${genericSearch}`,
     getGenericDrugNames
   );
@@ -65,7 +69,11 @@ const CreateMedicineDialog = ({ open, handleClose }: Props) => {
     `${config.apiBaseUrl}/${medicineEndPoint}/active-ingredients?search=${ingredientSearch}`,
     getActiveIngridients
   );
-  console.log("medicalIndo", basicMedicineInfo);
+
+  const { trigger, isMutating: createMutating } = useSWRMutation(
+    `${config.apiBaseUrl}/${medicineEndPoint}`,
+    createMedicine
+  );
 
   useEffect(() => {
     if (genericSearch.length > 4) {
@@ -92,7 +100,19 @@ const CreateMedicineDialog = ({ open, handleClose }: Props) => {
       setActiveIngredients(activeIngredientsData);
     }
   }, [activeIngredientsData]);
-  const handleCreate = () => {};
+  const handleCreate = async () => {
+    try {
+      const response = await trigger(basicMedicineInfo);
+      if (response) {
+        mutate();
+        toast.success("Successfully created.");
+        closeDialog();
+      }
+    } catch (error) {
+      console.log("error", error);
+      toast.error("Something went wrong.");
+    }
+  };
 
   const closeDialog = () => {
     handleClose();
@@ -208,6 +228,7 @@ const CreateMedicineDialog = ({ open, handleClose }: Props) => {
               sellPrices={basicMedicineInfo.sellPrices}
               basicMedicineInfo={basicMedicineInfo}
               setBasicMedicineInfo={setBasicMedicineInfo}
+              edit={false}
             />
 
             {showSellUnits ? (
@@ -236,7 +257,7 @@ const CreateMedicineDialog = ({ open, handleClose }: Props) => {
                   handleChange={(e) => {
                     setBasicMedicineInfo({
                       ...basicMedicineInfo,
-                      stockQuantity: e.target.value,
+                      stockQuantity: +e.target.value,
                     });
                   }}
                   type="number"
@@ -263,11 +284,11 @@ const CreateMedicineDialog = ({ open, handleClose }: Props) => {
               <div className="flex flex-col mx-2 md:w-[180px]">
                 <LabelTypography title="Minimum Alert Quantity" />
                 <CustomTextField
-                  value={basicMedicineInfo.miniumAlertQuantity}
+                  value={basicMedicineInfo.minimumAlertQuantity}
                   handleChange={(e) => {
                     setBasicMedicineInfo({
                       ...basicMedicineInfo,
-                      miniumAlertQuantity: e.target.value,
+                      minimumAlertQuantity: +e.target.value,
                     });
                   }}
                   type="number"
@@ -299,6 +320,8 @@ const CreateMedicineDialog = ({ open, handleClose }: Props) => {
               open={open}
               basicMedicineInfo={basicMedicineInfo}
               setBasicMedicineInfo={setBasicMedicineInfo}
+              edit={false}
+              urlArray={[]}
             />
           </Box>
         </Box>
@@ -311,7 +334,7 @@ const CreateMedicineDialog = ({ open, handleClose }: Props) => {
               basicMedicineInfo.brandName == "" ||
               basicMedicineInfo.genericDrug == "" ||
               !basicMedicineInfo.stockQuantity ||
-              !basicMedicineInfo.miniumAlertQuantity
+              !basicMedicineInfo.minimumAlertQuantity
             }
             isLoading={false}
             showIcon={true}

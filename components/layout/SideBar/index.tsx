@@ -65,19 +65,19 @@ const sidebarData: SidebarType[] = [
       {
         id: 50,
         icon: <MdBusiness size={26} />,
-        title: "Supplier",
+        title: "Suppliers",
         link: "/backoffice/inventory/suppliers",
       },
       {
         id: 51,
         icon: <GiMedicines size={26} />,
-        title: "Medicine",
-        link: "/backoffice/inventory/medicine",
+        title: "Medicines",
+        link: "/backoffice/inventory/medicines",
       },
       {
         id: 52,
         icon: <FaCartPlus size={26} />,
-        title: "Order",
+        title: "Orders",
         link: "/backoffice/inventory/order",
       },
       {

@@ -2,9 +2,15 @@ import CrossCheckButtonsGroup from "@/components/buttons/CrossCheckButtons/page"
 import CustomTextField from "@/components/input/CustomTextField/page";
 import PlainSelector from "@/components/selectors/PlainSelector/page";
 import LabelTypography from "@/components/typography/LabelTypography/page";
+import { updateMedicineData } from "@/datafetch/medicines/medicines.api";
+import { getCurrentMedicineId } from "@/redux/slices/inventory";
+import config from "@/utils/config";
+import { medicineEndPoint } from "@/utils/endpoints";
 import { buySellUnits } from "@/utils/staticData";
 import React, { useState } from "react";
 import toast from "react-hot-toast";
+import { useSelector } from "react-redux";
+import useSWRMutation from "swr/mutation";
 
 interface Props {
   setBasicMedicineInfo: (data: MedicineTypeCreate) => void;
@@ -16,11 +22,19 @@ const SellUnitCreate = ({
   basicMedicineInfo,
   setShowSellUnits,
 }: Props) => {
+  const alreadyUsedUnits = basicMedicineInfo.sellPrices.map(
+    (pricedata) => pricedata.unit
+  );
+  const medicineId = useSelector(getCurrentMedicineId);
   const [currentSellData, setCurrentSellData] = useState({
     price: 0,
     unit: "",
   });
   const [sellUnit, setSellUnit] = useState("");
+  const { trigger, isMutating } = useSWRMutation(
+    `${config.apiBaseUrl}/${medicineEndPoint}/${medicineId}`,
+    updateMedicineData
+  );
   return (
     <div className="flex flex-col md:flex-row items-center mx-2 my-2">
       <div className="flex flex-col  md:w-[180px]">
@@ -42,7 +56,9 @@ const SellUnitCreate = ({
       <div className="flex flex-col mx-2 md:w-[100px]">
         <LabelTypography title="Unit" />
         <PlainSelector
-          dataArr={buySellUnits}
+          dataArr={buySellUnits.filter(
+            (unitdata) => !alreadyUsedUnits.includes(unitdata.name)
+          )}
           title=""
           handleChange={(e, value) => {
             setSellUnit(e.target.value);
@@ -64,16 +80,31 @@ const SellUnitCreate = ({
             setCurrentSellData({ price: 0, unit: "" });
             setShowSellUnits(false);
           }}
-          handleAdd={() => {
+          handleAdd={async () => {
             if (currentSellData.price == 0 || currentSellData.unit == "") {
               return toast.error("Fill all fields.");
             }
-            setBasicMedicineInfo({
-              ...basicMedicineInfo,
-              sellPrices: [...basicMedicineInfo.sellPrices, currentSellData],
-            });
-            setShowSellUnits(false);
+            try {
+              const data = await trigger({
+                sellPrices: [...basicMedicineInfo.sellPrices, currentSellData],
+              });
+              if (data) {
+                toast.success("Successfully updated.");
+                setBasicMedicineInfo({
+                  ...basicMedicineInfo,
+                  sellPrices: data.sellPrices,
+                });
+                setCurrentSellData({
+                  price: 0,
+                  unit: "",
+                });
+                setShowSellUnits(false);
+              }
+            } catch (error) {
+              toast.error("Something went wrong.");
+            }
           }}
+          isLoading={isMutating}
         />
       </div>
     </div>
