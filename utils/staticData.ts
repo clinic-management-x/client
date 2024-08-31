@@ -64,7 +64,7 @@ export const defaultMedicinData = {
   routeOfAdministration: "",
   stockQuantity: 0,
   stockQuantityUnit: "BOX",
-  miniumAlertQuantity: 0,
+  minimumAlertQuantity: 0,
   minimumAlertQuantityUnit: "BOX",
   sellPrices: [],
   imageUrls: [],
@@ -111,7 +111,7 @@ export const routes = [
     name: "ORAL",
   },
   {
-    _id: 1,
+    _id: 2,
     name: "SUBLINGUAL",
   },
   {

@@ -6,11 +6,22 @@ import { TbCameraUp } from "react-icons/tb";
 import Image from "next/image";
 import { IoMdCloseCircle } from "react-icons/io";
 import DetailEditCancelButton from "@/components/buttons/DetailEditCancelButton/page";
+import useSWRMutation from "swr/mutation";
+import config from "@/utils/config";
+import { medicineEndPoint } from "@/utils/endpoints";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  getCurrentMedicineId,
+  getImageEditing,
+  insertImageEdiging,
+} from "@/redux/slices/inventory";
+import { updateMedicineData } from "@/datafetch/medicines/medicines.api";
+import toast from "react-hot-toast";
 
 interface Props {
   setBasicMedicineInfo: (data: MedicineTypeCreate) => void;
   basicMedicineInfo: MedicineTypeCreate;
-
+  imageArray: { preview: string; actual: string }[];
   edit: boolean;
 }
 
@@ -18,29 +29,42 @@ interface URL {
   preview: string;
   actual: string;
 }
-const ImageUploads = ({
+
+const ImageEdit = ({
   basicMedicineInfo,
   setBasicMedicineInfo,
+  imageArray,
+
   edit,
 }: Props) => {
-  const [urls, setUrls] = useState<URL[]>([]);
+  const isImageEditing = useSelector(getImageEditing);
+  const dispatch = useDispatch();
+  const medicineId = useSelector(getCurrentMedicineId);
 
   const handleFileDrop = async (acceptedFiles: Blob[]) => {
+    dispatch(insertImageEdiging(true));
     const formData = new FormData();
     formData.append("file", acceptedFiles[0]);
     formData.append("purpose", "DRUG_AVATAR");
     const data = await uploadFile(formData);
-    setUrls([...urls, { preview: data.presignedUrl, actual: data.url }]);
+
     setBasicMedicineInfo({
       ...basicMedicineInfo,
-      imageUrls: [...basicMedicineInfo.imageUrls, data.url],
+      imageUrls: [
+        ...basicMedicineInfo.imageUrls,
+        { preview: data.presignedUrl, actual: data.url },
+      ],
     });
   };
+  const { trigger, isMutating: updateMedicineMutating } = useSWRMutation(
+    `${config.apiBaseUrl}/${medicineEndPoint}/${medicineId}`,
+    updateMedicineData
+  );
 
   return (
     <div className="flex flex-col">
       <div className="flex items-center space-x-2">
-        {urls.map((url, index) => (
+        {basicMedicineInfo.imageUrls.map((url, index) => (
           <div
             key={index}
             className=" min-h-[300px] md:min-h-[200px] relative flex items-center justify-center"
@@ -55,11 +79,12 @@ const ImageUploads = ({
             <IconButton
               className="absolute top-0 right-0"
               onClick={() => {
-                setUrls(urls.filter((urldata, i) => i !== index));
+                dispatch(insertImageEdiging(true));
+
                 setBasicMedicineInfo({
                   ...basicMedicineInfo,
                   imageUrls: basicMedicineInfo.imageUrls.filter(
-                    (imageurl) => imageurl !== url.actual
+                    (urldata) => urldata.actual !== url.actual
                   ),
                 });
               }}
@@ -98,8 +123,36 @@ const ImageUploads = ({
           <></>
         )}
       </div>
+      <div className=" w-[50%] ">
+        <DetailEditCancelButton
+          show={isImageEditing}
+          handleCancel={() => {
+            dispatch(insertImageEdiging(false));
+            setBasicMedicineInfo({
+              ...basicMedicineInfo,
+              imageUrls: imageArray,
+            });
+          }}
+          handleUpdate={async () => {
+            try {
+              const payload = {
+                imageUrls: basicMedicineInfo.imageUrls,
+              };
+              const data = await trigger(payload as MedicineTypeUpdate);
+              if (data) {
+                toast.success("Successfully updated.");
+
+                dispatch(insertImageEdiging(false));
+              }
+            } catch (error) {
+              toast.error("Something went wrong.");
+            }
+          }}
+          loading={false}
+        />
+      </div>
     </div>
   );
 };
 
-export default ImageUploads;
+export default ImageEdit;

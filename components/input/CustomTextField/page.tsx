@@ -23,14 +23,18 @@ const CustomTextField = ({
       {type === "fees" || type === "number" ? (
         <TextField
           value={value}
-          onChange={(e) => handleChange(e)}
+          onChange={(e) => {
+            if (isNaN(+e.target.value)) {
+              return;
+            }
+            handleChange(e);
+          }}
           InputProps={{
             inputProps: { min: 0 },
             style: {
               color: theme === "dark" ? "#D1D5DB" : "#6B7280",
             },
           }}
-          type="number"
           sx={{
             "& .MuiOutlinedInput-root": {
               "& fieldset": {

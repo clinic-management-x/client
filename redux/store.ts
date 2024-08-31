@@ -16,12 +16,14 @@ import layoutSlice from "./slices/layout";
 import workersSlice from "./slices/workers";
 import storage from "./storage";
 import supplierSlice from "./slices/supplier";
+import inventorySlice from "./slices/inventory";
 
 const reducer = combineReducers({
   userSlice: userSlice,
   layoutSlice: layoutSlice,
   workersSlice: workersSlice,
   supplierSlice: supplierSlice,
+  inventorySlice: inventorySlice,
 });
 
 const persistConfig = {
