@@ -70,6 +70,16 @@ export const defaultMedicinData = {
   imageUrls: [],
 };
 
+export const defaultOrderData: OrderType = {
+  batchId: "",
+  paymentMethod: "CASH",
+  estimateDate: "",
+  supplier: "",
+  orderItems: [],
+  orderStatus: "PENDING",
+  hasAlreadyArrived: false,
+};
+
 export const units = [
   { _id: "1", name: "μg" },
   { _id: "2", name: "mg" },
@@ -161,5 +171,20 @@ export const routes = [
   {
     _id: 14,
     name: "TRANSDERMAL",
+  },
+];
+
+export const paymentMethods = [
+  { id: 1, label: "CASH" },
+  { id: 2, label: "CREDIT" },
+];
+export const orderStatus = [
+  {
+    id: 1,
+    label: "PENDING",
+  },
+  {
+    id: 2,
+    label: "PAID",
   },
 ];

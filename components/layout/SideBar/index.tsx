@@ -21,7 +21,7 @@ import {
   MdOutlineKeyboardArrowUp,
 } from "react-icons/md";
 import { RiCalendarScheduleLine } from "react-icons/ri";
-import { FaCartPlus, FaUserDoctor } from "react-icons/fa6";
+import { FaBarcode, FaCartPlus, FaUserDoctor } from "react-icons/fa6";
 import { HiMiniUsers } from "react-icons/hi2";
 import { GiMedicines } from "react-icons/gi";
 import { IoSettingsOutline } from "react-icons/io5";
@@ -78,7 +78,13 @@ const sidebarData: SidebarType[] = [
         id: 52,
         icon: <FaCartPlus size={26} />,
         title: "Orders",
-        link: "/backoffice/inventory/order",
+        link: "/backoffice/inventory/orders",
+      },
+      {
+        id: 53,
+        icon: <FaBarcode size={24} />,
+        title: "Barcodes",
+        link: "/backoffice/inventory/barcodes",
       },
       {
         id: 54,

@@ -13,6 +13,7 @@ interface Props<T extends DataItem, S> {
   title: string;
   handleChange: (e: any, value: any) => void;
   selectedValue: S;
+  size?: string;
 }
 
 const PlainSelector = <T extends DataItem, S>({
@@ -20,6 +21,7 @@ const PlainSelector = <T extends DataItem, S>({
   title,
   handleChange,
   selectedValue,
+  size,
 }: Props<T, S>) => {
   const { theme } = useTheme();
   return (
@@ -32,6 +34,7 @@ const PlainSelector = <T extends DataItem, S>({
           {title}
         </InputLabel>
         <Select
+          size={size ? "small" : "medium"}
           labelId="demo-simple-select-helper-label"
           id="demo-simple-select-helper"
           value={selectedValue}

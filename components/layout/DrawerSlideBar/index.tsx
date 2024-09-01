@@ -56,13 +56,13 @@ const slidebarData: SidebarType[] = [
         id: 31,
         icon: <GiMedicines size={26} />,
         title: "Medicine",
-        link: "/backoffice/inventory/medicine",
+        link: "/backoffice/inventory/medicines",
       },
       {
         id: 32,
         icon: <FaCartPlus size={26} />,
         title: "Order",
-        link: "/backoffice/inventory/order",
+        link: "/backoffice/inventory/orders",
       },
       {
         id: 34,
