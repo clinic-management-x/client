@@ -22,7 +22,10 @@ export const getMedicine = async (url: string) => {
 
   return response.data;
 };
-
+export const getDrugList = async (url: string) => {
+  const response = await baseApi.get(url);
+  return response.data;
+};
 export const createMedicine = async (
   url: string,
   {

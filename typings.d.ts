@@ -150,3 +150,31 @@ interface MedicineTypeStandard {
   _id?: string;
   __v?: string;
 }
+
+interface ItemNameType {
+  _id: string;
+  brandName: string;
+}
+interface SupplierCompanyType {
+  _id: string;
+  name: string;
+}
+
+interface OrderItemType {
+  itemName: ItemNameType | string;
+  quantity: number;
+  unit: string;
+  _id?: string;
+  _v?: string;
+}
+interface OrderType {
+  _id?: string;
+  __v?: string;
+  batchId: string;
+  paymentMethod: string;
+  estimateDate: string;
+  supplier: SupplierCompanyType | string;
+  orderItems: OrderItemType[];
+  orderStatus: string;
+  hasAlreadyArrived: boolean;
+}

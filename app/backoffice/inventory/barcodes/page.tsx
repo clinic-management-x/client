@@ -1,7 +1,7 @@
 import React from "react";
 
 const Page = () => {
-  return <main></main>;
+  return <main className="overflow-scroll h-full"></main>;
 };
 
 export default Page;

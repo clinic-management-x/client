@@ -110,20 +110,4 @@ const CustomTextField = ({
   );
 };
 
-// const CustomTextField = styled(TextField)(({}) => ({
-//   //input: { color: "gray" },
-//   "& .MuiOutlinedInput-root": {
-//     "& fieldset": {
-//       borderColor: "#9CA3AF",
-//       backgroundColor: "#C7C7C7F",
-//     },
-//     "&:hover fieldset": {
-//       borderColor: "#9CA3AF",
-//     },
-//     "&.Mui-focused fieldset": {
-//       borderColor: "#9CA3AF",
-//     },
-//   },
-// }));
-
 export default CustomTextField;

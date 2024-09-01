@@ -317,11 +317,9 @@ const CreateMedicineDialog = ({ open, handleClose, mutate }: Props) => {
               <LabelTypography title="Images" />
             </div>
             <ImageUploads
-              open={open}
               basicMedicineInfo={basicMedicineInfo}
               setBasicMedicineInfo={setBasicMedicineInfo}
               edit={false}
-              urlArray={[]}
             />
           </Box>
         </Box>

@@ -11,3 +11,5 @@ export const staffEndPoint = "staffs";
 export const supplierEndPoint = "suppliers";
 
 export const medicineEndPoint = "medicines";
+
+export const orderEndPoint = "orders";

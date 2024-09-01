@@ -12,6 +12,12 @@ export const getSupplier = async (url: string) => {
   return response.data;
 };
 
+export const getSuppliersList = async (url: string) => {
+  const response = await baseApi.get(url);
+
+  return response.data;
+};
+
 export const createSupplier = async (
   url: string,
   {
