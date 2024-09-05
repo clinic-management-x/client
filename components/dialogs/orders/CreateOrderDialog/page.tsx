@@ -139,6 +139,7 @@ const CreateOrderDialog = ({ open, handleClose, mutate }: Props) => {
                       setBatchIdLoading(true);
                       const isAlreadyExist = await batchIdTrigger({
                         batchId: orderInfo.batchId,
+                        isEdit: false,
                       });
 
                       if (isAlreadyExist) {

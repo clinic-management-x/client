@@ -3,23 +3,29 @@ import AutocompleteSearch from "@/components/input/AutoComplete/page";
 import CustomTextField from "@/components/input/CustomTextField/page";
 import PlainSelector from "@/components/selectors/PlainSelector/page";
 import { getDrugList } from "@/datafetch/medicines/medicines.api";
+import { createOrderItem } from "@/datafetch/orders/orders.api";
 import config from "@/utils/config";
-import { medicineEndPoint } from "@/utils/endpoints";
+import { medicineEndPoint, orderEndPoint } from "@/utils/endpoints";
 import { buySellUnits } from "@/utils/staticData";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import useSWR from "swr";
+import useSWRMutation from "swr/mutation";
 
 interface Props {
   orderInfo: OrderType;
   setOrderInfo: (data: OrderType) => void;
   setShowOrderitemCreate: (data: boolean) => void;
+  edit?: boolean;
+  id?: string;
 }
 
 const OrderItemCreate = ({
   orderInfo,
   setOrderInfo,
   setShowOrderitemCreate,
+  edit,
+  id,
 }: Props) => {
   const [currentOrderItem, setCurrentOrderItem] = useState<OrderItemType>({
     itemName: { _id: "", brandName: "" },
@@ -34,6 +40,10 @@ const OrderItemCreate = ({
   const { data: medicinesLists, mutate: medicineMutate } = useSWR(
     `${config.apiBaseUrl}/${medicineEndPoint}/list?search=${brandSearch}`,
     getDrugList
+  );
+  const { trigger, isMutating } = useSWRMutation(
+    `${config.apiBaseUrl}/${orderEndPoint}/order-item/${id}`,
+    createOrderItem
   );
   useEffect(() => {
     if (medicinesLists) {
@@ -105,7 +115,7 @@ const OrderItemCreate = ({
           });
           setShowOrderitemCreate(false);
         }}
-        handleAdd={() => {
+        handleAdd={async () => {
           if (
             currentOrderItem.itemName == "" ||
             currentOrderItem.quantity === 0 ||
@@ -113,12 +123,29 @@ const OrderItemCreate = ({
           ) {
             return toast.error("Fill all fields.");
           }
-
-          setOrderInfo({
-            ...orderInfo,
-            orderItems: [...orderInfo.orderItems, currentOrderItem],
-          });
-          setShowOrderitemCreate(false);
+          if (edit) {
+            try {
+              const data = await trigger({
+                ...currentOrderItem,
+                itemName: (
+                  currentOrderItem.itemName as { _id: ""; brandName: "" }
+                )._id,
+              });
+              if (data) {
+                toast.success("Successfully created.");
+                setOrderInfo({ ...orderInfo, orderItems: data.orderItems });
+                setShowOrderitemCreate(false);
+              }
+            } catch (error) {
+              toast.error("Something went wrong.");
+            }
+          } else {
+            setOrderInfo({
+              ...orderInfo,
+              orderItems: [...orderInfo.orderItems, currentOrderItem],
+            });
+            setShowOrderitemCreate(false);
+          }
         }}
       />
     </div>
