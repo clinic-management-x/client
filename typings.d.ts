@@ -178,3 +178,15 @@ interface OrderType {
   orderStatus: string;
   hasAlreadyArrived: boolean;
 }
+
+interface OrderUpdateType {
+  _id?: string;
+  __v?: string;
+  batchId?: string;
+  paymentMethod?: string;
+  estimateDate?: string;
+  supplier?: SupplierCompanyType | string;
+  orderItems?: OrderItemType[];
+  orderStatus?: string;
+  hasAlreadyArrived?: boolean;
+}
