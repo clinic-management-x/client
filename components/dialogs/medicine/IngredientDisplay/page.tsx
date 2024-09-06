@@ -177,9 +177,19 @@ const IngredientDiplay = ({
 
                     <TrashButton
                       handleClick={() => {
-                        setIngredientId(data.componentId as string);
-                        setIngredientName(data.activeIngredient);
-                        setOpenDeleteBox(true);
+                        if (edit) {
+                          setIngredientId(data.componentId as string);
+                          setIngredientName(data.activeIngredient);
+                          setOpenDeleteBox(true);
+                        } else {
+                          setBasicMedicineInfo({
+                            ...basicMedicineInfo,
+                            activeIngredients:
+                              basicMedicineInfo.activeIngredients.filter(
+                                (ingredient, i) => i !== index
+                              ),
+                          });
+                        }
                       }}
                     />
                   </div>

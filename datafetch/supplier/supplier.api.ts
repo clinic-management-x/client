@@ -3,7 +3,7 @@ import baseApi from "../base.api";
 export const getSuppliers = async (url: string) => {
   const response = await baseApi.get(url);
 
-  return response.data.data;
+  return response.data;
 };
 
 export const getSupplier = async (url: string) => {

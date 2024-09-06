@@ -49,7 +49,7 @@ const MedicineTable = ({ medicines }: Props) => {
                 Brand Name
               </Typography>
             </TableCell>
-            <TableCell>
+            <TableCell sx={{ width: 200 }}>
               <Typography
                 variant="body1"
                 className=" font-semibold text-whiteText dark:text-darkText"

@@ -2,6 +2,7 @@ import CrossCheckButtonsGroup from "@/components/buttons/CrossCheckButtons/page"
 import CustomTextField from "@/components/input/CustomTextField/page";
 import PlainSelector from "@/components/selectors/PlainSelector/page";
 import LabelTypography from "@/components/typography/LabelTypography/page";
+import SellPrices from "@/containers/medicines/edit/SellPrices";
 import { updateMedicineData } from "@/datafetch/medicines/medicines.api";
 import { getCurrentMedicineId } from "@/redux/slices/inventory";
 import config from "@/utils/config";
@@ -16,11 +17,13 @@ interface Props {
   setBasicMedicineInfo: (data: MedicineTypeCreate) => void;
   basicMedicineInfo: MedicineTypeCreate;
   setShowSellUnits: (data: boolean) => void;
+  edit?: boolean;
 }
 const SellUnitCreate = ({
   setBasicMedicineInfo,
   basicMedicineInfo,
   setShowSellUnits,
+  edit,
 }: Props) => {
   const alreadyUsedUnits = basicMedicineInfo.sellPrices.map(
     (pricedata) => pricedata.unit
@@ -84,24 +87,39 @@ const SellUnitCreate = ({
             if (currentSellData.price == 0 || currentSellData.unit == "") {
               return toast.error("Fill all fields.");
             }
-            try {
-              const data = await trigger({
+            if (edit) {
+              try {
+                const data = await trigger({
+                  sellPrices: [
+                    ...basicMedicineInfo.sellPrices,
+                    currentSellData,
+                  ],
+                });
+                if (data) {
+                  toast.success("Successfully updated.");
+                  setBasicMedicineInfo({
+                    ...basicMedicineInfo,
+                    sellPrices: data.sellPrices,
+                  });
+                  setCurrentSellData({
+                    price: 0,
+                    unit: "",
+                  });
+                  setShowSellUnits(false);
+                }
+              } catch (error) {
+                toast.error("Something went wrong.");
+              }
+            } else {
+              setBasicMedicineInfo({
+                ...basicMedicineInfo,
                 sellPrices: [...basicMedicineInfo.sellPrices, currentSellData],
               });
-              if (data) {
-                toast.success("Successfully updated.");
-                setBasicMedicineInfo({
-                  ...basicMedicineInfo,
-                  sellPrices: data.sellPrices,
-                });
-                setCurrentSellData({
-                  price: 0,
-                  unit: "",
-                });
-                setShowSellUnits(false);
-              }
-            } catch (error) {
-              toast.error("Something went wrong.");
+              setCurrentSellData({
+                price: 0,
+                unit: "",
+              });
+              setShowSellUnits(false);
             }
           }}
           isLoading={isMutating}

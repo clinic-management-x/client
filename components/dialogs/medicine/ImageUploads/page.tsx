@@ -6,6 +6,11 @@ import { TbCameraUp } from "react-icons/tb";
 import Image from "next/image";
 import { IoMdCloseCircle } from "react-icons/io";
 import DetailEditCancelButton from "@/components/buttons/DetailEditCancelButton/page";
+import { useDispatch } from "react-redux";
+import {
+  insertImageEdiging,
+  insertImageUploading,
+} from "@/redux/slices/inventory";
 
 interface Props {
   setBasicMedicineInfo: (data: MedicineTypeCreate) => void;
@@ -23,13 +28,16 @@ const ImageUploads = ({
   setBasicMedicineInfo,
   edit,
 }: Props) => {
+  const dispatch = useDispatch();
   const [urls, setUrls] = useState<URL[]>([]);
 
   const handleFileDrop = async (acceptedFiles: Blob[]) => {
+    dispatch(insertImageUploading(true));
     const formData = new FormData();
     formData.append("file", acceptedFiles[0]);
     formData.append("purpose", "DRUG_AVATAR");
     const data = await uploadFile(formData);
+    if (data) dispatch(insertImageUploading(false));
     setUrls([...urls, { preview: data.presignedUrl, actual: data.url }]);
     setBasicMedicineInfo({
       ...basicMedicineInfo,

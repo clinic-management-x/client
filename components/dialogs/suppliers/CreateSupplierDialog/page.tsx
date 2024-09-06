@@ -68,6 +68,7 @@ const CreateSupplierDialog = ({ open, handleClose, mutate }: Props) => {
     setBasicSupplierInfo(defaultSupplierInfo);
     setMedicalRepresentatives([]);
     setContactData("");
+    setContacts([]);
     setSelectedContact(null);
     handleClose();
   };

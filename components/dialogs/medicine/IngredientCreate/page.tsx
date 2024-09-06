@@ -19,6 +19,7 @@ interface Props {
   basicMedicineInfo: MedicineTypeCreate;
   setBasicMedicineInfo: (data: MedicineTypeCreate) => void;
   setShowIngredient: (data: boolean) => void;
+  edit?: boolean;
 }
 const IngredientCreate = ({
   activeIngredients,
@@ -26,6 +27,7 @@ const IngredientCreate = ({
   basicMedicineInfo,
   setBasicMedicineInfo,
   setShowIngredient,
+  edit,
 }: Props) => {
   const medicineId = useSelector(getCurrentMedicineId);
   const [currentIngredient, setCurrentIngredient] = useState({
@@ -72,7 +74,7 @@ const IngredientCreate = ({
           handleChange={(e) => {
             setCurrentIngredient({
               ...currentIngredient,
-              strength: +e.target.value,
+              strength: e.target.value,
             });
           }}
         />
@@ -113,41 +115,64 @@ const IngredientCreate = ({
               currentIngredient.strength !== 0 &&
               currentIngredient.unit !== ""
             ) {
-              try {
-                const data = await trigger({
-                  activeIngredient: currentIngredient._id,
-                  strength: currentIngredient.strength,
-                  unit: currentIngredient.unit,
-                });
-                if (data) {
-                  toast.success("Successfully updated.");
-                  setBasicMedicineInfo({
-                    ...basicMedicineInfo,
-                    activeIngredients: data.activeIngredients.map(
-                      (ingredientdata: ActiveIngridient) => {
-                        return {
-                          componentId: ingredientdata._id,
-                          _id: ingredientdata.activeIngredient._id,
-                          activeIngredient:
-                            ingredientdata.activeIngredient
-                              .activeIngredientName,
-                          strength: ingredientdata.strength,
-                          unit: ingredientdata.unit,
-                        };
-                      }
-                    ),
+              if (edit) {
+                try {
+                  const data = await trigger({
+                    activeIngredient: currentIngredient._id,
+                    strength: +currentIngredient.strength,
+                    unit: currentIngredient.unit,
                   });
-                  setShowIngredient(false);
-                  setCurrentUnit("");
-                  setCurrentIngredient({
-                    _id: "",
-                    activeIngredient: "",
-                    strength: 0,
-                    unit: "",
-                  });
+                  if (data) {
+                    toast.success("Successfully updated.");
+                    setBasicMedicineInfo({
+                      ...basicMedicineInfo,
+                      activeIngredients: data.activeIngredients.map(
+                        (ingredientdata: ActiveIngridient) => {
+                          return {
+                            componentId: ingredientdata._id,
+                            _id: ingredientdata.activeIngredient._id,
+                            activeIngredient:
+                              ingredientdata.activeIngredient
+                                .activeIngredientName,
+                            strength: ingredientdata.strength,
+                            unit: ingredientdata.unit,
+                          };
+                        }
+                      ),
+                    });
+                    setShowIngredient(false);
+                    setCurrentUnit("");
+                    setCurrentIngredient({
+                      _id: "",
+                      activeIngredient: "",
+                      strength: 0,
+                      unit: "",
+                    });
+                  }
+                } catch (error) {
+                  toast.error("Something went wrong.");
                 }
-              } catch (error) {
-                toast.error("Something went wrong.");
+              } else {
+                setBasicMedicineInfo({
+                  ...basicMedicineInfo,
+                  activeIngredients: [
+                    ...basicMedicineInfo.activeIngredients,
+                    {
+                      _id: currentIngredient._id,
+                      activeIngredient: currentIngredient.activeIngredient,
+                      strength: +currentIngredient.strength,
+                      unit: currentIngredient.unit,
+                    },
+                  ],
+                });
+                setShowIngredient(false);
+                setCurrentUnit("");
+                setCurrentIngredient({
+                  _id: "",
+                  activeIngredient: "",
+                  strength: 0,
+                  unit: "",
+                });
               }
             } else {
               toast.error("Fill all field");

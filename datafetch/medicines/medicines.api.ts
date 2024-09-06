@@ -15,7 +15,7 @@ export const getActiveIngridients = async (url: string) => {
 export const getMedicines = async (url: string) => {
   const response = await baseApi.get(url);
 
-  return response.data.data;
+  return response.data;
 };
 export const getMedicine = async (url: string) => {
   const response = await baseApi.get(url);

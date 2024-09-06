@@ -61,7 +61,7 @@ export const defaultMedicinData = {
   brandName: "",
   genericDrug: "",
   activeIngredients: [],
-  routeOfAdministration: "",
+  routeOfAdministration: "ORAL",
   stockQuantity: 0,
   stockQuantityUnit: "BOX",
   minimumAlertQuantity: 0,

@@ -151,8 +151,18 @@ const SellUnitDisplay = ({
 
                     <TrashButton
                       handleClick={() => {
-                        setShowDeleteBox(true);
-                        setSellUnitToEdit(data);
+                        if (edit) {
+                          setShowDeleteBox(true);
+                          setSellUnitToEdit(data);
+                        } else {
+                          setBasicMedicineInfo({
+                            ...basicMedicineInfo,
+                            sellPrices: basicMedicineInfo.sellPrices.filter(
+                              (sellpricedata) =>
+                                sellpricedata.unit !== data.unit
+                            ),
+                          });
+                        }
                       }}
                     />
                   </div>

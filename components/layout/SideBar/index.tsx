@@ -30,6 +30,7 @@ import { getHasClinic } from "@/redux/slices/user";
 import baseApi from "@/datafetch/base.api";
 import config from "@/utils/config";
 import { useTheme } from "next-themes";
+import { insertPageNumber } from "@/redux/slices/workers";
 const logo = require("../../../public/logo1.jpeg");
 const darkLogo = require("../../../public/logo2.jpeg");
 const sidebarData: SidebarType[] = [
@@ -140,6 +141,7 @@ const SideBar = () => {
                   return;
                 }
                 if (data.link) {
+                  dispatch(insertPageNumber(1));
                   dispatch(insertSelectedTab(data.title.toLowerCase()));
                   dispatch(insertSelectedSubcategoryTab(""));
                 } else {
@@ -191,7 +193,7 @@ const SideBar = () => {
                     if (!hasClinic) {
                       return;
                     }
-
+                    dispatch(insertPageNumber(1));
                     dispatch(
                       insertSelectedSubcategoryTab(
                         subcategory.title.toLowerCase()

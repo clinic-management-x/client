@@ -12,7 +12,7 @@ export const checkOverlapBatchId = async (
 export const getOrders = async (url: string) => {
   const response = await baseApi.get(url);
 
-  return response.data.data;
+  return response.data;
 };
 
 export const getOrder = async (url: string) => {

@@ -56,10 +56,6 @@ const EditOrder = ({ id }: { id: string }) => {
     `${config.apiBaseUrl}/${orderEndPoint}/${id}`,
     updateOrder
   );
-  const { trigger: deleteTrigger } = useSWRMutation(
-    `${config.apiBaseUrl}/${orderEndPoint}/${id}`,
-    deleteOrder
-  );
 
   useEffect(() => {
     if (data) {
@@ -85,7 +81,6 @@ const EditOrder = ({ id }: { id: string }) => {
       if (keyname !== "batchId") toast.error("Something went wrong.");
     }
   };
-  console.log("orderInfo", orderInfo);
 
   return (
     <section className="flex flex-col  ">
@@ -235,7 +230,9 @@ const EditOrder = ({ id }: { id: string }) => {
           handleDelete={async () => {
             try {
               setDeleteLoading(true);
-              const data = await deleteTrigger();
+              const data = await deleteOrder(
+                `${config.apiBaseUrl}/${orderEndPoint}/${id}`
+              );
               if (data) {
                 setDeleteLoading(false);
                 setOpenDeleteOrderDialog(false);

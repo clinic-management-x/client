@@ -26,6 +26,7 @@ const SellPrices = ({ medicine, setMedicine }: Props) => {
           basicMedicineInfo={medicine}
           setBasicMedicineInfo={setMedicine}
           setShowSellUnits={setShowSellUnits}
+          edit={true}
         />
       ) : (
         <></>
