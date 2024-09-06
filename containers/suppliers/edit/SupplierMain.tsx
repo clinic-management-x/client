@@ -67,7 +67,7 @@ const SupplierMain = ({ id, data, mutate }: Props) => {
   const updateSupplier = async (data: EditSupplierType) => {
     try {
       const response = await trigger(
-        data.mobile ? { ...data, mobile: `+959` + data.mobile } : data
+        data.mobile ? { ...data, mobile: `+959` + supplier.mobile } : data
       );
 
       if (response) {

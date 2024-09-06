@@ -36,6 +36,8 @@ import SellUnitDisplay from "../SellUnitDisplay/page";
 import ImageUploads from "../ImageUploads/page";
 import useSWRMutation from "swr/mutation";
 import toast from "react-hot-toast";
+import { useSelector } from "react-redux";
+import { getImageUploading } from "@/redux/slices/inventory";
 
 interface Props {
   open: boolean;
@@ -44,6 +46,7 @@ interface Props {
 }
 
 const CreateMedicineDialog = ({ open, handleClose, mutate }: Props) => {
+  const imageUploading = useSelector(getImageUploading);
   const [genericDrugs, setGenericDrugs] = useState<
     { _id: string; genericName: string }[]
   >([]);
@@ -109,7 +112,6 @@ const CreateMedicineDialog = ({ open, handleClose, mutate }: Props) => {
         closeDialog();
       }
     } catch (error) {
-      console.log("error", error);
       toast.error("Something went wrong.");
     }
   };
@@ -332,9 +334,10 @@ const CreateMedicineDialog = ({ open, handleClose, mutate }: Props) => {
               basicMedicineInfo.brandName == "" ||
               basicMedicineInfo.genericDrug == "" ||
               !basicMedicineInfo.stockQuantity ||
-              !basicMedicineInfo.minimumAlertQuantity
+              !basicMedicineInfo.minimumAlertQuantity ||
+              imageUploading
             }
-            isLoading={false}
+            isLoading={createMutating}
             showIcon={true}
           />
         </div>

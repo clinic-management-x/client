@@ -44,7 +44,7 @@ const DispalySuppliers = () => {
 
   useEffect(() => {
     if (data) {
-      setSuppliers(data);
+      setSuppliers(data.data);
     }
   }, [data]);
 
@@ -117,7 +117,7 @@ const DispalySuppliers = () => {
         <div className="mt-8 w-full m-auto flex items-center justify-center ">
           <Pagination
             size="large"
-            count={Math.ceil(suppliers?.length / 8)}
+            count={Math.ceil(data?.count / 8)}
             defaultPage={page}
             color="primary"
             sx={{

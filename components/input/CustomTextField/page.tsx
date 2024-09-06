@@ -25,7 +25,12 @@ const CustomTextField = ({
           value={value}
           onChange={(e) => {
             if (isNaN(+e.target.value)) {
-              return;
+              if (
+                e.target.value.includes(".") &&
+                e.target.value.endsWith(".")
+              ) {
+                handleChange(e);
+              } else return;
             }
             handleChange(e);
           }}

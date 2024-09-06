@@ -38,6 +38,7 @@ const ImageEdit = ({
   edit,
 }: Props) => {
   const isImageEditing = useSelector(getImageEditing);
+
   const dispatch = useDispatch();
   const medicineId = useSelector(getCurrentMedicineId);
 
@@ -148,7 +149,7 @@ const ImageEdit = ({
               toast.error("Something went wrong.");
             }
           }}
-          loading={false}
+          loading={updateMedicineMutating}
         />
       </div>
     </div>

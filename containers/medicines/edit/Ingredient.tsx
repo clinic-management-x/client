@@ -54,6 +54,7 @@ const Ingredient = ({ medicine, setMedicine }: Props) => {
             setBasicMedicineInfo={setMedicine}
             setIngredientSearch={setIngredientSearch}
             setShowIngredient={setShowIngredient}
+            edit={true}
           />
         </div>
       ) : (
