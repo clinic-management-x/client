@@ -2,6 +2,7 @@
 import { getLocalStorageItem } from "@/utils/storageItem";
 import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
+import { useDispatch } from "react-redux";
 
 const Main = () => {
   const router = useRouter();
@@ -11,6 +12,7 @@ const Main = () => {
     if (!access) {
       router.push("/login");
     } else {
+      console.log("HIII");
       router.push("/backoffice");
     }
   }, [access]);

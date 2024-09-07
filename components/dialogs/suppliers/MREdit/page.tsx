@@ -103,10 +103,11 @@ const MREditDialog = ({
             }}
           />
         </div>
-        <div className="ml-[-12px]">
+        <div className="md:ml-[-12px]">
           <ContactDisplay
             contacts={contacts}
             setContacts={setContacts}
+            mr={true}
             edit={true}
           />
           {showContactSelector ? (

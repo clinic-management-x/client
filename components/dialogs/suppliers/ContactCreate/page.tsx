@@ -3,9 +3,11 @@ import CrossCheckButtonsGroup from "@/components/buttons/CrossCheckButtons/page"
 import CustomTextField from "@/components/input/CustomTextField/page";
 import PlainSelector from "@/components/selectors/PlainSelector/page";
 import { Box } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
+import toast from "react-hot-toast";
 import { FaTelegram, FaViber } from "react-icons/fa";
 import { LiaSmsSolid } from "react-icons/lia";
+
 export const contactDataArr = [
   {
     _id: 1,
@@ -32,7 +34,8 @@ interface Props {
   setContactData: (data: any) => void;
   setSelectedContact: (data: number | null) => void;
   selectedContact: number | null;
-  setShowContactEditBox?: (data: boolean) => void;
+  mr?: boolean;
+  trigger?: any;
 }
 const ContactCreate = ({
   contacts,
@@ -42,9 +45,17 @@ const ContactCreate = ({
   selectedContact,
   setContactData,
   setSelectedContact,
-  setShowContactEditBox,
+  mr,
+  trigger,
 }: Props) => {
   const alreadySelectedContacts = contacts.map((data) => data.name);
+  const [editLoading, setEditLoading] = useState(false);
+
+  const handleClear = () => {
+    setSelectedContact(null);
+    setContactData("");
+    setShowContactSelector(false);
+  };
   return (
     <Box
       className={` mt-2 mx-2  md:ml-2 lg:ml-6 flex flex-col md:flex-row items-center justify-start space-y-2 md:space-y-0  md:space-x-2`}
@@ -73,24 +84,37 @@ const ContactCreate = ({
       </div>
 
       <CrossCheckButtonsGroup
-        handleCancel={() => {
-          setSelectedContact(null);
-          setContactData("");
-          setShowContactSelector(false);
-        }}
-        handleAdd={() => {
+        handleCancel={handleClear}
+        handleAdd={async () => {
           const chosenContact = contactDataArr.find(
             (data) => data._id == selectedContact
           );
-          setContacts([
+          const contactsArr = [
             ...contacts,
             { name: chosenContact?.name, value: contactData },
-          ]);
-          setSelectedContact(null);
-          setContactData("");
-          setShowContactSelector(false);
-          setShowContactEditBox && setShowContactEditBox(true);
+          ];
+          if (mr || !trigger) {
+            setContacts(contactsArr);
+            handleClear();
+          } else {
+            try {
+              setEditLoading(true);
+              const response = await trigger({
+                contacts: contactsArr,
+              });
+              if (response) {
+                setEditLoading(false);
+                handleClear();
+                toast.success("Successfully deleted.");
+                setContacts(response?.contacts);
+              }
+            } catch (error) {
+              setEditLoading(false);
+              toast.error("Something went wrong.");
+            }
+          }
         }}
+        isLoading={editLoading}
       />
     </Box>
   );

@@ -25,7 +25,6 @@ const OrderDisplay = () => {
   const theme = useTheme();
   const dispatch = useDispatch();
   const showMobileSearchBar = useSelector(getShowMobileSearchBar);
-
   const [open, setOpen] = useState(false);
   const [skip, setSkip] = useState((page - 1) * 8);
   const [search, setSearch] = useState("");

@@ -26,7 +26,7 @@ const DispalySuppliers = () => {
   const page = useSelector(getPageNumber);
   const showMobileSearchBar = useSelector(getShowMobileSearchBar);
   const [open, setOpen] = useState(false);
-  const [skip, setSkip] = useState(0);
+  const [skip, setSkip] = useState((page - 1) * 8);
   const [search, setSearch] = useState("");
   const [typeSearch, setTypeSearch] = useState("");
   const [suppliers, setSuppliers] = useState<SupplierType[]>([]);

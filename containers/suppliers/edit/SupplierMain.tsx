@@ -64,10 +64,12 @@ const SupplierMain = ({ id, data, mutate }: Props) => {
     setSupplier({ ...supplier, avatarUrl: filedata.url });
   };
 
-  const updateSupplier = async (data: EditSupplierType) => {
+  const updateSupplier = async (supplierdata: EditSupplierType) => {
     try {
       const response = await trigger(
-        data.mobile ? { ...data, mobile: `+959` + supplier.mobile } : data
+        supplierdata.mobile
+          ? { ...supplierdata, mobile: `+959` + supplierdata.mobile }
+          : supplierdata
       );
 
       if (response) {
@@ -123,7 +125,7 @@ const SupplierMain = ({ id, data, mutate }: Props) => {
           contacts={contacts}
           setContacts={setContacts}
           edit={true}
-          setShowContactEditBox={setShowContactEditBox}
+          trigger={trigger}
         />
         {showContactSelector ? (
           <ContactCreate
@@ -134,25 +136,17 @@ const SupplierMain = ({ id, data, mutate }: Props) => {
             setSelectedContact={setSelectedContact}
             selectedContact={selectedContact}
             setShowContactSelector={setShowContactSelector}
-            setShowContactEditBox={setShowContactEditBox}
+            trigger={trigger}
           />
         ) : (
           <></>
         )}
-        <DetailEditCancelButton
-          show={showEditContactBox}
-          handleCancel={() => {
-            setContacts(data.contacts || []);
-            setShowContactEditBox(false);
-          }}
-          handleUpdate={() => {
-            updateSupplier({ contacts: contacts });
-          }}
-          loading={detailMutating}
-        />
+
         <div
           className={`md:ml-4 mt-2 ${
-            showContactSelector || showEditContactBox ? "hidden" : ""
+            showContactSelector || showEditContactBox || contacts.length === 3
+              ? "hidden"
+              : ""
           }`}
         >
           <AddButton

@@ -1,5 +1,5 @@
 import AddButton from "@/components/buttons/AddButton/page";
-import MRCreate from "@/components/dialogs/suppliers/MRCreate/page";
+import MRCreateDialog from "@/components/dialogs/suppliers/MRCreate/edit";
 import MRDisplay from "@/components/dialogs/suppliers/MRDisplay/page";
 import MREditDialog from "@/components/dialogs/suppliers/MREdit/page";
 import { defaultMRInfo } from "@/utils/staticData";
@@ -35,19 +35,20 @@ const MRMain = ({ id, data }: Props) => {
         id={id}
       />
       {showMRs ? (
-        <MRCreate
+        <MRCreateDialog
           medRepresentatives={medicalRepresentatives}
           setMedRepresentatives={setMedicalRepresentatives}
           medRepresentative={medRepresentative as MedicalRepresentativeType}
           setMedRepresentative={setMedRepresentative}
           setShowMR={setShowMRs}
+          showMRs={showMRs}
           edit={true}
           id={id}
         />
       ) : (
         <></>
       )}
-      <div className={`md:ml-4 mt-2 ${showMRs ? "hidden" : ""}`}>
+      <div className={`md:ml-4 mt-2 `}>
         <AddButton
           handleClick={() => {
             if (

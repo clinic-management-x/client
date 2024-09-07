@@ -6,25 +6,35 @@ import { contactDataArr } from "../ContactCreate/page";
 import EditButton from "@/components/buttons/EditButton/page";
 import { MdCheck } from "react-icons/md";
 import { RxCross2 } from "react-icons/rx";
+import toast from "react-hot-toast";
+import DeleteDialog from "../../delete";
 
 interface Props {
   contacts: { name?: string; value: string }[];
   setContacts: (data: { name?: string; value: string }[]) => void;
+  mr?: boolean;
   edit?: boolean;
-  setShowContactEditBox?: (data: boolean) => void;
+  trigger?: any;
 }
 
 const ContactDisplay = ({
   contacts,
   setContacts,
+  mr,
   edit,
-  setShowContactEditBox,
+  trigger,
 }: Props) => {
   const [contactToEdit, setContactToEdit] = useState<{
     name?: string;
     value: string;
   } | null>(null);
+  const [contactToDelete, setContactToDelete] = useState<{
+    name?: string;
+    value: string;
+  } | null>(null);
   const [editName, setEditName] = useState("");
+  const [openDeleteBox, setOpenDeleteBox] = useState(false);
+  const [deleteLoading, setDeleteLoading] = useState(false);
 
   return (
     <Box className=" mt-2 md:mt-0 mx-2 md:ml-2 lg:ml-6 flex flex-col">
@@ -72,16 +82,31 @@ const ContactDisplay = ({
                   <IconButton>
                     <MdCheck
                       className="text-green-500"
-                      onClick={() => {
-                        setContactToEdit(null);
-                        setContacts(
-                          contacts.map((contactdata) => {
-                            return contactdata.name === contact.name
-                              ? contactToEdit
-                              : contactdata;
-                          })
-                        );
-                        setShowContactEditBox && setShowContactEditBox(true);
+                      onClick={async () => {
+                        const contactsArr = contacts.map((contactdata) => {
+                          return contactdata.name === contact.name
+                            ? contactToEdit
+                            : contactdata;
+                        });
+                        if (mr) {
+                          setContacts(contactsArr);
+                          setContactToEdit(null);
+                        } else {
+                          try {
+                            const response = await trigger({
+                              contacts: contactsArr,
+                            });
+
+                            if (response) {
+                              //mutate();
+                              toast.success("Successfully added.");
+                              setContactToEdit(null);
+                              setContacts(response?.contacts);
+                            }
+                          } catch (error) {
+                            toast.error("Something went wrong.");
+                          }
+                        }
                       }}
                     />
                   </IconButton>
@@ -101,12 +126,8 @@ const ContactDisplay = ({
 
                   <TrashButton
                     handleClick={() => {
-                      setContacts(
-                        contacts.filter(
-                          (contacti) => contacti.name !== contact.name
-                        )
-                      );
-                      setShowContactEditBox && setShowContactEditBox(true);
+                      setOpenDeleteBox(true);
+                      setContactToDelete(contact);
                     }}
                   />
                 </div>
@@ -115,6 +136,38 @@ const ContactDisplay = ({
           </div>
         );
       })}
+      <DeleteDialog
+        open={openDeleteBox}
+        handleClose={() => {
+          setOpenDeleteBox(false);
+          setContactToDelete(null);
+        }}
+        text={"this contact"}
+        handleDelete={async () => {
+          setDeleteLoading(true);
+          const contactsArr = contacts.filter(
+            (contact) => contact.name !== contactToDelete?.name
+          );
+
+          try {
+            const response = await trigger({
+              contacts: contactsArr,
+            });
+
+            if (response) {
+              setOpenDeleteBox(false);
+              setDeleteLoading(false);
+              toast.success("Successfully deleted.");
+              setContactToEdit(null);
+              setContacts(response?.contacts);
+            }
+          } catch (error) {
+            setDeleteLoading(false);
+            toast.error("Something went wrong.");
+          }
+        }}
+        loading={deleteLoading}
+      />
     </Box>
   );
 };
