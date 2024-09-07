@@ -6,8 +6,6 @@ import { uploadFile } from "@/datafetch/fileupload/upload.api";
 import { defaultMRInfo, defaultSupplierInfo } from "@/utils/staticData";
 import {
   Box,
-  Button,
-  Chip,
   Dialog,
   DialogActions,
   DialogContent,
@@ -17,7 +15,6 @@ import React, { useState } from "react";
 import BasicSupplierInfo from "../BasicInfo/page";
 import ContactDisplay from "../ContactDispaly/page";
 import ContactCreate from "../ContactCreate/page";
-import MRCreate from "../MRCreate/page";
 import MRDisplay from "../MRDisplay/page";
 import AddButton from "@/components/buttons/AddButton/page";
 import CreateButton from "@/components/buttons/CreateButton/page";
@@ -26,6 +23,7 @@ import { supplierEndPoint } from "@/utils/endpoints";
 import config from "@/utils/config";
 import { createSupplier } from "@/datafetch/supplier/supplier.api";
 import toast from "react-hot-toast";
+import MRCreate from "../MRCreate/create";
 
 interface Props {
   open: boolean;
