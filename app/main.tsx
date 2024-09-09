@@ -12,7 +12,6 @@ const Main = () => {
     if (!access) {
       router.push("/login");
     } else {
-      console.log("HIII");
       router.push("/backoffice");
     }
   }, [access]);

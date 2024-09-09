@@ -12,7 +12,7 @@ import {
 import config from "@/utils/config";
 import { medicineEndPoint } from "@/utils/endpoints";
 import { buySellUnits, defaultMedicinData, routes } from "@/utils/staticData";
-import { Box, Typography } from "@mui/material";
+import { Box, Divider, Typography } from "@mui/material";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import useSWR from "swr";
@@ -31,6 +31,9 @@ import SellPrices from "./SellPrices";
 import DeleteMajorInfo from "@/components/dialogs/delete/DeleteMajorInfo";
 import ImageUploads from "@/components/dialogs/medicine/ImageUploads/page";
 import ImageEdit from "./image";
+import AddButton from "@/components/buttons/AddButton/page";
+import QuantityRealtionsDisplay from "@/components/dialogs/medicine/QuantityRelationsDisplay/page";
+import QuantityRelationCreate from "@/components/dialogs/medicine/QuantityRelationsCreate/page";
 
 export const defaultShowData = {
   type: "",
@@ -50,6 +53,15 @@ const EditMedicine = ({ id }: { id: string }) => {
   const [openDeleteMedicineDialog, setOpenDeleteMedicineDialog] =
     useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
+  const [selectedUnits, setSelectedUnits] = useState<
+    { _id: string; name: string }[]
+  >([]);
+  const [quantityRelations, setQuantityRelations] = useState<
+    QuantityRealtions[]
+  >([]);
+  const [showQuantiyRelationCreate, setShowQuantityRelationCreate] =
+    useState(false);
+
   const { data, mutate, isLoading } = useSWR(
     `${config.apiBaseUrl}/${medicineEndPoint}/${id}`,
     getMedicine
@@ -77,6 +89,11 @@ const EditMedicine = ({ id }: { id: string }) => {
         }
       ),
     };
+    const units = data.sellPrices.map((sellprice, index) => {
+      return { _id: `${index + 1}`, name: sellprice.unit };
+    });
+    setSelectedUnits(units);
+    setQuantityRelations(data.quantityRelations || []);
 
     setMedicine(info);
     setRouteId(
@@ -222,7 +239,67 @@ const EditMedicine = ({ id }: { id: string }) => {
                 loading={updateMedicineMutating}
               />
             </div>
-            <SellPrices medicine={medicine} setMedicine={setMedicine} />
+            <SellPrices
+              medicine={medicine}
+              setMedicine={setMedicine}
+              selectedUnits={selectedUnits}
+              setSelectedUnits={setSelectedUnits}
+            />
+
+            {medicine.sellPrices.length > 1 ? (
+              <>
+                <div className="flex flex-col  mx-2">
+                  <LabelTypography title="Quantity Relations" />
+                  <Typography
+                    variant="caption"
+                    className="dark:text-darkText text-whiteText mb-2"
+                  >
+                    In order to get precise calculation, give the relation
+                    between sell units. (eg.1 BOX - 30 CARD)
+                  </Typography>
+                  {quantityRelations.length ? (
+                    <QuantityRealtionsDisplay
+                      quantityRelations={quantityRelations}
+                      setQuantityRelations={setQuantityRelations}
+                      selectedUnits={selectedUnits}
+                      edit={true}
+                      trigger={trigger}
+                    />
+                  ) : (
+                    <></>
+                  )}
+                  {showQuantiyRelationCreate ? (
+                    <QuantityRelationCreate
+                      quantityRelations={quantityRelations}
+                      setQuantityRelations={setQuantityRelations}
+                      selectedUnits={selectedUnits}
+                      setShowQuantityRelationCreate={
+                        setShowQuantityRelationCreate
+                      }
+                      trigger={trigger}
+                      edit={true}
+                    />
+                  ) : (
+                    <></>
+                  )}
+                </div>
+                {!showQuantiyRelationCreate ? (
+                  <div className="ml-2">
+                    <AddButton
+                      handleClick={() => {
+                        setShowQuantityRelationCreate(true);
+                      }}
+                    />{" "}
+                  </div>
+                ) : (
+                  <></>
+                )}
+              </>
+            ) : (
+              <></>
+            )}
+            <Divider sx={{ my: 4 }} />
+
             <Quantity
               medicine={medicine}
               setMedicine={setMedicine}

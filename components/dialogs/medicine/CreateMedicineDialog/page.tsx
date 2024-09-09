@@ -25,6 +25,7 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
+  Divider,
   Typography,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
@@ -38,11 +39,19 @@ import useSWRMutation from "swr/mutation";
 import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
 import { getImageUploading } from "@/redux/slices/inventory";
+import QuantityRelationCreate from "../QuantityRelationsCreate/page";
+import QuantityRealtionsDisplay from "../QuantityRelationsDisplay/page";
 
 interface Props {
   open: boolean;
   handleClose: () => void;
   mutate: any;
+}
+
+export interface QuantityRealtions {
+  upperUnit: string;
+  lowerUnit: string;
+  quantityRelation: number;
 }
 
 const CreateMedicineDialog = ({ open, handleClose, mutate }: Props) => {
@@ -62,6 +71,14 @@ const CreateMedicineDialog = ({ open, handleClose, mutate }: Props) => {
   const [stockUnit, setStockUnit] = useState("");
   const [alertUnit, setAlertUnit] = useState("");
   const [routeId, setRouteId] = useState(0);
+  const [selectedUnits, setSelectedUnits] = useState<
+    { _id: string; name: string }[]
+  >([]);
+  const [quantityRelations, setQuantityRelations] = useState<
+    QuantityRealtions[]
+  >([]);
+  const [showQuantiyRelationCreate, setShowQuantityRelationCreate] =
+    useState(false);
 
   const { data: genericDrugData } = useSWR(
     `${config.apiBaseUrl}/${medicineEndPoint}/generic-drugs?search=${genericSearch}`,
@@ -105,7 +122,8 @@ const CreateMedicineDialog = ({ open, handleClose, mutate }: Props) => {
   }, [activeIngredientsData]);
   const handleCreate = async () => {
     try {
-      const response = await trigger(basicMedicineInfo);
+      const payload = { ...basicMedicineInfo, quantityRelations };
+      const response = await trigger(payload);
       if (response) {
         mutate();
         toast.success("Successfully created.");
@@ -238,6 +256,8 @@ const CreateMedicineDialog = ({ open, handleClose, mutate }: Props) => {
                 basicMedicineInfo={basicMedicineInfo}
                 setBasicMedicineInfo={setBasicMedicineInfo}
                 setShowSellUnits={setShowSellUnits}
+                selectedUnits={selectedUnits}
+                setSelectedUnits={setSelectedUnits}
               />
             ) : (
               <></>
@@ -250,7 +270,52 @@ const CreateMedicineDialog = ({ open, handleClose, mutate }: Props) => {
                 }}
               />
             </div>
+            {basicMedicineInfo.sellPrices.length > 1 ? (
+              <>
+                <div className="flex flex-col  mx-2">
+                  <LabelTypography title="Quantity Relations" />
+                  <Typography variant="caption">
+                    In order to get precise calculation, give the relation
+                    between sell units. (eg.1 BOX - 30 CARD)
+                  </Typography>
+                  {quantityRelations.length ? (
+                    <QuantityRealtionsDisplay
+                      quantityRelations={quantityRelations}
+                      setQuantityRelations={setQuantityRelations}
+                    />
+                  ) : (
+                    <></>
+                  )}
+                  {showQuantiyRelationCreate ? (
+                    <QuantityRelationCreate
+                      quantityRelations={quantityRelations}
+                      setQuantityRelations={setQuantityRelations}
+                      selectedUnits={selectedUnits}
+                      setShowQuantityRelationCreate={
+                        setShowQuantityRelationCreate
+                      }
+                    />
+                  ) : (
+                    <></>
+                  )}
+                </div>
+                {!showQuantiyRelationCreate ? (
+                  <div className="ml-2">
+                    <AddButton
+                      handleClick={() => {
+                        setShowQuantityRelationCreate(true);
+                      }}
+                    />{" "}
+                  </div>
+                ) : (
+                  <></>
+                )}
+              </>
+            ) : (
+              <></>
+            )}
 
+            <Divider sx={{ my: 4 }} />
             <div className="flex flex-col md:flex-row items-center mx-2 my-2">
               <div className="flex flex-col  md:w-[180px]">
                 <LabelTypography title="Total Quantity" />

@@ -6,8 +6,15 @@ import React, { useState } from "react";
 interface Props {
   medicine: MedicineTypeCreate;
   setMedicine: (data: MedicineTypeCreate) => void;
+  selectedUnits: { _id: string; name: string }[];
+  setSelectedUnits: (data: { _id: string; name: string }[]) => void;
 }
-const SellPrices = ({ medicine, setMedicine }: Props) => {
+const SellPrices = ({
+  medicine,
+  setMedicine,
+  selectedUnits,
+  setSelectedUnits,
+}: Props) => {
   const [showSellUnits, setShowSellUnits] = useState(false);
   return (
     <div>
@@ -27,6 +34,12 @@ const SellPrices = ({ medicine, setMedicine }: Props) => {
           setBasicMedicineInfo={setMedicine}
           setShowSellUnits={setShowSellUnits}
           edit={true}
+          selectedUnits={[]}
+          setSelectedUnits={function (
+            data: { _id: string; name: string }[]
+          ): void {
+            throw new Error("Function not implemented.");
+          }}
         />
       ) : (
         <></>

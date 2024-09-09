@@ -87,6 +87,12 @@ interface ActiveIngredientCreate {
   strength: number;
   unit: string;
 }
+
+interface QuantityRealtions {
+  upperUnit: string;
+  lowerUnit: string;
+  quantityRelation: number;
+}
 interface MedicineTypeCreate {
   brandName: string;
   genericDrug: string;
@@ -101,6 +107,7 @@ interface MedicineTypeCreate {
     unit: string;
   }[];
   imageUrls: any[];
+  quantityRelations?: QuantityRealtions[];
 }
 interface MedicineTypeUpdate {
   brandName?: string;
@@ -111,6 +118,7 @@ interface MedicineTypeUpdate {
   stockQuantityUnit?: string;
   minimumAlertQuantity?: number;
   minimumAlertQuantityUni?: string;
+  quantityRelations?: QuantityRealtions[];
   sellPrices?: {
     price: number;
     unit: string;
@@ -141,6 +149,7 @@ interface MedicineTypeStandard {
   stockQuantityUnit: string;
   minimumAlertQuantity: number;
   minimumAlertQuantityUnit: string;
+  quantityRelations?: QuantityRealtions[];
   sellPrices: {
     price: number;
     unit: string;

@@ -1,26 +1,20 @@
 "use client";
 import CreateButton from "@/components/buttons/CreateButton/page";
-import CreateMedicineDialog from "@/components/dialogs/medicine/CreateMedicineDialog/page";
+import CreateBarcodeDialog from "@/components/dialogs/barcodes/CreateBarcodeDialog/page";
 import SearchBar from "@/components/input/SearchBar/page";
-import { getMedicines } from "@/datafetch/medicines/medicines.api";
 import {
   getShowMobileSearchBar,
   insertShowMobileSearchBar,
 } from "@/redux/slices/layout";
-import config from "@/utils/config";
-import { medicineEndPoint } from "@/utils/endpoints";
-import { Box, IconButton, Pagination } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import { getPageNumber } from "@/redux/slices/workers";
+import { Box, IconButton } from "@mui/material";
+import { useTheme } from "next-themes";
+import React, { useState } from "react";
 import { FiSearch } from "react-icons/fi";
 import { RxCross1 } from "react-icons/rx";
 import { useDispatch, useSelector } from "react-redux";
-import useSWR from "swr";
-import MedicineTable from "./medicineTable";
-import SkeletonFrame from "./skeleton";
-import { useTheme } from "next-themes";
-import { getPageNumber, insertPageNumber } from "@/redux/slices/workers";
 
-const MedicineDisplay = () => {
+const BarcodesDisplay = () => {
   const page = useSelector(getPageNumber);
   const theme = useTheme();
   const dispatch = useDispatch();
@@ -30,26 +24,11 @@ const MedicineDisplay = () => {
   const [skip, setSkip] = useState((page - 1) * 8);
   const [search, setSearch] = useState("");
   const [typeSearch, setTypeSearch] = useState("");
-  const [medicines, setMedicines] = useState<MedicineTypeStandard[]>([]);
 
   const hanldeSearchChange = (e: any) => {
     setTypeSearch(e.target.value);
     e.target.value === "" ? setSearch("") : "";
   };
-
-  const { data, mutate, isLoading } = useSWR(
-    `${
-      config.apiBaseUrl
-    }/${medicineEndPoint}?limit=${8}&skip=${skip}&search=${search}`,
-    getMedicines
-  );
-
-  useEffect(() => {
-    if (data) {
-      setMedicines(data.data);
-    }
-  });
-
   return (
     <section className="flex flex-col overflow-y-scroll">
       <Box sx={{ mb: 40 }}>
@@ -110,43 +89,15 @@ const MedicineDisplay = () => {
             <RxCross1 className="text-primaryBlue-300" />
           </IconButton>
         </div>
-        {isLoading ? (
-          <SkeletonFrame />
-        ) : (
-          <MedicineTable medicines={medicines} />
-        )}
-        <div className="mt-8 w-full m-auto flex items-center justify-center ">
-          <Pagination
-            size="large"
-            count={Math.ceil(data?.count / 8)}
-            defaultPage={page}
-            color="primary"
-            sx={{
-              mx: 4,
-              color: "gray",
-              ul: {
-                "& .MuiPaginationItem-root": {
-                  color: theme.theme === "dark" ? "#fff" : "dark",
-                },
-              },
-            }}
-            className="space-x-2 dark:text-darkText"
-            onChange={(e, pagenumber) => {
-              dispatch(insertPageNumber(pagenumber));
-              setSkip((pagenumber - 1) * 8);
-            }}
-          />
-        </div>
       </Box>
-      <CreateMedicineDialog
+      <CreateBarcodeDialog
         open={open}
         handleClose={() => {
           setOpen(false);
         }}
-        mutate={mutate}
       />
     </section>
   );
 };
 
-export default MedicineDisplay;
+export default BarcodesDisplay;
