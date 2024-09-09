@@ -32,15 +32,18 @@ const OrderItemCreate = ({
     quantity: 0,
     unit: "",
   });
+  const [selectedValue, setSelectedValue] = useState("");
   const [availableMedicines, setAvailableMedicines] = useState<
-    { _id: string; brandName: string }[]
+    { _id: string; brandName: string; stockQuantityUnit: string }[]
   >([]);
+
   const [brandSearch, setBrandSearch] = useState("");
 
   const { data: medicinesLists, mutate: medicineMutate } = useSWR(
     `${config.apiBaseUrl}/${medicineEndPoint}/list?search=${brandSearch}`,
     getDrugList
   );
+
   const { trigger, isMutating } = useSWRMutation(
     `${config.apiBaseUrl}/${orderEndPoint}/order-item/${id}`,
     createOrderItem
@@ -58,15 +61,21 @@ const OrderItemCreate = ({
           dataArr={availableMedicines}
           dataIndex="brandName"
           handleChange={(e, newValue) => {
-            const selectedIngredient = availableMedicines.find(
+            const selectedDrug = availableMedicines.find(
               (medicine: { _id: string; brandName: string }) =>
                 medicine.brandName === newValue
             );
-            if (selectedIngredient) {
+            if (selectedDrug) {
               setCurrentOrderItem({
                 ...currentOrderItem,
-                itemName: selectedIngredient,
+                itemName: selectedDrug,
+                unit: selectedDrug.stockQuantityUnit,
               });
+              setSelectedValue(
+                buySellUnits.find(
+                  (selldata) => selldata.name === selectedDrug.stockQuantityUnit
+                )?._id || ""
+              );
             }
           }}
           handleSearch={(e) => {
@@ -86,25 +95,8 @@ const OrderItemCreate = ({
           type="number"
         />
       </div>
-      <div className="w-[100px]">
-        <PlainSelector
-          dataArr={buySellUnits}
-          title=""
-          handleChange={(e, value) => {
-            const selectedUnit = buySellUnits.find(
-              (unit) => unit._id === e.target.value
-            );
-            setCurrentOrderItem({
-              ...currentOrderItem,
-              unit: selectedUnit?.name as string,
-            });
-          }}
-          selectedValue={
-            buySellUnits.find(
-              (selldata) => selldata.name === currentOrderItem?.unit
-            )?._id
-          }
-        />
+      <div className="w-[100px] border-[1px] border-[#9CA3AF] rounded-md h-[50px] pt-3  text-center">
+        {currentOrderItem.unit}
       </div>
       <CrossCheckButtonsGroup
         handleCancel={() => {

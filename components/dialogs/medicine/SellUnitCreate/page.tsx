@@ -18,12 +18,16 @@ interface Props {
   basicMedicineInfo: MedicineTypeCreate;
   setShowSellUnits: (data: boolean) => void;
   edit?: boolean;
+  selectedUnits: { _id: string; name: string }[];
+  setSelectedUnits: (data: { _id: string; name: string }[]) => void;
 }
 const SellUnitCreate = ({
   setBasicMedicineInfo,
   basicMedicineInfo,
   setShowSellUnits,
   edit,
+  selectedUnits,
+  setSelectedUnits,
 }: Props) => {
   const alreadyUsedUnits = basicMedicineInfo.sellPrices.map(
     (pricedata) => pricedata.unit
@@ -111,6 +115,13 @@ const SellUnitCreate = ({
                 toast.error("Something went wrong.");
               }
             } else {
+              setSelectedUnits([
+                ...selectedUnits,
+                {
+                  _id: `${selectedUnits.length + 1}`,
+                  name: currentSellData.unit,
+                },
+              ]);
               setBasicMedicineInfo({
                 ...basicMedicineInfo,
                 sellPrices: [...basicMedicineInfo.sellPrices, currentSellData],
