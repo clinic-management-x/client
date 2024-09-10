@@ -20,7 +20,7 @@ const CheckTextField = ({
   handleBlur,
 }: Props) => {
   const { theme } = useTheme();
-  console.log("already", alreadyExist);
+
   return (
     <div>
       <TextField

@@ -188,3 +188,13 @@ export const orderStatus = [
     label: "PAID",
   },
 ];
+
+export const defaultBarcode = {
+  orderId: "",
+  batchId: "",
+  medicine: "",
+  barcode: "",
+  expiredDate: "",
+  quantity: 0,
+  unit: "",
+};

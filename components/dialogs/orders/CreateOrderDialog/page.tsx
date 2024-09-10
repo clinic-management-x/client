@@ -185,6 +185,7 @@ const CreateOrderDialog = ({ open, handleClose, mutate }: Props) => {
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DatePicker
                   value={arrivalTime}
+                  disablePast
                   onChange={(value) => {
                     setArrivalTime(value);
                     setOrderInfo({
