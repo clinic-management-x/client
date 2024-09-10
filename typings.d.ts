@@ -199,3 +199,16 @@ interface OrderUpdateType {
   orderStatus?: string;
   hasAlreadyArrived?: boolean;
 }
+
+interface Barcode {
+  _id?: string;
+  __v?: string;
+  orderId: string;
+  batchId: string;
+  medicine: string;
+  barcode: string;
+  barCodeUrl?: string;
+  expiredDate: string;
+  quantity: number;
+  unit: string;
+}

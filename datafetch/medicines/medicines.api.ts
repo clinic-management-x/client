@@ -38,6 +38,14 @@ export const createMedicine = async (
   return response.data;
 };
 
+export const createBarcode = async (
+  url: string,
+  { arg }: { arg: Barcode[] }
+) => {
+  const response = await baseApi.post(url, arg);
+  return response.data;
+};
+
 export const createIngredient = async (
   url: string,
   {

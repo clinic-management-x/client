@@ -24,6 +24,7 @@ const PlainSelector = <T extends DataItem, S>({
   size,
 }: Props<T, S>) => {
   const { theme } = useTheme();
+  console.log("selected", selectedValue);
   return (
     <div>
       <FormControl fullWidth>
