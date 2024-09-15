@@ -62,6 +62,11 @@ const OrderItemsDisplay = ({ orderInfo, setOrderInfo, edit, id }: Props) => {
                   <CustomTextField
                     value={orderItemToUpdate?.quantity as number}
                     handleChange={(e) => {
+                      if (orderInfo.hasAlreadyArrived) {
+                        return toast.error(
+                          "Quantity cannot be changed after arrival."
+                        );
+                      }
                       setOrderItemToUpdate({
                         ...orderItemToUpdate,
                         quantity: +e.target.value,
@@ -94,7 +99,7 @@ const OrderItemsDisplay = ({ orderInfo, setOrderInfo, edit, id }: Props) => {
             ) : (
               <div
                 key={i}
-                className="flex items-center px-2 md:w-[300px] h-[50px] border-[1px] rounded border-[#9CA3AF] space-x-2"
+                className="flex items-center px-2 w-[240px] md:w-[300px] h-[50px] border-[1px] rounded border-[#9CA3AF] space-x-2"
               >
                 <Typography
                   variant="body1"

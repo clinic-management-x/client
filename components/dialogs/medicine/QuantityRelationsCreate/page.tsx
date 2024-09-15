@@ -32,8 +32,8 @@ const QuantityRelationCreate = ({
   const [upperUnit, setUpperUnit] = useState("");
   const [loading, setLoading] = useState(false);
   return (
-    <div className="flex items-center space-x-2 mt-2">
-      <div className="w-[120px]">
+    <div className="flex flex-col md:flex-row items-center md:space-x-2 mt-2">
+      <div className="w-full md:w-[120px]">
         <CustomTextField
           value={currentQuantityRelation.quantityRelation}
           handleChange={(e) => {
@@ -42,9 +42,10 @@ const QuantityRelationCreate = ({
               quantityRelation: +e.target.value,
             });
           }}
+          className="w-full"
         />
       </div>
-      <div className="w-[150px]">
+      <div className="w-full mt-2 md:mt-0 md:w-[150px]">
         <PlainSelector
           dataArr={selectedUnits}
           title={"Lower unit"}
@@ -66,7 +67,7 @@ const QuantityRelationCreate = ({
         {" "}
         per
       </Typography>
-      <div className="w-[150px]">
+      <div className="w-full md:w-[150px]">
         <PlainSelector
           dataArr={selectedUnits}
           title={"Upper unit"}

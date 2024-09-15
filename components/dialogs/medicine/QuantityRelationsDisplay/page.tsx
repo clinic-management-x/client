@@ -109,7 +109,7 @@ const QuantityRealtionsDisplay = ({
               ) : (
                 <div
                   key={index}
-                  className="flex items-center px-2 md:w-[300px] h-[50px] border-[1px] rounded border-[#9CA3AF] space-x-2"
+                  className="flex items-center px-2 w-full md:w-[300px] h-[50px] border-[1px] rounded border-[#9CA3AF] space-x-2"
                 >
                   {" "}
                   <Typography

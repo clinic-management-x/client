@@ -55,8 +55,8 @@ const OrderItemCreate = ({
   }, [medicinesLists]);
 
   return (
-    <div className="flex items-center space-x-2 mt-2 ">
-      <div className="w-[300px]">
+    <div className="flex flex-col space-y-2 md:space-y-0 md:flex-row items-center space-x-2 mt-2 ">
+      <div className="w-full md:w-[300px] ">
         <AutocompleteSearch
           dataArr={availableMedicines}
           dataIndex="brandName"
@@ -83,20 +83,22 @@ const OrderItemCreate = ({
           }}
         />
       </div>
-      <div className="w-[150px]">
-        <CustomTextField
-          value={currentOrderItem?.quantity as number}
-          handleChange={(e) => {
-            setCurrentOrderItem({
-              ...currentOrderItem,
-              quantity: +e.target.value,
-            });
-          }}
-          type="number"
-        />
-      </div>
-      <div className="w-[100px] border-[1px] border-[#9CA3AF] rounded-md h-[50px] pt-3  text-center">
-        {currentOrderItem.unit}
+      <div className="flex items-center  justify-between md:justify-start md:space-x-2 w-full md:w-auto">
+        <div className=" w-[150px] ">
+          <CustomTextField
+            value={currentOrderItem?.quantity as number}
+            handleChange={(e) => {
+              setCurrentOrderItem({
+                ...currentOrderItem,
+                quantity: +e.target.value,
+              });
+            }}
+            type="number"
+          />
+        </div>
+        <div className="w-[80px] md:w-[100px] ml-1 md:ml-0 mr-2 md:mr-0 border-[1px] border-[#9CA3AF] rounded-md h-[50px] pt-3  text-center">
+          {currentOrderItem.unit}
+        </div>
       </div>
       <CrossCheckButtonsGroup
         handleCancel={() => {

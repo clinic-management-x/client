@@ -93,8 +93,8 @@ const EditOrder = ({ id }: { id: string }) => {
         {isLoading ? (
           <SkeletonFrame />
         ) : (
-          <div className="flex flex-col ml-4 md:ml-14 w-full">
-            <div className="flex flex-col mx-2 md:w-[300px]  mb-2">
+          <div className="flex flex-col  md:ml-14  ">
+            <div className="flex flex-col mx-2  md:w-[300px]  mb-2">
               <LabelTypography title="BatchId" />
 
               <div className="relative">
@@ -104,7 +104,7 @@ const EditOrder = ({ id }: { id: string }) => {
                     setShowEditBatchId(true);
                     setOrderInfo({ ...orderInfo, batchId: e.target.value });
                   }}
-                  className="md:w-[300px]"
+                  className="w-full md:w-[300px]"
                   alreadyExist={alreadyExist}
                   handleBlur={async () => {
                     try {
@@ -196,7 +196,13 @@ const EditOrder = ({ id }: { id: string }) => {
                 <></>
               )}
 
-              <div className={`${showOrderItemCreate ? "hidden" : "ml-2"}`}>
+              <div
+                className={`${
+                  showOrderItemCreate || orderInfo.hasAlreadyArrived
+                    ? "hidden"
+                    : "ml-2"
+                }`}
+              >
                 <AddButton
                   handleClick={() => {
                     setShowOrderitemCreate(true);
@@ -240,6 +246,7 @@ const EditOrder = ({ id }: { id: string }) => {
                 router.push("/backoffice/inventory/orders");
               }
             } catch (error) {
+              setDeleteLoading(false);
               toast.error("Something went wrong");
             }
           }}

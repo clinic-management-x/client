@@ -13,3 +13,5 @@ export const supplierEndPoint = "suppliers";
 export const medicineEndPoint = "medicines";
 
 export const orderEndPoint = "orders";
+
+export const barcodeEndPoint = "barcodes";

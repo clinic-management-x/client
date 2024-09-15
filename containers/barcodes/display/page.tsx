@@ -2,17 +2,23 @@
 import CreateButton from "@/components/buttons/CreateButton/page";
 import CreateBarcodeDialog from "@/components/dialogs/barcodes/CreateBarcodeDialog/page";
 import SearchBar from "@/components/input/SearchBar/page";
+import { getBarcodes } from "@/datafetch/medicines/medicines.api";
 import {
   getShowMobileSearchBar,
   insertShowMobileSearchBar,
 } from "@/redux/slices/layout";
-import { getPageNumber } from "@/redux/slices/workers";
-import { Box, IconButton } from "@mui/material";
+import { getPageNumber, insertPageNumber } from "@/redux/slices/workers";
+import config from "@/utils/config";
+import { barcodeEndPoint, medicineEndPoint } from "@/utils/endpoints";
+import { Box, IconButton, Pagination } from "@mui/material";
 import { useTheme } from "next-themes";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FiSearch } from "react-icons/fi";
 import { RxCross1 } from "react-icons/rx";
 import { useDispatch, useSelector } from "react-redux";
+import useSWR from "swr";
+import SkeletonFrame from "./skeletonFrame";
+import BarcodeTable from "./barcodeTable";
 
 const BarcodesDisplay = () => {
   const page = useSelector(getPageNumber);
@@ -24,6 +30,20 @@ const BarcodesDisplay = () => {
   const [skip, setSkip] = useState((page - 1) * 8);
   const [search, setSearch] = useState("");
   const [typeSearch, setTypeSearch] = useState("");
+  const [barcodes, setBarcodes] = useState<BarcodeDisplay[]>([]);
+
+  const { data, mutate, isLoading } = useSWR(
+    `${
+      config.apiBaseUrl
+    }/${medicineEndPoint}/${barcodeEndPoint}?limit=${8}&skip=${skip}&search=${search}`,
+    getBarcodes
+  );
+
+  useEffect(() => {
+    if (data) {
+      setBarcodes(data.data);
+    }
+  }, [data]);
 
   const hanldeSearchChange = (e: any) => {
     setTypeSearch(e.target.value);
@@ -89,12 +109,36 @@ const BarcodesDisplay = () => {
             <RxCross1 className="text-primaryBlue-300" />
           </IconButton>
         </div>
+        {isLoading ? <SkeletonFrame /> : <BarcodeTable barcodes={barcodes} />}
+        <div className="mt-8 w-full m-auto flex items-center justify-center ">
+          <Pagination
+            size="large"
+            count={Math.ceil(data?.count / 8)}
+            defaultPage={page}
+            color="primary"
+            sx={{
+              mx: 4,
+              color: "gray",
+              ul: {
+                "& .MuiPaginationItem-root": {
+                  color: theme.theme === "dark" ? "#fff" : "dark",
+                },
+              },
+            }}
+            className="space-x-2 dark:text-darkText"
+            onChange={(e, pagenumber) => {
+              dispatch(insertPageNumber(pagenumber));
+              setSkip((pagenumber - 1) * 8);
+            }}
+          />
+        </div>
       </Box>
       <CreateBarcodeDialog
         open={open}
         handleClose={() => {
           setOpen(false);
         }}
+        mutate={mutate}
       />
     </section>
   );

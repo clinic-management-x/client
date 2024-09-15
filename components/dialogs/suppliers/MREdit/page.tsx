@@ -65,7 +65,7 @@ const MREditDialog = ({
 
   return (
     <Dialog open={open} onClose={closeDialog} maxWidth="sm" fullWidth>
-      <div className="flex flex-col mx-6 mb-6">
+      <div className="flex flex-col px-6 pb-6 dark:bg-[#3C3C3C]">
         <CloseButton handleClose={closeDialog} />
         <Typography
           variant="h6"

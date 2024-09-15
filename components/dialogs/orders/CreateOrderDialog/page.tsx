@@ -35,6 +35,7 @@ import RadioGroupSelector from "@/components/input/RadioGroup/page";
 import OrderItemCreate from "../OrderItem/page";
 import AddButton from "@/components/buttons/AddButton/page";
 import OrderItemsDisplay from "../OrderItemDisplay/page";
+import CustomDatePicker from "@/components/selectors/CustomDatePicker/page";
 
 interface Props {
   open: boolean;
@@ -123,7 +124,7 @@ const CreateOrderDialog = ({ open, handleClose, mutate }: Props) => {
                 : "md:w-[100%] mt-4"
             } mr-2`}
           >
-            <div className="flex flex-col mx-2 md:w-[300px]  mb-2">
+            <div className="flex flex-col mx-2 md:w-[300px]   mb-2">
               <LabelTypography title="BatchId" />
 
               <div className="relative">
@@ -132,7 +133,7 @@ const CreateOrderDialog = ({ open, handleClose, mutate }: Props) => {
                   handleChange={(e) => {
                     setOrderInfo({ ...orderInfo, batchId: e.target.value });
                   }}
-                  className="md:w-[300px]"
+                  className="w-full md:w-[300px]"
                   alreadyExist={alreadyExist}
                   handleBlur={async () => {
                     try {
@@ -183,10 +184,9 @@ const CreateOrderDialog = ({ open, handleClose, mutate }: Props) => {
             <div className="flex flex-col mx-2 md:w-[300px]  mb-2">
               <LabelTypography title="Estimate Date of Arrival" />
               <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DatePicker
+                <CustomDatePicker
                   value={arrivalTime}
-                  disablePast
-                  onChange={(value) => {
+                  handleChange={(value) => {
                     setArrivalTime(value);
                     setOrderInfo({
                       ...orderInfo,

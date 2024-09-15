@@ -47,7 +47,7 @@ const ImageUploads = ({
 
   return (
     <div className="flex flex-col">
-      <div className="flex items-center space-x-2">
+      <div className="flex flex-col md:flex-row items-center space-x-2">
         {urls.map((url, index) => (
           <div
             key={index}

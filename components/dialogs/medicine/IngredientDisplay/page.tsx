@@ -57,7 +57,7 @@ const IngredientDiplay = ({
               <div className="flex items-center mb-2 ">
                 {ingredientToEdit &&
                 ingredientToEdit.componentId === data.componentId ? (
-                  <div className="flex flex-col  md:flex-row items-center space-x-2 ml-2  mt-2">
+                  <div className="flex  items-center space-x-2 md:ml-2  mt-2">
                     <CustomTextField
                       value={ingredientToEdit.activeIngredient}
                       handleChange={(e) => {
@@ -65,7 +65,7 @@ const IngredientDiplay = ({
                           "Ingredient name can't be edited once it is created."
                         );
                       }}
-                      className="w-[300px] ml-[-8px]"
+                      className="w-full md:w-[300px] md:ml-[-8px]"
                     />
 
                     <div className="w-[150px]">
@@ -102,7 +102,7 @@ const IngredientDiplay = ({
                     </div>
                   </div>
                 ) : (
-                  <div className="flex items-center px-2 md:w-[300px] h-[50px] border-[1px] rounded border-[#9CA3AF] space-x-2">
+                  <div className="flex items-center px-2 w-full md:w-[300px] h-[50px] border-[1px] rounded border-[#9CA3AF] space-x-2">
                     <Typography
                       variant="body1"
                       className="dark:text-darkText text-whiteText"

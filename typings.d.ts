@@ -212,3 +212,25 @@ interface Barcode {
   quantity: number;
   unit: string;
 }
+
+interface BarcodeDisplay {
+  _id?: string;
+  __v?: string;
+  orderId: {
+    _id: string;
+    supplier: {
+      _id: string;
+      name: string;
+    };
+  };
+  batchId: string;
+  medicine: {
+    _id: string;
+    brandName: string;
+  };
+  barcode: string;
+  barCodeUrl: string;
+  expiredDate: string;
+  quantity: number;
+  unit: string;
+}
