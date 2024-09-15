@@ -161,7 +161,7 @@ const EditMedicine = ({ id }: { id: string }) => {
         {isLoading ? (
           <SkeletonFrame />
         ) : (
-          <div className="flex flex-col ml-4 md:ml-14 w-full">
+          <div className="flex flex-col md:ml-14 w-full">
             <div className="flex flex-col mx-2 md:w-[300px]">
               <LabelTypography title="Brand Name" />
               <CustomTextField

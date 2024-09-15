@@ -8,6 +8,7 @@ import { MdCheck } from "react-icons/md";
 import { RxCross2 } from "react-icons/rx";
 import toast from "react-hot-toast";
 import DeleteDialog from "../../delete";
+import { useTheme } from "next-themes";
 
 interface Props {
   contacts: { name?: string; value: string }[];
@@ -24,6 +25,7 @@ const ContactDisplay = ({
   edit,
   trigger,
 }: Props) => {
+  const { theme } = useTheme();
   const [contactToEdit, setContactToEdit] = useState<{
     name?: string;
     value: string;
@@ -57,6 +59,11 @@ const ContactDisplay = ({
                         value: e.target.value,
                       });
                     }}
+                    InputProps={{
+                      style: {
+                        color: theme === "dark" ? "#D1D5DB" : "#6B7280",
+                      },
+                    }}
                     variant="standard"
                   />
                 ) : (
@@ -76,7 +83,7 @@ const ContactDisplay = ({
                       setContacts(contacts);
                     }}
                   >
-                    <RxCross2 />
+                    <RxCross2 className="dark:text-darkText" />
                   </IconButton>
 
                   <IconButton>

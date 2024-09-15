@@ -6,15 +6,17 @@ import React from "react";
 interface Props {
   value: Dayjs | null;
   handleChange: (newValue: Dayjs | null) => void;
+  disabledPast?: boolean;
 }
 
-const CustomDatePicker = ({ value, handleChange }: Props) => {
+const CustomDatePicker = ({ value, handleChange, disabledPast }: Props) => {
   const { theme } = useTheme();
   return (
     <DatePicker
       value={value}
       onChange={(newValue) => handleChange(newValue)}
       views={["year", "month", "day"]}
+      disablePast={disabledPast}
       slotProps={{
         popper: {
           sx: {

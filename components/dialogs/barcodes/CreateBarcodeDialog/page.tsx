@@ -5,16 +5,20 @@ import CrossCheckButtonsGroup from "@/components/buttons/CrossCheckButtons/page"
 import TrashButton from "@/components/buttons/TrashButton/page";
 import AutocompleteSearch from "@/components/input/AutoComplete/page";
 import CustomTextField from "@/components/input/CustomTextField/page";
+import CustomDatePicker from "@/components/selectors/CustomDatePicker/page";
 import PlainSelector from "@/components/selectors/PlainSelector/page";
 import LabelTypography from "@/components/typography/LabelTypography/page";
 import { createBarcode } from "@/datafetch/medicines/medicines.api";
 import { getOrders } from "@/datafetch/orders/orders.api";
 import config from "@/utils/config";
-import { medicineEndPoint, orderEndPoint } from "@/utils/endpoints";
+import {
+  barcodeEndPoint,
+  medicineEndPoint,
+  orderEndPoint,
+} from "@/utils/endpoints";
 import { defaultBarcode } from "@/utils/staticData";
 import { Box, Dialog, DialogActions, DialogContent } from "@mui/material";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import dayjs, { Dayjs } from "dayjs";
 import React, { useEffect, useState } from "react";
@@ -26,10 +30,10 @@ import useSWRMutation from "swr/mutation";
 interface Props {
   open: boolean;
   handleClose: () => void;
-  //mutate: any;
+  mutate: any;
 }
 
-const CreateBarcodeDialog = ({ open, handleClose }: Props) => {
+const CreateBarcodeDialog = ({ open, handleClose, mutate }: Props) => {
   const [search, setSearch] = useState("");
   const [orders, setOrders] = useState<OrderType[]>([]);
   const [selectedOrder, setSelectedOrder] = useState<OrderType | null>(null);
@@ -43,7 +47,7 @@ const CreateBarcodeDialog = ({ open, handleClose }: Props) => {
   const [barcodeDataArr, setBarcodeDataArr] = useState<Barcode[]>([]);
   const [showCreate, setShowCreate] = useState(false);
 
-  const { data, mutate, isLoading } = useSWR(
+  const { data } = useSWR(
     `${
       config.apiBaseUrl
     }/${orderEndPoint}/valid?skip=${0}&limit=${8}&search=${search}`,
@@ -51,7 +55,7 @@ const CreateBarcodeDialog = ({ open, handleClose }: Props) => {
   );
 
   const { trigger, isMutating: createMutating } = useSWRMutation(
-    `${config.apiBaseUrl}/${medicineEndPoint}/barcodes`,
+    `${config.apiBaseUrl}/${medicineEndPoint}/${barcodeEndPoint}`,
     createBarcode
   );
 
@@ -85,6 +89,7 @@ const CreateBarcodeDialog = ({ open, handleClose }: Props) => {
       });
       const data = await trigger(modifiedArr);
       if (data) {
+        mutate();
         toast.success("Successfully created.");
         closeDialog();
       }
@@ -143,7 +148,7 @@ const CreateBarcodeDialog = ({ open, handleClose }: Props) => {
                 : "md:w-[100%] mt-4"
             } mr-2`}
           >
-            <div className="flex flex-col mx-2 md:w-[300px]">
+            <div className="flex flex-col mx-2 w-full md:w-[300px]">
               <LabelTypography title="Select Order Id" />
               <AutocompleteSearch
                 dataArr={orders}
@@ -171,7 +176,7 @@ const CreateBarcodeDialog = ({ open, handleClose }: Props) => {
             </div>
 
             {medicines?.length ? (
-              <div className="flex flex-col  mx-2  mt-4">
+              <div className="flex flex-col   mx-2  mt-4">
                 <LabelTypography title="Sort Order Items By Expired Date" />
                 {barcodeDataArr.length ? (
                   <div className="">
@@ -179,15 +184,15 @@ const CreateBarcodeDialog = ({ open, handleClose }: Props) => {
                       <div className="flex items-center mb-2">
                         <div
                           key={index}
-                          className="flex items-center  border-[1px] md:w-[400px] p-2 border-[#9CA3AF] rounded-md "
+                          className="flex items-center  border-[1px] w-full md:w-[400px] p-2 border-[#9CA3AF] rounded-md "
                         >
-                          <div className="flex flex-col w-[150px]   mb-2">
+                          <div className="flex flex-col w-[150px] dark:text-darkText  mb-2">
                             {dayjs(data?.expiredDate).format("DD-MM-YYYY")}
                           </div>
-                          <div className="mb-2 w-[50px] mr-6">
+                          <div className="mb-2 w-[50px] mr-6 dark:text-darkText">
                             <MdKeyboardDoubleArrowRight size={24} />
                           </div>
-                          <div className="flex  mb-2">
+                          <div className="flex  mb-2 dark:text-darkText">
                             {
                               medicines.find(
                                 (medicine) => medicine._id === data.medicine
@@ -213,24 +218,24 @@ const CreateBarcodeDialog = ({ open, handleClose }: Props) => {
                   <></>
                 )}
                 {showCreate ? (
-                  <div className="flex items-center space-x-2 mt-4">
-                    <div className="flex flex-col  md:w-[150px]  mb-2">
+                  <div className="flex flex-col md:flex-row items-center space-x-2 mt-4">
+                    <div className="flex flex-col w-full  md:min-w-[150px]  mb-2">
                       <LabelTypography title="Expired date" />
                       <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <DatePicker
+                        <CustomDatePicker
                           value={selectedDate}
-                          disablePast
-                          onChange={(value) => {
+                          handleChange={(value) => {
                             setSelectedDate(value);
                             setCurrentBarcodeData({
                               ...currentBarcodeData,
                               expiredDate: dayjs(value).toISOString(),
                             });
                           }}
+                          disabledPast={true}
                         />
                       </LocalizationProvider>
                     </div>
-                    <div className="flex flex-col  md:w-[150px]  mb-2">
+                    <div className="flex flex-col w-full  md:max-w-[150px] md:min-w-[150px]  mb-2">
                       <LabelTypography title="Item Name" />
                       <PlainSelector
                         dataArr={medicines}
@@ -253,28 +258,30 @@ const CreateBarcodeDialog = ({ open, handleClose }: Props) => {
                         selectedValue={selectedMedicine}
                       />
                     </div>
-                    <div className="flex flex-col  md:w-[150px]  mb-2">
-                      <LabelTypography
-                        title={`Available Qty (${validQuantity})`}
-                      />
-                      <CustomTextField
-                        type="number"
-                        value={currentBarcodeData?.quantity || 0}
-                        handleChange={(e) => {
-                          if (Number(e.target.value) > validQuantity) {
-                            return toast.error("Quantity is invalid.");
-                          }
-                          setCurrentBarcodeData({
-                            ...currentBarcodeData,
-                            quantity: Number(e.target.value),
-                          });
-                        }}
-                      />
-                    </div>
-                    <div className="flex flex-col  md:w-[150px]  mb-2">
-                      <LabelTypography title="Unit" />
-                      <div className=" border-[1px] w-[80px]  h-[50px] py-3 rounded-md text-center border-[#9CA3AF]">
-                        {currentBarcodeData.unit}
+                    <div className="flex items-center space-x-2 w-full">
+                      <div className="flex flex-col  md:min-w-[120px]  mb-2">
+                        <LabelTypography
+                          title={`Available Qty (${validQuantity})`}
+                        />
+                        <CustomTextField
+                          type="number"
+                          value={currentBarcodeData?.quantity || 0}
+                          handleChange={(e) => {
+                            if (Number(e.target.value) > validQuantity) {
+                              return toast.error("Quantity is invalid.");
+                            }
+                            setCurrentBarcodeData({
+                              ...currentBarcodeData,
+                              quantity: Number(e.target.value),
+                            });
+                          }}
+                        />
+                      </div>
+                      <div className="flex flex-col  md:w-[150px]  mb-2">
+                        <LabelTypography title="Unit" />
+                        <div className=" border-[1px] w-[80px]  h-[50px] py-3 rounded-md dark:text-darkText text-center border-[#9CA3AF]">
+                          {currentBarcodeData.unit}
+                        </div>
                       </div>
                     </div>
                     <div className="mt-4 ">

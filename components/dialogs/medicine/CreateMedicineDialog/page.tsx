@@ -193,27 +193,29 @@ const CreateMedicineDialog = ({ open, handleClose, mutate }: Props) => {
                 }}
               />
             </div>
-            <div className="ml-2">
+            <div className="mx-2">
               <LabelTypography title="Active Ingredients" />
             </div>
-            <div className="ml-2">
+            <div className="mx-2">
               <IngredientDiplay
                 activeIngredients={basicMedicineInfo.activeIngredients}
                 basicMedicineInfo={basicMedicineInfo}
                 setBasicMedicineInfo={setBasicMedicineInfo}
               />
             </div>
-            {showIngredient ? (
-              <IngredientCreate
-                activeIngredients={activeIngredients}
-                basicMedicineInfo={basicMedicineInfo}
-                setBasicMedicineInfo={setBasicMedicineInfo}
-                setIngredientSearch={setIngredientSearch}
-                setShowIngredient={setShowIngredient}
-              />
-            ) : (
-              <></>
-            )}
+            <div className="mx-2">
+              {showIngredient ? (
+                <IngredientCreate
+                  activeIngredients={activeIngredients}
+                  basicMedicineInfo={basicMedicineInfo}
+                  setBasicMedicineInfo={setBasicMedicineInfo}
+                  setIngredientSearch={setIngredientSearch}
+                  setShowIngredient={setShowIngredient}
+                />
+              ) : (
+                <></>
+              )}
+            </div>
 
             <div className="ml-2">
               <AddButton
@@ -274,7 +276,7 @@ const CreateMedicineDialog = ({ open, handleClose, mutate }: Props) => {
               <>
                 <div className="flex flex-col  mx-2">
                   <LabelTypography title="Quantity Relations" />
-                  <Typography variant="caption">
+                  <Typography variant="caption" className=" dark:text-darkText">
                     In order to get precise calculation, give the relation
                     between sell units. (eg.1 BOX - 30 CARD)
                   </Typography>
@@ -317,7 +319,7 @@ const CreateMedicineDialog = ({ open, handleClose, mutate }: Props) => {
 
             <Divider sx={{ my: 4 }} />
             <div className="flex flex-col md:flex-row items-center mx-2 my-2">
-              <div className="flex flex-col  md:w-[180px]">
+              <div className="flex flex-col w-full  md:w-[180px]">
                 <LabelTypography title="Total Quantity" />
                 <CustomTextField
                   value={basicMedicineInfo.stockQuantity}
@@ -330,7 +332,7 @@ const CreateMedicineDialog = ({ open, handleClose, mutate }: Props) => {
                   type="number"
                 />
               </div>
-              <div className="flex flex-col mx-2 md:w-[100px]">
+              <div className="flex flex-col mx-2 w-full md:w-[100px]">
                 <LabelTypography title="Unit" />
                 <PlainSelector
                   dataArr={buySellUnits}
@@ -348,7 +350,7 @@ const CreateMedicineDialog = ({ open, handleClose, mutate }: Props) => {
                   selectedValue={stockUnit}
                 />
               </div>
-              <div className="flex flex-col mx-2 md:w-[180px]">
+              <div className="flex flex-col mx-2 w-full md:w-[180px]">
                 <LabelTypography title="Minimum Alert Quantity" />
                 <CustomTextField
                   value={basicMedicineInfo.minimumAlertQuantity}
@@ -361,7 +363,7 @@ const CreateMedicineDialog = ({ open, handleClose, mutate }: Props) => {
                   type="number"
                 />
               </div>
-              <div className="flex flex-col mx-2 md:w-[100px]">
+              <div className="flex flex-col mx-2 w-full md:w-[100px]">
                 <LabelTypography title="Unit" />
                 <PlainSelector
                   dataArr={buySellUnits}

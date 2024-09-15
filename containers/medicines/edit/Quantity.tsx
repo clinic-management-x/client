@@ -35,7 +35,7 @@ const Quantity = ({
   return (
     <div>
       <div className="flex flex-col md:flex-row items-center mx-2 my-2">
-        <div className="flex flex-col  md:w-[180px]">
+        <div className="flex flex-col w-full  md:w-[180px]">
           <LabelTypography title="Total Quantity" />
           <CustomTextField
             value={medicine.stockQuantity}
@@ -49,7 +49,7 @@ const Quantity = ({
             type="number"
           />
         </div>
-        <div className="flex flex-col mx-2 md:w-[100px]">
+        <div className="flex flex-col mx-2 w-full md:w-[100px]">
           <LabelTypography title="Unit" />
           <PlainSelector
             dataArr={buySellUnits}
@@ -68,7 +68,7 @@ const Quantity = ({
             selectedValue={stockUnit}
           />
         </div>
-        <div className="flex flex-col mx-2 md:w-[180px]">
+        <div className="flex flex-col mx-2 w-full md:w-[180px]">
           <LabelTypography title="Minimum Alert Quantity" />
           <CustomTextField
             value={medicine.minimumAlertQuantity}
@@ -82,7 +82,7 @@ const Quantity = ({
             type="number"
           />
         </div>
-        <div className="flex flex-col mx-2 md:w-[100px]">
+        <div className="flex flex-col mx-2 w-full md:w-[100px]">
           <LabelTypography title="Unit" />
           <PlainSelector
             dataArr={buySellUnits}
@@ -102,7 +102,7 @@ const Quantity = ({
           />
         </div>
       </div>
-      <div className="w-[500px] text-center">
+      <div className="w-full md:w-[500px] text-center">
         <DetailEditCancelButton
           show={showEditButton.type === "quantity" && showEditButton.show}
           handleCancel={() => {

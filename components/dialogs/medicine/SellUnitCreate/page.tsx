@@ -44,7 +44,7 @@ const SellUnitCreate = ({
   );
   return (
     <div className="flex flex-col md:flex-row items-center mx-2 my-2">
-      <div className="flex flex-col  md:w-[180px]">
+      <div className="flex flex-col w-full  md:w-[180px]">
         <LabelTypography title="Sell Price" />
         <CustomTextField
           value={currentSellData.price}
@@ -60,7 +60,7 @@ const SellUnitCreate = ({
       <div className="mx-6 mt-6">
         <LabelTypography title="Per" />
       </div>
-      <div className="flex flex-col mx-2 md:w-[100px]">
+      <div className="flex flex-col mx-2 w-full md:w-[100px]">
         <LabelTypography title="Unit" />
         <PlainSelector
           dataArr={buySellUnits.filter(

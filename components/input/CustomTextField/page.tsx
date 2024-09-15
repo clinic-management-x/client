@@ -54,6 +54,7 @@ const CustomTextField = ({
               },
             },
           }}
+          className={className}
         />
       ) : type === "mobile" ? (
         <TextField

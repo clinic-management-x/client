@@ -38,6 +38,12 @@ export const createMedicine = async (
   return response.data;
 };
 
+export const getBarcodes = async (url: string) => {
+  const response = await baseApi.get(url);
+
+  return response.data;
+};
+
 export const createBarcode = async (
   url: string,
   { arg }: { arg: Barcode[] }

@@ -43,8 +43,8 @@ const IngredientCreate = ({
   );
 
   return (
-    <div className="flex flex-col md:flex-row items-center space-x-2  ml-2  w-full mt-2">
-      <div className="w-[300px] ">
+    <div className="flex flex-col md:flex-row items-center space-x-2    w-full mt-2">
+      <div className=" w-full md:w-[300px] ">
         <LabelTypography title="Name" />
         <AutocompleteSearch
           dataArr={activeIngredients}
@@ -66,9 +66,11 @@ const IngredientCreate = ({
           }}
         />
       </div>
-      <div className="w-[150px]">
+
+      <div className="w-full md:w-[150px]">
         <LabelTypography title="Dose" />
         <CustomTextField
+          className="w-full"
           type="number"
           value={currentIngredient.strength}
           handleChange={(e) => {
@@ -79,7 +81,7 @@ const IngredientCreate = ({
           }}
         />
       </div>
-      <div className="w-[100px]">
+      <div className="w-full md:w-[100px] ">
         <LabelTypography title="Unit" />
         <PlainSelector
           dataArr={units}
@@ -97,6 +99,7 @@ const IngredientCreate = ({
           selectedValue={currentUnit}
         />
       </div>
+
       <div className="mt-4">
         <CrossCheckButtonsGroup
           handleCancel={() => {

@@ -48,7 +48,7 @@ const SellUnitDisplay = ({
             <div className="mx-2" key={index}>
               <div className="flex items-center mb-2 ">
                 {sellUnitToEdit && sellUnitToEdit.unit === data.unit ? (
-                  <div className="flex flex-col md:flex-row items-center mx-2 my-2">
+                  <div className="flex  items-center mx-2 my-2">
                     <div className="flex flex-col  md:w-[180px]">
                       <CustomTextField
                         value={sellUnitToEdit?.price as number}
@@ -80,7 +80,7 @@ const SellUnitDisplay = ({
                     </div>
                   </div>
                 ) : (
-                  <div className="flex items-center px-2 md:w-[300px] h-[50px] border-[1px] rounded border-[#9CA3AF] space-x-2">
+                  <div className="flex items-center px-2 w-full md:w-[300px] h-[50px] border-[1px] rounded border-[#9CA3AF] space-x-2">
                     <Typography
                       variant="body1"
                       className="dark:text-darkText text-whiteText"
@@ -104,7 +104,7 @@ const SellUnitDisplay = ({
                         });
                       }}
                     >
-                      <RxCross2 />
+                      <RxCross2 className="dark:text-darkText" />
                     </IconButton>
 
                     <IconButton>
