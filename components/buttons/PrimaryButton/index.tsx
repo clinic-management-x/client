@@ -28,7 +28,7 @@ const PrimaryButton: FC<PrimaryButtonProps> = ({
       disabled={disabled}
       className={` ${
         disabled ? " opacity-50" : "bg-primaryBlue-400"
-      }  flex justify-center items-center w-[130px]  md:w-[170px] md:h-[52px] text-sm md:text-md text-white ${className} `}
+      }  flex justify-center items-center w-[130px]  md:w-[170px] md:h-[45px] text-sm md:text-md text-white ${className} `}
     >
       {loading ? <CircularProgress color="inherit" size={30} /> : text}
     </Button>
