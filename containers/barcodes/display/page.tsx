@@ -10,7 +10,7 @@ import {
 import { getPageNumber, insertPageNumber } from "@/redux/slices/workers";
 import config from "@/utils/config";
 import { barcodeEndPoint, medicineEndPoint } from "@/utils/endpoints";
-import { Box, IconButton, Pagination } from "@mui/material";
+import { Box, Button, IconButton, Pagination } from "@mui/material";
 import { useTheme } from "next-themes";
 import React, { useEffect, useState } from "react";
 import { FiSearch } from "react-icons/fi";
@@ -19,19 +19,24 @@ import { useDispatch, useSelector } from "react-redux";
 import useSWR from "swr";
 import SkeletonFrame from "./skeletonFrame";
 import BarcodeTable from "./barcodeTable";
+import { IoMdDownload } from "react-icons/io";
+import DownloadBarcodeDialog from "@/components/dialogs/barcodes/DownloadBarcodeDialog/page";
+import toast from "react-hot-toast";
 
 const BarcodesDisplay = () => {
   const page = useSelector(getPageNumber);
   const theme = useTheme();
   const dispatch = useDispatch();
   const showMobileSearchBar = useSelector(getShowMobileSearchBar);
-
+  const [imageUrls, setImageUrls] = useState<
+    { imageUrl: string; quantity: number }[]
+  >([]);
   const [open, setOpen] = useState(false);
   const [skip, setSkip] = useState((page - 1) * 8);
   const [search, setSearch] = useState("");
   const [typeSearch, setTypeSearch] = useState("");
   const [barcodes, setBarcodes] = useState<BarcodeDisplay[]>([]);
-
+  const [openBarcodeDialog, setOpenBarcodeDialog] = useState(false);
   const { data, mutate, isLoading } = useSWR(
     `${
       config.apiBaseUrl
@@ -42,6 +47,14 @@ const BarcodesDisplay = () => {
   useEffect(() => {
     if (data) {
       setBarcodes(data.data);
+      setImageUrls(
+        data.data.map((innerdata: BarcodeDisplay) => {
+          return {
+            imageUrl: innerdata.barCodeUrl,
+            quantity: innerdata.quantity,
+          };
+        })
+      );
     }
   }, [data]);
 
@@ -66,7 +79,22 @@ const BarcodesDisplay = () => {
               showIcon={true}
             />
           </div>
+
           <div className="w-[60%] flex items-center justify-end mr-4  ">
+            <div>
+              <Button
+                onClick={() => {
+                  if (barcodes.length === 0) {
+                    return toast.error("No barcode to download.");
+                  }
+                  setOpenBarcodeDialog(true);
+                }}
+                className=" bg-primaryBlue-400 mr-2 hover:bg-primaryBlue-400 flex items-center text-white "
+              >
+                <IoMdDownload className="md:mr-2 text-[20px]" />{" "}
+                <p className="hidden md:block">Download</p>
+              </Button>
+            </div>
             <IconButton
               className="md:hidden mr-2"
               onClick={() => {
@@ -139,6 +167,13 @@ const BarcodesDisplay = () => {
           setOpen(false);
         }}
         mutate={mutate}
+      />
+      <DownloadBarcodeDialog
+        open={openBarcodeDialog}
+        closeDialog={() => {
+          setOpenBarcodeDialog(false);
+        }}
+        imageUrls={imageUrls}
       />
     </section>
   );

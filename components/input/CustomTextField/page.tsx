@@ -8,6 +8,7 @@ interface Props {
   type?: string;
   className?: string;
   placeholder?: string;
+  handleBlur?: () => void;
 }
 
 const CustomTextField = ({
@@ -16,6 +17,7 @@ const CustomTextField = ({
   type,
   className,
   placeholder,
+  handleBlur,
 }: Props) => {
   const { theme } = useTheme();
   return (
@@ -55,6 +57,7 @@ const CustomTextField = ({
             },
           }}
           className={className}
+          onBlur={handleBlur ? handleBlur : () => {}}
         />
       ) : type === "mobile" ? (
         <TextField

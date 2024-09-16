@@ -189,7 +189,7 @@ const SideBar = () => {
               data.subCategories?.map((subcategory) => (
                 <div
                   key={subcategory.id}
-                  onClick={() => {
+                  onClick={(e) => {
                     if (!hasClinic) {
                       return;
                     }
