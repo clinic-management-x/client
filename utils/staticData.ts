@@ -198,3 +198,38 @@ export const defaultBarcode = {
   quantity: 0,
   unit: "",
 };
+
+export const defaultAlertData = [
+  {
+    _id: "1",
+    name: "Alert when expired date is near",
+    description: "",
+    type: "expired_near",
+    enable: false,
+    days: 0,
+  },
+  {
+    _id: "2",
+    name: "Alert when expired date is past",
+    description: "",
+    type: "expired_past",
+    enable: false,
+    days: 0,
+  },
+  {
+    _id: "3",
+    name: "Alert when arrival date is near",
+    description: "",
+    type: "arrival_near",
+    enable: false,
+    days: 0,
+  },
+  {
+    _id: "4",
+    name: "Alert when arrival date is past due",
+    description: "",
+    type: "arrival_due",
+    enable: false,
+    days: 0,
+  },
+];
