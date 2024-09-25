@@ -234,3 +234,23 @@ interface BarcodeDisplay {
   quantity: number;
   unit: string;
 }
+
+interface Alert {
+  type: string;
+  enable: boolean;
+  days: number;
+  clinicId?: string;
+  _id?: string;
+  createdAt?: string;
+  updatedAt?: string;
+  __v?: number;
+}
+
+interface DefaultAlertData {
+  _id: string;
+  name: string;
+  description: string;
+  type: string;
+  enable: boolean;
+  days: number;
+}

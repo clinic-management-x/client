@@ -15,3 +15,5 @@ export const medicineEndPoint = "medicines";
 export const orderEndPoint = "orders";
 
 export const barcodeEndPoint = "barcodes";
+
+export const alertEndPoint = "alert";
