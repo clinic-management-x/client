@@ -254,3 +254,14 @@ interface DefaultAlertData {
   enable: boolean;
   days: number;
 }
+
+interface Notification {
+  type: string;
+  message: string;
+  hasRead: boolean;
+  clinicId: string;
+  _id?: string;
+  createdAt?: string;
+  updatedAt?: string;
+  __v?: number;
+}

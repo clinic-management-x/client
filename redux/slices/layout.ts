@@ -7,6 +7,7 @@ interface InitialState {
   openDrawer: boolean;
   showMobileSearchBar: boolean;
   mutateStaffs: any;
+  openNotification: boolean;
 }
 
 const initialState: InitialState = {
@@ -15,6 +16,7 @@ const initialState: InitialState = {
   openDrawer: false,
   showMobileSearchBar: false,
   mutateStaffs: null,
+  openNotification: false,
 };
 
 export const layoutSlice = createSlice({
@@ -42,6 +44,12 @@ export const layoutSlice = createSlice({
     insertMutateStaff: (state: InitialState, action: PayloadAction<any>) => {
       state.mutateStaffs = action.payload;
     },
+    insertOpenNotification: (
+      state: InitialState,
+      action: PayloadAction<any>
+    ) => {
+      state.openNotification = action.payload;
+    },
   },
 });
 
@@ -51,6 +59,7 @@ export const {
   insertOpenDrawer,
   insertShowMobileSearchBar,
   insertMutateStaff,
+  insertOpenNotification,
 } = layoutSlice.actions;
 
 export const getSelectedTab = (state: RootState) =>
@@ -66,5 +75,8 @@ export const getShowMobileSearchBar = (state: RootState) =>
 
 export const getMutateStaffs = (state: RootState) =>
   state.layoutSlice.mutateStaffs;
+
+export const getOpenNotifications = (state: RootState) =>
+  state.layoutSlice.openNotification;
 
 export default layoutSlice.reducer;

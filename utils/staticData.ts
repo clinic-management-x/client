@@ -203,7 +203,7 @@ export const defaultAlertData = [
   {
     _id: "1",
     name: "Alert when expired date is near",
-    description: "",
+    description: "Please enter how many days ahead to alert.",
     type: "expired_near",
     enable: false,
     days: 0,
@@ -211,7 +211,7 @@ export const defaultAlertData = [
   {
     _id: "2",
     name: "Alert when expired date is past",
-    description: "",
+    description: "Please enter how many days needed to be past due to alert.",
     type: "expired_past",
     enable: false,
     days: 0,
@@ -219,7 +219,7 @@ export const defaultAlertData = [
   {
     _id: "3",
     name: "Alert when arrival date is near",
-    description: "",
+    description: "Please enter how many days ahead to alert",
     type: "arrival_near",
     enable: false,
     days: 0,
@@ -227,7 +227,7 @@ export const defaultAlertData = [
   {
     _id: "4",
     name: "Alert when arrival date is past due",
-    description: "",
+    description: "Please enter how many days needed to be past due to alert.",
     type: "arrival_due",
     enable: false,
     days: 0,
