@@ -1,3 +1,4 @@
+import NotificationDialog from "@/components/dialogs/notifications/page";
 import BottomBar from "@/components/layout/BottomBar";
 import DrawerSlideBar from "@/components/layout/DrawerSlideBar";
 import NavBar from "@/components/layout/NavBar";
@@ -12,11 +13,13 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
         <SideBar />
         <div className="md:ml-[225px] lg:ml-[275px] w-full h-full flex flex-col">
           <NavBar />
+          <NotificationDialog />
           <div className="mt-[80px]">{children}</div>
         </div>
       </div>
       <div className="w-full flex flex-col md:hidden">
         <TopBar />
+        <NotificationDialog />
         <DrawerSlideBar />
         {children}
         <BottomBar />

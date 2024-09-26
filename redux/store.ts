@@ -10,7 +10,7 @@ import {
   persistReducer,
   persistStore,
 } from "redux-persist";
-//import storage from "redux-persist/lib/storage";
+
 import userSlice from "./slices/user";
 import layoutSlice from "./slices/layout";
 import workersSlice from "./slices/workers";

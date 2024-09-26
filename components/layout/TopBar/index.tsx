@@ -7,6 +7,7 @@ import { GiHamburgerMenu } from "react-icons/gi";
 import { useDispatch, useSelector } from "react-redux";
 import { getOpenDrawer, insertOpenDrawer } from "@/redux/slices/layout";
 import { useTheme } from "next-themes";
+import NotificationButton from "@/components/buttons/NotificationButton/page";
 
 const logo = require("../../../public/logo1.jpeg");
 const darkLogo = require("../../../public/logo2.jpeg");
@@ -22,15 +23,20 @@ const TopBar = () => {
         width={150}
         height={70}
       />
-      <ThemeSwitcherButton />
-      <IconButton
-        className="text-primaryBlue-300 mr-2"
-        onClick={() => {
-          dispatch(insertOpenDrawer(!openDrawer));
-        }}
-      >
-        <GiHamburgerMenu size={32} />
-      </IconButton>
+
+      <div className=" flex items-center space-x-2">
+        <NotificationButton />
+        <ThemeSwitcherButton />
+
+        <IconButton
+          className="text-primaryBlue-300 mr-2 "
+          onClick={() => {
+            dispatch(insertOpenDrawer(!openDrawer));
+          }}
+        >
+          <GiHamburgerMenu size={32} />
+        </IconButton>
+      </div>
     </div>
   );
 };

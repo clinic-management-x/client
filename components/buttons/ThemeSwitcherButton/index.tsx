@@ -9,9 +9,7 @@ const ThemeSwitcherButton = ({ isAuth }: { isAuth?: boolean }) => {
   const currentTheme = theme === "system" ? systemTheme : theme;
 
   return (
-    <div
-      className={`fixed ${isAuth ? "right-4 top-2" : "right-20 md:right-4"} `}
-    >
+    <div>
       {currentTheme === "dark" ? (
         <div
           onClick={() => setTheme("light")}
