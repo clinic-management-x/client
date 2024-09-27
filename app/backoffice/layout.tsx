@@ -19,7 +19,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
       </div>
       <div className="w-full flex flex-col md:hidden">
         <TopBar />
-        <NotificationDialog />
+        {/* <NotificationDialog /> */}
         <DrawerSlideBar />
         {children}
         <BottomBar />
