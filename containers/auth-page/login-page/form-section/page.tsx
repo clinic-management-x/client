@@ -12,8 +12,11 @@ import config from "@/utils/config";
 import { authEndPoint } from "@/utils/endpoints";
 import { signinUser } from "@/datafetch/auth/auth.api";
 import { encryptData } from "@/utils/encrypt";
+import { insertClinicId } from "@/redux/slices/user";
+import { useDispatch } from "react-redux";
 
 const LoginSection = () => {
+  const dispatch = useDispatch();
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [userInfo, setUserInfo] = useState<UserInfo>({
@@ -30,11 +33,13 @@ const LoginSection = () => {
       const response: any = await trigger(userInfo);
 
       if (response) {
+        console.log("response", response);
         const ac = encryptData(response.accessToken);
         const rf = encryptData(response.refreshToken);
+
         localStorage.setItem("access-x", ac);
         localStorage.setItem("refresh-x", rf);
-
+        dispatch(insertClinicId(response.clinicId));
         router.push("/backoffice");
       } else {
         toast.error("Email or password incorrect.");
