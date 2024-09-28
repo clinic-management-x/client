@@ -14,3 +14,8 @@ export const updateNotification = async (
 
   return response.data;
 };
+
+export const markAllAsRead = async (url: string) => {
+  const response = await baseApi.patch(url);
+  return response;
+};
