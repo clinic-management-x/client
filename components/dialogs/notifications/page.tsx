@@ -1,6 +1,7 @@
 "use client";
 import {
   getNotifications,
+  markAllAsRead,
   updateNotification,
 } from "@/datafetch/notifications/notifications.api";
 import {
@@ -29,6 +30,8 @@ import useSWR from "swr";
 import useSWRMutation from "swr/mutation";
 import io, { Socket } from "socket.io-client";
 import { getClinicId } from "@/redux/slices/user";
+import { throttle } from "@/functions/throttle";
+import { IoCheckmarkDoneSharp } from "react-icons/io5";
 
 const NotificationDialog = () => {
   const clinicId = useSelector(getClinicId);
@@ -37,9 +40,8 @@ const NotificationDialog = () => {
   const openNotification = useSelector(getOpenNotifications);
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [currentGroup, setCurrentGroup] = useState("All");
-  let count = 1;
-
   const [limit, setLimit] = useState(8);
+
   const { data, isLoading, isValidating, mutate } = useSWR(
     `${config.apiBaseUrl}/${notificationEndPoint}?limit=${limit}&type=${currentGroup}`,
     getNotifications
@@ -48,6 +50,11 @@ const NotificationDialog = () => {
   const { trigger: update } = useSWRMutation(
     `${config.apiBaseUrl}/${notificationEndPoint}`,
     updateNotification
+  );
+
+  const { trigger: markAllRead, isMutating } = useSWRMutation(
+    `${config.apiBaseUrl}/${notificationEndPoint}/mark-all-read`,
+    markAllAsRead
   );
 
   useEffect(() => {
@@ -59,22 +66,13 @@ const NotificationDialog = () => {
 
   useEffect(() => {
     socketRef.current = io(config.apiBaseUrl, { query: { clinicId } });
-
-    // socket.on("notification", (data) => {
-    //   console.log("data", data);
-    // });
-
-    // Cleanup function to disconnect the socket when the component unmounts
-    // return () => {
-    //   socket.disconnect();
-    // };
   }, [clinicId]);
 
+  const throttleMutate = throttle(mutate, 3000);
+
   socketRef.current?.on("notification", (data: any) => {
-    mutate();
-    count += 1;
+    throttleMutate();
   });
-  console.log("socket", count);
 
   return (
     <Dialog
@@ -139,66 +137,103 @@ const NotificationDialog = () => {
         className="flex flex-col dark:bg-[#3C3C3C] h-screen"
       >
         <Box className="flex flex-col space-y-2">
-          {isValidating ? (
+          {isValidating || isLoading || isMutating ? (
             <CircularProgress
               size={40}
-              className=" m-auto text-center  mt-[300px]"
+              className=" m-auto text-center text-primaryBlue-400  mt-[300px]"
             />
           ) : (
-            notifications.map((notification) => (
-              <div
-                key={notification._id}
-                className="border-[1px] border-gray-500 rounded p-2 "
-              >
-                <div className="flex justify-between items-center mb-2">
-                  <Chip
-                    label={notification.type}
-                    className="rounded-md font-bold text-whiteText dark:text-darkText"
-                  />
-
-                  <Typography className=" text-whiteText dark:text-darkText">
-                    {dayjs(notification.createdAt).format("DD MMM,YYYY")}
-                  </Typography>
-                </div>
-                <div className="flex justify-between items-center mb-2">
-                  <Typography className="font-400 dark:text-darkText">
-                    {notification.message}
-                  </Typography>
-                  <Chip
-                    onClick={async () => {
-                      try {
-                        const data = await update({
-                          _id: notification._id as string,
-                          hasRead: true,
-                        });
-
-                        if (data) {
-                          toast.success("Successfully marked as read.");
-                          setNotifications(
-                            notifications.map((noti) => {
-                              if (noti._id === notification._id) {
-                                return { ...noti, hasRead: data.hasRead };
-                              } else {
-                                return noti;
-                              }
-                            })
-                          );
-                        }
-                      } catch (error) {
-                        toast.error("Something went wrong.");
+            <div>
+              {currentGroup === "Unread" ? (
+                <div
+                  className="cursor-pointer flex items-center justify-end space-x-1 mb-2 text-primaryBlue-400"
+                  onClick={async () => {
+                    try {
+                      const data = await markAllRead();
+                      if (data) {
+                        setCurrentGroup("All");
+                        toast.success("Successfully updated.");
                       }
-                    }}
-                    size="small"
-                    className={`cursor-pointer ${
-                      notification.hasRead
-                        ? "bg-primaryBlue-300 text-white hover:bg-primaryBlue-300"
-                        : " dark:text-primaryBlue-300 "
-                    }`}
-                    label={notification.hasRead ? "Read" : "Mark as read?"}
-                  />
+                    } catch (error) {
+                      toast.error("Something went wrong");
+                    }
+                  }}
+                >
+                  <IoCheckmarkDoneSharp size={22} />
+                  <Typography>Mark All as Read?</Typography>
                 </div>
-              </div>
-            ))
+              ) : (
+                <></>
+              )}
+
+              {notifications.map((notification) => (
+                <div
+                  key={notification._id}
+                  className={`border-b-[1px] ${
+                    notification.hasRead
+                      ? ""
+                      : notification.type === "ORDER"
+                      ? "bg-[#DEEFFF]"
+                      : "bg-[#ECF8FE]"
+                  }  rounded p-2 mb-1`}
+                >
+                  <div className="flex justify-between items-center mb-2">
+                    <Chip
+                      label={notification.type}
+                      className="rounded-md font-bold text-whiteText dark:text-darkText"
+                    />
+
+                    <Typography className=" text-whiteText dark:text-darkText">
+                      {dayjs(notification.createdAt).format("DD MMM,YYYY")}
+                    </Typography>
+                  </div>
+                  <div className="flex justify-between items-center mb-2">
+                    <Typography
+                      variant="subtitle1"
+                      className={` ${
+                        notification.hasRead
+                          ? " dark:text-darkText "
+                          : "text-primaryBlue-400 font-semibold"
+                      }`}
+                    >
+                      {notification.message}
+                    </Typography>
+                    <Chip
+                      onClick={async () => {
+                        try {
+                          const data = await update({
+                            _id: notification._id as string,
+                            hasRead: true,
+                          });
+
+                          if (data) {
+                            toast.success("Successfully marked as read.");
+                            setNotifications(
+                              notifications.map((noti) => {
+                                if (noti._id === notification._id) {
+                                  return { ...noti, hasRead: data.hasRead };
+                                } else {
+                                  return noti;
+                                }
+                              })
+                            );
+                          }
+                        } catch (error) {
+                          toast.error("Something went wrong.");
+                        }
+                      }}
+                      size="small"
+                      className={`cursor-pointer ${
+                        notification.hasRead
+                          ? "bg-primaryBlue-300 text-white hover:bg-primaryBlue-300"
+                          : " dark:text-primaryBlue-300 "
+                      }`}
+                      label={notification.hasRead ? "Read" : "Mark as read?"}
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
           )}
         </Box>
       </DialogContent>

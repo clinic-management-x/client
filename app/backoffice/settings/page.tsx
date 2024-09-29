@@ -1,10 +1,10 @@
-import ClinicDataPage from "@/containers/clinic/clinic-data/page";
+import MainSettingsPage from "@/containers/settings/main/page";
 import React from "react";
 
 const Page = () => {
   return (
     <main className="overflow-scroll h-full">
-      <ClinicDataPage />
+      <MainSettingsPage />
     </main>
   );
 };
