@@ -17,6 +17,7 @@ import workersSlice from "./slices/workers";
 import storage from "./storage";
 import supplierSlice from "./slices/supplier";
 import inventorySlice from "./slices/inventory";
+import settingsSlice from "./slices/settings";
 
 const reducer = combineReducers({
   userSlice: userSlice,
@@ -24,6 +25,7 @@ const reducer = combineReducers({
   workersSlice: workersSlice,
   supplierSlice: supplierSlice,
   inventorySlice: inventorySlice,
+  settingsSlice: settingsSlice,
 });
 
 const persistConfig = {

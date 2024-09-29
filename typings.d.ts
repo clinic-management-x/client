@@ -265,3 +265,14 @@ interface Notification {
   updatedAt?: string;
   __v?: number;
 }
+
+interface TelegramInfo {
+  supplierId: {
+    _id: string;
+    name: string;
+  };
+  clinicId: string;
+  groupId: number;
+  _id?: string;
+  __v?: number;
+}
