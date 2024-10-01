@@ -276,3 +276,13 @@ interface TelegramInfo {
   _id?: string;
   __v?: number;
 }
+
+interface ClinicType {
+  _id?: string;
+  __v?: number;
+  name: string;
+  enableTelegram: boolean;
+  enableViber: boolean;
+  enableSMS: boolean;
+  user: string;
+}

@@ -49,7 +49,7 @@ const Guide = ({ open, handleClose }: Props) => {
         dividers={true}
         className="flex flex-col min-h-[640px] dark:bg-[#3C3C3C]"
       >
-        <Box className="h-[500px]">
+        <Box className="h-[500px] relative ">
           <CloseButton handleClose={handleClose} />
           <div>
             <Typography
@@ -71,7 +71,7 @@ const Guide = ({ open, handleClose }: Props) => {
                 <Typography className="text-whiteText dark:text-darkText font-medium mb-6">
                   2. Add bot to your group
                 </Typography>
-                <div className="flex items-center justify-center space-x-2">
+                <div className="flex flex-col md:flex-row  h-[400px] overflow-scroll md:h-auto items-center md:justify-center space-y-2  md:space-x-2">
                   <Image src={addBotImg} alt="" height={600} width={300} />
                   <Image src={groupImg} alt="" height={600} width={300} />
                 </div>
@@ -88,7 +88,7 @@ const Guide = ({ open, handleClose }: Props) => {
                 <Typography className="text-whiteText dark:text-darkText font-medium mb-6">
                   4. Give our bot the administrator role
                 </Typography>
-                <div className="flex items-center justify-center space-x-2">
+                <div className="flex flex-col md:flex-row h-[400px] overflow-scroll md:h-auto items-center md:justify-center space-y-2 md:space-x-2 ">
                   <Image src={addAdminImg} alt="" height={600} width={300} />
                   <Image src={promotedImg} alt="" height={600} width={300} />
                 </div>
@@ -110,8 +110,8 @@ const Guide = ({ open, handleClose }: Props) => {
             steps={5}
             position="static"
             activeStep={activeStep}
-            sx={{ maxWidth: 400, flexGrow: 1, mx: "auto", mt: 6 }}
-            className="dark:bg-[#3C3C3C]"
+            sx={{ maxWidth: 400, flexGrow: 1, mx: "auto" }}
+            className="dark:bg-[#3C3C3C] "
             nextButton={
               <Button
                 size="small"

@@ -41,8 +41,6 @@ const CreateGroup = ({ setOpenCreate, mutate }: Props) => {
     []
   );
 
-  const [enableTelegramMessaging, setEnableTelegramMessaging] = useState(false);
-
   const { data: supplierLists } = useSWR(
     `${config.apiBaseUrl}/${supplierEndPoint}/list`,
     getSuppliersList
@@ -60,35 +58,37 @@ const CreateGroup = ({ setOpenCreate, mutate }: Props) => {
   }, [supplierLists]);
 
   return (
-    <div className="flex items-center space-x-3 my-4">
-      <div className="flex flex-col mx-2 md:w-[250px] ">
-        <LabelTypography title="Suppliers" />
-        <PlainSelector
-          dataArr={suppliers}
-          title=""
-          handleChange={(e, value) => {
-            setTelegramData({
-              ...telegramData,
-              supplierId: e.target.value,
-              clinicId: clinicId,
-            });
-          }}
-          selectedValue={telegramData.supplierId}
-        />
+    <div className="flex  flex-col md:flex-row items-center  my-4">
+      <div className="flex items-center space-x-3">
+        <div className="flex flex-col w-[150px]   ">
+          <LabelTypography title="Suppliers" />
+          <PlainSelector
+            dataArr={suppliers}
+            title=""
+            handleChange={(e, value) => {
+              setTelegramData({
+                ...telegramData,
+                supplierId: e.target.value,
+                clinicId: clinicId,
+              });
+            }}
+            selectedValue={telegramData.supplierId}
+          />
+        </div>
+        <div className="flex flex-col  w-[150px] ">
+          <LabelTypography title="Group Id" />
+          <CustomTextField
+            value={telegramData.groupId}
+            handleChange={(e) => {
+              setTelegramData({
+                ...telegramData,
+                groupId: e.target.value,
+              });
+            }}
+          />
+        </div>
       </div>
-      <div className="flex flex-col">
-        <LabelTypography title="Group Id" />
-        <CustomTextField
-          value={telegramData.groupId}
-          handleChange={(e) => {
-            setTelegramData({
-              ...telegramData,
-              groupId: e.target.value,
-            });
-          }}
-        />
-      </div>
-      <div className="mt-5">
+      <div className="mt-5 ml-2">
         <CrossCheckButtonsGroup
           handleCancel={() => {
             setOpenCreate(false);
