@@ -20,8 +20,14 @@ import TrashButton from "@/components/buttons/TrashButton/page";
 import DeleteDialog from "@/components/dialogs/delete";
 import toast from "react-hot-toast";
 import useSWRMutation from "swr/mutation";
+import { updateClinic } from "@/datafetch/clinic/clinic.api";
 
-const Telegram = () => {
+interface Props {
+  clinic: ClinicType | null;
+  setClinic: (data: ClinicType | null) => void;
+}
+
+const Telegram = ({ clinic, setClinic }: Props) => {
   const [openGuide, setOpenGuide] = useState(false);
   const [openCreate, setOpenCreate] = useState(false);
   const [telegramInfos, setTelegramInfos] = useState<TelegramInfo[]>([]);
@@ -43,7 +49,7 @@ const Telegram = () => {
   });
   const [deleteLoading, setDeleteLoading] = useState(false);
 
-  const { data, mutate } = useSWR(
+  const { data, mutate: teleMutate } = useSWR(
     `${config.apiBaseUrl}/${telegramEndPoint}`,
     getAllTelegramInfo
   );
@@ -53,6 +59,11 @@ const Telegram = () => {
     updateTelegramInfo
   );
 
+  const { trigger: enableTrigger } = useSWRMutation(
+    `${config.apiBaseUrl}/clinics`,
+    updateClinic
+  );
+
   useEffect(() => {
     if (data) {
       setTelegramInfos(data);
@@ -60,7 +71,7 @@ const Telegram = () => {
   }, [data]);
 
   return (
-    <div className="ml-10 mt-4">
+    <div className=" mx-4 md:ml-6 mt-4">
       <div className="flex items-center justify-between">
         <div className=" flex items-center space-x-2">
           <FaTelegram size={24} className="text-[#3AABE1]" />
@@ -82,7 +93,24 @@ const Telegram = () => {
       </div>
       <FormGroup className="mt-4">
         <FormControlLabel
-          control={<Switch defaultChecked />}
+          control={
+            <Switch
+              checked={clinic ? clinic.enableTelegram : false}
+              onChange={async (e) => {
+                try {
+                  const data = await enableTrigger({
+                    enableTelegram: e.target.checked,
+                  });
+                  if (data) {
+                    setClinic(data);
+                    toast.success("Successfully updated");
+                  }
+                } catch (error) {
+                  toast.error("Something went wrong.");
+                }
+              }}
+            />
+          }
           label={
             <Typography className="text-whiteText dark:text-darkText">
               Enable Telegram Messaging
@@ -106,29 +134,36 @@ const Telegram = () => {
           {telegramInfos.map((tinfo) => (
             <div
               key={tinfo._id}
-              className="flex items-center text-whiteText dark:text-darkText my-2 space-x-2"
+              className={`flex items-center ${
+                telegramInfoToEdit._id === tinfo._id
+                  ? "flex-col  space-y-2 md:space-y-0 md:flex-row"
+                  : ""
+              } text-whiteText dark:text-darkText my-2 space-x-2`}
             >
-              <div className="w-[150px] h-[56px] border-[1px] border-primaryBlue-300 pl-3 pt-3 rounded-md">
-                {tinfo.supplierId.name}
+              <div className="flex items-center space-x-2">
+                <div className="w-[150px] h-[56px] border-[1px] border-primaryBlue-300 pl-3 pt-3 rounded-md">
+                  {tinfo.supplierId.name}
+                </div>
+                <CustomTextField
+                  value={"" + tinfo.groupId}
+                  handleChange={(e) => {
+                    setTelegramInfos(
+                      telegramInfos.map((info) => {
+                        if (info._id === tinfo._id) {
+                          return { ...info, groupId: e.target.value };
+                        } else {
+                          return info;
+                        }
+                      })
+                    );
+                    setTelegramInfoToEdit({
+                      _id: tinfo._id as string,
+                      groupId: e.target.value,
+                    });
+                  }}
+                  className="w-[150px]"
+                />
               </div>
-              <CustomTextField
-                value={"" + tinfo.groupId}
-                handleChange={(e) => {
-                  setTelegramInfos(
-                    telegramInfos.map((info) => {
-                      if (info._id === tinfo._id) {
-                        return { ...info, groupId: e.target.value };
-                      } else {
-                        return info;
-                      }
-                    })
-                  );
-                  setTelegramInfoToEdit({
-                    _id: tinfo._id as string,
-                    groupId: e.target.value,
-                  });
-                }}
-              />
               {telegramInfoToEdit._id === tinfo._id ? (
                 <div>
                   <CrossCheckButtonsGroup
@@ -142,7 +177,7 @@ const Telegram = () => {
                           groupId: telegramInfoToEdit.groupId,
                         });
                         if (updatedData) {
-                          mutate();
+                          teleMutate();
                           setTelegramInfoToEdit({
                             _id: "",
                             groupId: "",
@@ -174,7 +209,7 @@ const Telegram = () => {
         <></>
       )}
       {openCreate ? (
-        <CreateGroup setOpenCreate={setOpenCreate} mutate={mutate} />
+        <CreateGroup setOpenCreate={setOpenCreate} mutate={teleMutate} />
       ) : (
         <></>
       )}
@@ -198,7 +233,7 @@ const Telegram = () => {
         handleClose={() => {
           setTelegramInfoIdToDelete({ supplier: "", _id: "", groupId: "" });
         }}
-        text={`telegram group: ${telegramInfoIdToDelete.supplier} : ${telegramInfoIdToDelete.groupId}`}
+        text={`telegram group: ${telegramInfoIdToDelete.supplier} with groupId ${telegramInfoIdToDelete.groupId}`}
         handleDelete={async () => {
           try {
             setDeleteLoading(true);
@@ -206,7 +241,7 @@ const Telegram = () => {
               `${config.apiBaseUrl}/${telegramEndPoint}/${telegramInfoIdToDelete._id}`
             );
             if (data) {
-              mutate();
+              teleMutate();
               setDeleteLoading(false);
               setTelegramInfoIdToDelete({ supplier: "", _id: "", groupId: "" });
               toast.success("Successfully deleted.");
