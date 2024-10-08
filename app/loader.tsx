@@ -16,7 +16,7 @@ const Loader = () => {
         <>
           <div className="w-full  hidden md:flex">
             <SideBar />
-            <div className="md:ml-[225px] lg:ml-[275px] w-full h-full flex flex-col">
+            <div className=" w-full h-full flex flex-col">
               <NavBar />
               <div className="mt-[400px]  m-auto flex items-center justify-center">
                 {" "}

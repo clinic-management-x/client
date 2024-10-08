@@ -233,3 +233,23 @@ export const defaultAlertData = [
     days: 0,
   },
 ];
+
+export const defaultPatientData = {
+  name: "",
+  qrCodeUrl: "",
+  dateOfBirth: "",
+  gender: "M",
+  address: "",
+  city: "",
+  state: "",
+  country: "",
+  postalCode: "",
+  contacts: [
+    { name: "email", value: "", is_preferred_way: false },
+    { name: "mobile", value: "", is_preferred_way: false },
+    { name: "viber", value: "", is_preferred_way: false },
+  ],
+  emergencyMobileContact: "",
+  occupation: "",
+  preferredDoctor: "",
+};

@@ -21,3 +21,5 @@ export const alertEndPoint = "alert";
 export const notificationEndPoint = "notifications";
 
 export const telegramEndPoint = "telegram";
+
+export const patientsEndPoint = "patients";
