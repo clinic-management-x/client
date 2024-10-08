@@ -22,6 +22,7 @@ const AutocompleteSearch = <T,>({
   handleSearch,
 }: Props<T>) => {
   const { theme } = useTheme();
+  console.log("data", dataArr);
   return (
     <>
       <Autocomplete

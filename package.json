@@ -19,6 +19,7 @@
     "@mui/x-date-pickers": "^7.7.1",
     "@reduxjs/toolkit": "^2.2.5",
     "axios": "^1.7.2",
+    "country-list-js": "^3.1.8",
     "crypto-js": "^4.2.0",
     "dayjs": "^1.11.11",
     "dropzone": "^6.0.0-beta.2",

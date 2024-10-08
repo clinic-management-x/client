@@ -286,3 +286,45 @@ interface ClinicType {
   enableSMS: boolean;
   user: string;
 }
+
+interface ContactType {
+  name: string;
+  value: string;
+  is_preferred_way: boolean;
+}
+
+interface PatientType {
+  _id?: string;
+  __v?: number;
+  clinic?: string;
+  name: string;
+  patientId?: string;
+  qrCodeUrl?: string;
+  dateOfBirth: string;
+  gender: string;
+  address?: string;
+  city?: string;
+  state?: string;
+  country?: string;
+  postalCode?: string;
+  emergencyMobileContact: string;
+  contacts: ContactType[];
+  occupation?: string;
+  preferredDoctor?: string;
+}
+
+interface UpdatePatientType {
+  name?: string;
+  patientId?: string;
+  qrCodeUrl?: string;
+  dateOfBirth?: string;
+  gender?: string;
+  address?: string;
+  city?: string;
+  state?: string;
+  country?: string;
+  postalCode?: number;
+  contacts?: ContactType[];
+  occupation?: string;
+  preferredDoctor?: string;
+}

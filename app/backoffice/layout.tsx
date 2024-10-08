@@ -11,7 +11,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
     <div className="w-full h-screen overflow-y-scroll bg-white dark:bg-[#212121] ">
       <div className="w-full  hidden md:flex">
         <SideBar />
-        <div className="md:ml-[225px] lg:ml-[275px] w-full h-full flex flex-col">
+        <div className=" w-full h-full flex flex-col">
           <NavBar />
           <NotificationDialog />
           <div className="mt-[80px]">{children}</div>
