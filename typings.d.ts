@@ -323,8 +323,9 @@ interface UpdatePatientType {
   city?: string;
   state?: string;
   country?: string;
-  postalCode?: number;
+  postalCode?: string;
   contacts?: ContactType[];
   occupation?: string;
   preferredDoctor?: string;
+  emergencyMobileContact?: string;
 }

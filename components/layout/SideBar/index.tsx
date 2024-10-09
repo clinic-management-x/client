@@ -136,7 +136,7 @@ const SideBar = () => {
   }, [pathname]);
 
   return (
-    <div className="flex flex-col h-screen max-w-[225px] lg:min-w-[275px] z-[999] border-gray-300 dark:border-black border-r-[1px] bg-white dark:bg-[#171717]">
+    <div className="flex flex-col sticky top-0 z-[999] h-screen max-w-[225px] lg:min-w-[275px]  border-gray-300 dark:border-black border-r-[1px] bg-white dark:bg-[#171717]">
       <div className="h-auto border-[0.5px] rounded text-center border-primaryBlue-400 m-2 text-black mb-2">
         <Image
           src={theme.theme === "dark" ? darkLogo : logo}
