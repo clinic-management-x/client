@@ -1,25 +1,8 @@
 "use client";
 import CloseButton from "@/components/buttons/CloseButton/page";
 import CreateButton from "@/components/buttons/CreateButton/page";
-import CustomTextField from "@/components/input/CustomTextField/page";
-import CustomDatePicker from "@/components/selectors/CustomDatePicker/page";
-import LabelTypography from "@/components/typography/LabelTypography/page";
 import { defaultPatientData } from "@/utils/staticData";
-import {
-  Box,
-  Checkbox,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  FormControl,
-  FormControlLabel,
-  FormGroup,
-  Radio,
-  RadioGroup,
-} from "@mui/material";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import dayjs, { Dayjs } from "dayjs";
+import { Box, Dialog, DialogActions, DialogContent } from "@mui/material";
 import React, { useState } from "react";
 import AddressData from "../Address/page";
 import PatientContacts from "../Contacts/page";
@@ -40,7 +23,6 @@ interface Props {
 const CreatePatientDialog = ({ open, handleClose, mutate }: Props) => {
   const [basicPatientInfo, setBasicPatientInfo] =
     useState<PatientType>(defaultPatientData);
-  const [dob, setDob] = useState<Dayjs | null>(dayjs());
 
   const { trigger, isMutating: createMutating } = useSWRMutation(
     `${config.apiBaseUrl}/${patientsEndPoint}`,
@@ -48,15 +30,16 @@ const CreatePatientDialog = ({ open, handleClose, mutate }: Props) => {
   );
 
   const closeDialog = () => {
+    setBasicPatientInfo(defaultPatientData);
     handleClose();
   };
   const handleCreate = async () => {
     try {
-      delete basicPatientInfo.qrCodeUrl;
       const data = await trigger(basicPatientInfo);
       if (data) {
+        mutate();
         toast.success("Successfully created.");
-        handleClose();
+        closeDialog();
       }
     } catch (error) {
       toast.error("Something went wrong.");
@@ -79,18 +62,22 @@ const CreatePatientDialog = ({ open, handleClose, mutate }: Props) => {
           <BasicInfo
             basicPatientInfo={basicPatientInfo}
             setBasicPatientInfo={setBasicPatientInfo}
+            edit={false}
           />
           <AddressData
             basicPatientInfo={basicPatientInfo}
             setBasicPatientInfo={setBasicPatientInfo}
+            edit={false}
           />
           <DetailInfo
             basicPatientInfo={basicPatientInfo}
             setBasicPatientInfo={setBasicPatientInfo}
+            edit={false}
           />
           <PatientContacts
             basicPatientInfo={basicPatientInfo}
             setBasicPatientInfo={setBasicPatientInfo}
+            edit={false}
           />
         </Box>
       </DialogContent>

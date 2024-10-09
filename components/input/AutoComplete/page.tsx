@@ -13,6 +13,7 @@ interface Props<T> {
   dataIndex: string;
   handleChange: (e: any, newValue: string) => void;
   handleSearch: (e: any) => void;
+  value?: string;
 }
 
 const AutocompleteSearch = <T,>({
@@ -20,15 +21,17 @@ const AutocompleteSearch = <T,>({
   dataIndex,
   handleChange,
   handleSearch,
+  value,
 }: Props<T>) => {
   const { theme } = useTheme();
-  console.log("data", dataArr);
+
   return (
     <>
       <Autocomplete
         freeSolo
         id="free-solo-2-demo"
         disableClearable
+        value={value}
         options={dataArr?.map((data: any) => data[dataIndex])}
         onChange={(e, newValue) => {
           handleChange(e, newValue);

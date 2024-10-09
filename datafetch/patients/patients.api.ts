@@ -18,15 +18,32 @@ export const createPatient = async (
     arg: PatientType;
   }
 ) => {
-  const response = await baseApi.post(url, arg);
+  delete arg.qrCodeUrl;
+  if (arg.preferredDoctor == "") {
+    delete arg.preferredDoctor;
+  }
+  const payload = {
+    ...arg,
+    contacts: arg.contacts.map((contact) =>
+      contact.name === "mobile"
+        ? { ...contact, value: "+959" + contact.value }
+        : contact
+    ),
+    emergencyMobileContact: "+959" + arg.emergencyMobileContact,
+  };
+  const response = await baseApi.post(url, payload);
   return response.data;
 };
 
 export const updatePatient = async (
   url: string,
-  { args }: { args: UpdatePatientType }
+  {
+    arg,
+  }: {
+    arg: UpdatePatientType;
+  }
 ) => {
-  const response = await baseApi.patch(url, args);
+  const response = await baseApi.patch(url, arg);
   return response.data;
 };
 

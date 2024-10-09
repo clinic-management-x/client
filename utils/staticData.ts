@@ -242,7 +242,7 @@ export const defaultPatientData = {
   address: "",
   city: "",
   state: "",
-  country: "",
+  country: "Myanmar",
   postalCode: "",
   contacts: [
     { name: "email", value: "", is_preferred_way: false },
