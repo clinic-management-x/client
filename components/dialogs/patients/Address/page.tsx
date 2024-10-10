@@ -46,9 +46,9 @@ const AddressData = ({
   }, [mainData]);
 
   return (
-    <div className="flex flex-col  w-full mt-4">
-      <div className="flex items-center justify-between">
-        <div className="flex flex-col mx-2 w-[30%]">
+    <div className="flex flex-col  w-full mt-4 ">
+      <div className="flex flex-col md:flex-row items-center mx-2 md:mx-0 justify-between">
+        <div className="flex flex-col mx-2 w-full md:w-[30%]">
           <LabelTypography title="City" />
           <CustomTextField
             value={basicPatientInfo.city as string}
@@ -61,7 +61,7 @@ const AddressData = ({
             }}
           />
         </div>
-        <div className="flex flex-col mx-2 w-[30%]">
+        <div className="flex flex-col mx-2 mt-2 md:mt-0 w-full md:w-[30%]">
           <LabelTypography title="State" />
           <CustomTextField
             value={basicPatientInfo.state as string}
@@ -74,7 +74,7 @@ const AddressData = ({
             }}
           />
         </div>
-        <div className="flex flex-col mx-2 w-[30%]">
+        <div className="flex flex-col mx-2 mt-2 md:mt-0 w-full md:w-[30%]">
           <LabelTypography title="Country" />
           <PlainSelector
             dataArr={countries}
@@ -95,8 +95,8 @@ const AddressData = ({
           />
         </div>
       </div>
-      <div className="flex items-center justify-between mt-4">
-        <div className="flex flex-col mx-2 w-[50%]">
+      <div className="flex flex-col md:flex-row items-center justify-between mx-2 md:mx-0 mt-4">
+        <div className="flex flex-col mx-2 w-full md:w-[50%]">
           <LabelTypography title="Address" />
           <CustomTextField
             value={basicPatientInfo.address as string}
@@ -109,7 +109,7 @@ const AddressData = ({
             }}
           />
         </div>
-        <div className="flex flex-col mx-2 w-[50%]">
+        <div className="flex flex-col mx-2 mt-2 md:mt-0 w-full md:w-[50%]">
           <LabelTypography title="Postal code" />
           <CustomTextField
             value={basicPatientInfo.postalCode as string}

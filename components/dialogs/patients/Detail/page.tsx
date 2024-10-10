@@ -6,6 +6,8 @@ import { getDoctors } from "@/datafetch/doctors/doctors.api";
 import { updatePatient } from "@/datafetch/patients/patients.api";
 import config from "@/utils/config";
 import { doctorEndPoint, patientsEndPoint } from "@/utils/endpoints";
+import { Autocomplete, TextField } from "@mui/material";
+import { useTheme } from "next-themes";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import useSWR from "swr";
@@ -23,6 +25,7 @@ const DetailInfo = ({
   edit,
   mainData,
 }: Props) => {
+  const theme = useTheme();
   const [doctorSearch, setDoctorSearch] = useState("");
   const [doctors, setDoctors] = useState([]);
   const [showEditBox, setShowEditBox] = useState(false);
@@ -47,8 +50,8 @@ const DetailInfo = ({
 
   return (
     <div>
-      <div className="flex items-center justify-between mt-4">
-        <div className="flex flex-col mx-2 w-[50%]">
+      <div className="flex flex-col md:flex-row items-center justify-between mt-4 mx-2 md:mx-0">
+        <div className="flex flex-col mx-2 w-full md:w-[50%]">
           <LabelTypography title="Occupation" />
           <CustomTextField
             value={basicPatientInfo.occupation as string}
@@ -61,28 +64,62 @@ const DetailInfo = ({
             }}
           />
         </div>
-        <div className="flex flex-col mx-2 w-[50%]">
+        <div className="flex flex-col mx-2 w-full mt-2 md:mt-0 md:w-[50%]">
           <LabelTypography title=" Preferred Doctor" />
-
-          <AutocompleteSearch
-            dataArr={doctors}
-            value={basicPatientInfo.preferredDoctor}
-            dataIndex="name"
-            handleChange={(e, newValue) => {
-              const doctor = doctors?.find(
-                (doctor: any) => doctor.name === newValue
-              ) as unknown as DoctorType;
-              setBasicPatientInfo({
-                ...basicPatientInfo,
-                preferredDoctor: doctor._id,
-              });
-              setShowEditBox(true);
-            }}
-            handleSearch={(e) => {
-              if (e.target.value.length > 3) {
-                mutate();
+          <Autocomplete
+            freeSolo
+            id="free-solo-2-demo"
+            disableClearable
+            value={
+              basicPatientInfo.preferredDoctor
+                ? doctors.find(
+                    (doctor: any) =>
+                      doctor._id === basicPatientInfo.preferredDoctor
+                  )
+                : null
+            }
+            options={doctors || []}
+            getOptionLabel={(option: any) => option.name || ""}
+            onChange={(e, newValue) => {
+              if (newValue) {
+                setBasicPatientInfo({
+                  ...basicPatientInfo,
+                  preferredDoctor: newValue._id,
+                });
+                setShowEditBox(true);
               }
             }}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                InputProps={{
+                  ...params.InputProps,
+                  type: "search",
+                  style: {
+                    color: theme.theme === "dark" ? "#D1D5DB" : "#6B7280",
+                  },
+                }}
+                sx={{
+                  "& .MuiOutlinedInput-root": {
+                    "& fieldset": {
+                      borderColor: "#9CA3AF",
+                      backgroundColor: "#C7C7C7F",
+                    },
+                    "&:hover fieldset": {
+                      borderColor: "#9CA3AF",
+                    },
+                    "&.Mui-focused fieldset": {
+                      borderColor: "#9CA3AF",
+                    },
+                  },
+                }}
+                onChange={(e) => {
+                  if (e.target.value.length > 3) {
+                    mutate(); // Fetch new data if needed
+                  }
+                }}
+              />
+            )}
           />
         </div>
       </div>

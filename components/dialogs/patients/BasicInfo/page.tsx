@@ -46,9 +46,9 @@ const BasicInfo = ({
   }, [mainData]);
 
   return (
-    <div className="flex flex-col items-center">
-      <div className="flex items-center justify-between w-full">
-        <div className="flex flex-col mx-2 w-[30%]">
+    <div className="flex flex-col  items-center  mx-2 md:mx-0">
+      <div className="flex flex-col md:flex-row items-center  justify-between w-full">
+        <div className="flex flex-col mx-2 w-full md:w-[30%]">
           <LabelTypography title=" Name" />
           <CustomTextField
             value={basicPatientInfo.name}
@@ -61,7 +61,7 @@ const BasicInfo = ({
             }}
           />
         </div>
-        <div className="flex flex-col mx-2 w-[30%]">
+        <div className="flex flex-col mx-2 mt-2 md:mt-0 w-full md:w-[30%]">
           <LabelTypography title="Age" />
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <CustomDatePicker
@@ -79,12 +79,12 @@ const BasicInfo = ({
         </div>
         <FormControl
           id="demo-row-radio-buttons-group-label"
-          className="mx-2 w-[30%]"
+          className="mx-2 w-full mt-2 md:mt-0 md:w-[30%]"
         >
           <LabelTypography title="Gender" />
           <RadioGroup
             row
-            className="border-[1px] w-full rounded-md border-[#9CA3AF] h-[55px]  flex items-center justify-start pl-4 md:pl-1 md:justify-center"
+            className="border-[1px] w-full rounded-md border-[#9CA3AF] h-[55px]  flex items-center justify-center pl-4 md:pl-1 md:justify-center"
           >
             {[
               { id: "M", label: "M" },
