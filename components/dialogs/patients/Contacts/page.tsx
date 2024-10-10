@@ -41,8 +41,8 @@ const PatientContacts = ({
       <div className="ml-2 mt-4">
         <LabelTypography title="Contacts" />
       </div>
-      <div className="flex items-center justify-between mt-4">
-        <div className="flex flex-col mx-2 w-[30%]">
+      <div className="flex flex-col md:flex-row items-center mx-2 md:mx-0 justify-between mt-4">
+        <div className="flex flex-col mx-2  w-full md:w-[30%]">
           <LabelTypography title="Email" />
           <CustomTextField
             value={basicPatientInfo.contacts[0].value}
@@ -59,7 +59,7 @@ const PatientContacts = ({
             }}
           />
         </div>
-        <div className="flex flex-col mx-2 w-[30%]">
+        <div className="flex flex-col mx-2 mt-2 md:mt-0 w-full md:w-[30%]">
           <LabelTypography title="Mobile" />
           <CustomTextField
             type="mobile"
@@ -77,7 +77,7 @@ const PatientContacts = ({
             }}
           />
         </div>
-        <div className="flex flex-col mx-2 w-[30%]">
+        <div className="flex flex-col mx-2 mt-2 md:mt-0 w-full md:w-[30%]">
           <LabelTypography title="Viber" />
           <CustomTextField
             value={basicPatientInfo.contacts[2].value}
@@ -222,7 +222,7 @@ const PatientContacts = ({
       ) : (
         <></>
       )}
-      <div className="flex flex-col mx-2 w-[30%] mt-4">
+      <div className="flex flex-col mx-2 md:w-[30%] mt-4">
         <LabelTypography title="Emergency Contact" />
         <CustomTextField
           type="mobile"
