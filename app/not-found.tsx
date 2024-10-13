@@ -17,6 +17,8 @@ export default function NotFound() {
           <PrimaryButton
             onClick={() => router.push("/")}
             text="Home Page"
+            loading={false}
+            disabled={false}
           ></PrimaryButton>
         </div>
       </section>

@@ -16,10 +16,17 @@ export default function GlobalError({
     <html>
       <body>
         <h2>Something went wrong!</h2>
-        <PrimaryButton onClick={() => reset()} text="Try Again" />
+        <PrimaryButton
+          onClick={() => reset()}
+          text="Try Again"
+          loading={false}
+          disabled={false}
+        />
         <PrimaryButton
           onClick={() => router.push("/")}
           text="Back to Home Page"
+          loading={false}
+          disabled={false}
         />
       </body>
     </html>
