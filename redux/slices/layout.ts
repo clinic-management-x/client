@@ -9,6 +9,7 @@ interface InitialState {
   mutateStaffs: any;
   openNotification: boolean;
   notificationCount: number;
+  appointmentView: string;
 }
 
 const initialState: InitialState = {
@@ -19,6 +20,7 @@ const initialState: InitialState = {
   mutateStaffs: null,
   openNotification: false,
   notificationCount: 0,
+  appointmentView: "row",
 };
 
 export const layoutSlice = createSlice({
@@ -58,6 +60,12 @@ export const layoutSlice = createSlice({
     ) => {
       state.notificationCount = action.payload;
     },
+    insertAppointmentView: (
+      state: InitialState,
+      action: PayloadAction<any>
+    ) => {
+      state.appointmentView = action.payload;
+    },
   },
 });
 
@@ -69,6 +77,7 @@ export const {
   insertMutateStaff,
   insertOpenNotification,
   insertNotificationCount,
+  insertAppointmentView,
 } = layoutSlice.actions;
 
 export const getSelectedTab = (state: RootState) =>
@@ -90,5 +99,8 @@ export const getOpenNotifications = (state: RootState) =>
 
 export const getNotificationCount = (state: RootState) =>
   state.layoutSlice.notificationCount;
+
+export const getAppointmentView = (state: RootState) =>
+  state.layoutSlice.appointmentView; // Accessing from state.layout
 
 export default layoutSlice.reducer;
