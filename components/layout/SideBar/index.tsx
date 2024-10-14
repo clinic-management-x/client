@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   getSelectedSubcategoryTab,
   getSelectedTab,
+  insertAppointmentView,
   insertSelectedSubcategoryTab,
   insertSelectedTab,
 } from "@/redux/slices/layout";
@@ -159,6 +160,7 @@ const SideBar = () => {
                     dispatch(insertPageNumber(1));
                     dispatch(insertSelectedTab(data.title.toLowerCase()));
                     dispatch(insertSelectedSubcategoryTab(""));
+                    dispatch(insertAppointmentView("row"));
                   } else {
                     setShowSubCategories(!showSubCategories);
                   }
