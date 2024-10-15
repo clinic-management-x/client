@@ -329,3 +329,36 @@ interface UpdatePatientType {
   preferredDoctor?: string;
   emergencyMobileContact?: string;
 }
+
+interface AppointmentType {
+  _id?: string;
+  __v?: number;
+  appointmentDate?: string;
+  appointmentStartTime?: string;
+  appointmentEndTime?: string;
+  necessity: string;
+  status?: string;
+  clinicId?: string;
+  createdAt?: string;
+  updatedAt?: string;
+  patient: {
+    _id: string;
+    name: string;
+    patientId: string;
+  };
+  doctor: {
+    _id: string;
+    name: string;
+    avatarUrl: string;
+  };
+}
+
+interface CrudAppointmentType {
+  appointmentDate?: string;
+  appointmentStartTime?: string;
+  appointmentEndTime?: string;
+  necessity?: string;
+  status?: string;
+  patient?: string;
+  doctor?: string;
+}

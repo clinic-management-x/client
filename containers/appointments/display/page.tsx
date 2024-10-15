@@ -1,16 +1,15 @@
 "use client";
 import CreateButton from "@/components/buttons/CreateButton/page";
 import SearchBar from "@/components/input/SearchBar/page";
-import BasicSelector from "@/components/selectors/BasicSelector/page";
 import {
   getAppointmentView,
   getShowMobileSearchBar,
   insertAppointmentView,
   insertShowMobileSearchBar,
 } from "@/redux/slices/layout";
-import { getPageNumber } from "@/redux/slices/workers";
-import { Box, IconButton, useTheme } from "@mui/material";
-import React, { useState } from "react";
+import { getPageNumber, insertPageNumber } from "@/redux/slices/workers";
+import { Box, IconButton, Pagination } from "@mui/material";
+import React, { useEffect, useState } from "react";
 import { FiSearch } from "react-icons/fi";
 import { RxCross1 } from "react-icons/rx";
 import { PiSquaresFour } from "react-icons/pi";
@@ -18,6 +17,19 @@ import { IoListSharp } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
 import AppointmentTable from "./appointmentTable";
 import CalendarTable from "./calenderTable";
+import useSWR from "swr";
+import config from "@/utils/config";
+import { appointmentEndPoint } from "@/utils/endpoints";
+import {
+  deleteAppointment,
+  getAppointments,
+} from "@/datafetch/appointments/appointment.api";
+import SkeletonFrame from "./skeleton";
+import { useTheme } from "next-themes";
+import DeleteDialog from "@/components/dialogs/delete";
+import toast from "react-hot-toast";
+import AppointmentDialog from "@/components/dialogs/appointments/AppointmentDialog/page";
+import { defaultAppointmentData } from "@/utils/staticData";
 
 const DisplayAppointments = () => {
   const dispatch = useDispatch();
@@ -27,14 +39,35 @@ const DisplayAppointments = () => {
   const view = useSelector(getAppointmentView);
   const [typeSearch, setTypeSearch] = useState("");
   const [open, setOpen] = useState(false);
+  const [idToEdit, setIdToEdit] = useState("");
   const [skip, setSkip] = useState((page - 1) * 8);
   const [search, setSearch] = useState("");
+  const [appointments, setAppointments] = useState<AppointmentType[]>([]);
+  const [idToDelete, setIdToDelete] = useState("");
+  const [deleteLoading, setDeleteLoading] = useState(false);
+  const [appointment, setAppointment] = useState<CrudAppointmentType>(
+    defaultAppointmentData
+  );
 
   const hanldeSearchChange = (e: any) => {
     setTypeSearch(e.target.value);
     e.target.value === "" ? setSearch("") : "";
   };
-  console.log("view", view);
+
+  const { data, isLoading, mutate } = useSWR(
+    `${
+      config.apiBaseUrl
+    }/${appointmentEndPoint}?limit=${8}&skip=${skip}&search=${search}`,
+    getAppointments
+  );
+
+  useEffect(() => {
+    if (data) {
+      setAppointments(data.data);
+    }
+  }, [data]);
+
+  console.log("data", appointment);
 
   return (
     <section className="flex flex-col overflow-y-scroll">
@@ -102,7 +135,7 @@ const DisplayAppointments = () => {
             </IconButton>
           </div>
         </div>
-        {view === "row" ? <AppointmentTable /> : <CalendarTable />}
+
         <div
           className={`w-full mt-16 md:hidden md:mt-0 h-[70px] text-black ${
             showMobileSearchBar ? "flex items-center justify-center" : "hidden"
@@ -125,7 +158,77 @@ const DisplayAppointments = () => {
             <RxCross1 className="text-primaryBlue-300" />
           </IconButton>
         </div>
+        {isLoading ? (
+          <SkeletonFrame />
+        ) : view === "row" ? (
+          <AppointmentTable
+            appointments={appointments}
+            setIdToDelete={setIdToDelete}
+          />
+        ) : (
+          <CalendarTable />
+        )}
+        {view === "row" ? (
+          <div className="mt-8 w-full m-auto flex items-center justify-center ">
+            <Pagination
+              size="large"
+              count={Math.ceil(data?.count / 8)}
+              defaultPage={page}
+              color="primary"
+              sx={{
+                mx: 4,
+                color: "gray",
+                ul: {
+                  "& .MuiPaginationItem-root": {
+                    color: theme.theme === "dark" ? "#fff" : "dark",
+                  },
+                },
+              }}
+              className="space-x-2 dark:text-darkText"
+              onChange={(e, pagenumber) => {
+                dispatch(insertPageNumber(pagenumber));
+                setSkip((pagenumber - 1) * 8);
+              }}
+            />
+          </div>
+        ) : (
+          <></>
+        )}
       </Box>
+      <AppointmentDialog
+        open={open || idToEdit !== ""}
+        handleClose={() => {
+          setIdToEdit("");
+          setOpen(false);
+        }}
+        mutate={mutate}
+        appointment={appointment}
+        setAppointment={setAppointment}
+        edit={idToEdit}
+      />
+      <DeleteDialog
+        open={idToDelete !== ""}
+        handleClose={() => {
+          setIdToDelete("");
+        }}
+        text={"this appointment"}
+        handleDelete={async () => {
+          try {
+            setDeleteLoading(true);
+            const data = await deleteAppointment(
+              `${config.apiBaseUrl}/${appointmentEndPoint}/${idToDelete}`
+            );
+            if (data) {
+              toast.success("Successfully deleted.");
+              setIdToDelete("");
+              mutate();
+            }
+          } catch (error) {
+            toast.error("Something went wrong.");
+          }
+        }}
+        loading={deleteLoading}
+      />
     </section>
   );
 };

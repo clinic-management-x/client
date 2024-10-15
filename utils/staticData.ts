@@ -253,3 +253,13 @@ export const defaultPatientData = {
   occupation: "",
   preferredDoctor: "",
 };
+
+export const defaultAppointmentData = {
+  appointmentDate: "",
+  appointmentStartTime: "",
+  appointmentEndTime: "",
+  necessity: "",
+  status: "",
+  patient: "",
+  doctor: "",
+};
