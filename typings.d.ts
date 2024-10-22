@@ -19,6 +19,7 @@ interface ScheduleType {
 interface DoctorType {
   clinic?: string;
   doctorFee: number;
+  duration: number;
   dateOfBirth: string;
   avatarUrl?: string;
   email: string;
@@ -328,4 +329,41 @@ interface UpdatePatientType {
   occupation?: string;
   preferredDoctor?: string;
   emergencyMobileContact?: string;
+}
+
+interface AppointmentType {
+  _id?: string;
+  __v?: number;
+  appointmentDate?: string;
+  appointmentStartTime?: string;
+  appointmentEndTime?: string;
+  necessity: string;
+  status?: string;
+  clinicId?: string;
+  createdAt?: string;
+  updatedAt?: string;
+  patient: {
+    _id: string;
+    name: string;
+    patientId: string;
+  };
+  doctor: {
+    _id: string;
+    name: string;
+    avatarUrl: string;
+    speciality: {
+      _id: string;
+      name: string;
+    };
+  };
+}
+
+interface CrudAppointmentType {
+  appointmentDate?: string;
+  appointmentStartTime?: string;
+  appointmentEndTime?: string;
+  necessity?: string;
+  status?: string;
+  patient?: string;
+  doctor?: string;
 }

@@ -16,7 +16,7 @@ interface Props<T> {
   value?: any;
 }
 
-const AutocompleteSearch = <T,>({
+const TestAutocomplete = <T,>({
   dataArr,
   dataIndex,
   handleChange,
@@ -32,7 +32,8 @@ const AutocompleteSearch = <T,>({
         id="free-solo-2-demo"
         disableClearable
         value={value}
-        options={dataArr?.map((data: any) => data[dataIndex])}
+        options={dataArr}
+        getOptionLabel={(option: any) => option.name || ""}
         onChange={(e, newValue) => {
           handleChange(e, newValue);
         }}
@@ -70,4 +71,4 @@ const AutocompleteSearch = <T,>({
   );
 };
 
-export default AutocompleteSearch;
+export default TestAutocomplete;

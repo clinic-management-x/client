@@ -115,7 +115,7 @@ const DetailInfo = ({
                 }}
                 onChange={(e) => {
                   if (e.target.value.length > 3) {
-                    mutate(); // Fetch new data if needed
+                    mutate();
                   }
                 }}
               />
