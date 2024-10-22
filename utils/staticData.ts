@@ -1,3 +1,4 @@
+import { duration } from "@mui/material";
 import dayjs from "dayjs";
 import { FaViber } from "react-icons/fa";
 
@@ -21,6 +22,7 @@ export const defaultInfo = {
   },
   mobile: "",
   doctorFee: 0,
+  duration: 20,
   email: "",
 };
 
@@ -259,7 +261,6 @@ export const defaultAppointmentData = {
   appointmentStartTime: "",
   appointmentEndTime: "",
   necessity: "",
-  status: "",
   patient: "",
   doctor: "",
 };

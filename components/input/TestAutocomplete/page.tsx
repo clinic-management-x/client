@@ -13,7 +13,7 @@ interface Props<T> {
   dataIndex: string;
   handleChange: (e: any, newValue: string) => void;
   handleSearch: (e: any) => void;
-  value?: string;
+  value?: any;
 }
 
 const TestAutocomplete = <T,>({

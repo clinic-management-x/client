@@ -8,6 +8,7 @@ import CrossButton from "@/components/buttons/CrossButton/page";
 import CheckButton from "@/components/buttons/CheckButton/page";
 import { Dayjs } from "dayjs";
 import { days } from "@/utils/staticData";
+import dayjs from "dayjs";
 
 interface Props {
   newSchedule: ScheduleType;
@@ -33,6 +34,7 @@ const CreateScheduleDialog = ({
   handleClose,
   edit,
 }: Props) => {
+  console.log("ndw", newSchedule.start, dayjs().set("day", 3).day(), days);
   return (
     <Box
       className={`relative w-full ${

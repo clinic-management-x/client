@@ -106,36 +106,7 @@ const BasicDoctorInfo = ({
           </RadioGroup>
         </FormControl>
       </Box>
-      <Box className="  flex flex-col   md:grid md:grid-cols-2 gap-2 mt-2">
-        <div className="flex flex-col mx-2">
-          <LabelTypography title=" Phone Number" />
-          <CustomTextField
-            value={basicDoctorInfo.mobile}
-            type="mobile"
-            handleChange={(e) => {
-              setBasicDoctorInfo({
-                ...basicDoctorInfo,
-                mobile: e.target.value,
-              });
-              setShowEditBox && setShowEditBox(true);
-            }}
-          />
-        </div>
-        <div className="flex flex-col mx-2 ">
-          <LabelTypography title="Email" />
-          <CustomTextField
-            value={basicDoctorInfo.email}
-            handleChange={(e) => {
-              setBasicDoctorInfo({
-                ...basicDoctorInfo,
-                email: e.target.value,
-              });
-              setShowEditBox && setShowEditBox(true);
-            }}
-          />
-        </div>
-      </Box>
-      <Box className="  flex flex-col   md:grid md:grid-cols-2 gap-2 mt-2">
+      <Box className="  flex flex-col   md:grid md:grid-cols-3 gap-2 mt-2">
         <div className="flex flex-col mx-2">
           <LabelTypography title="Speciality" />
           <PlainSelector
@@ -163,6 +134,49 @@ const BasicDoctorInfo = ({
               setBasicDoctorInfo({
                 ...basicDoctorInfo,
                 doctorFee: +e.target.value,
+              });
+              setShowEditBox && setShowEditBox(true);
+            }}
+          />
+        </div>
+        <div className="flex flex-col mx-2 ">
+          <LabelTypography title="Duration per Section" />
+          <CustomTextField
+            value={basicDoctorInfo.duration}
+            type="fees"
+            handleChange={(e) => {
+              setBasicDoctorInfo({
+                ...basicDoctorInfo,
+                duration: +e.target.value,
+              });
+              setShowEditBox && setShowEditBox(true);
+            }}
+          />
+        </div>
+      </Box>
+      <Box className="  flex flex-col   md:grid md:grid-cols-2 gap-2 mt-2">
+        <div className="flex flex-col mx-2">
+          <LabelTypography title=" Phone Number" />
+          <CustomTextField
+            value={basicDoctorInfo.mobile}
+            type="mobile"
+            handleChange={(e) => {
+              setBasicDoctorInfo({
+                ...basicDoctorInfo,
+                mobile: e.target.value,
+              });
+              setShowEditBox && setShowEditBox(true);
+            }}
+          />
+        </div>
+        <div className="flex flex-col mx-2 ">
+          <LabelTypography title="Email" />
+          <CustomTextField
+            value={basicDoctorInfo.email}
+            handleChange={(e) => {
+              setBasicDoctorInfo({
+                ...basicDoctorInfo,
+                email: e.target.value,
               });
               setShowEditBox && setShowEditBox(true);
             }}

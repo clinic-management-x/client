@@ -12,18 +12,38 @@ import {
 } from "@mui/material";
 import React, { useState } from "react";
 import Image from "next/image";
+import defaultImage from "@/public/defaultAvatar.jpg";
 import dayjs from "dayjs";
 import { IoCopyOutline } from "react-icons/io5";
 import { FiEdit3 } from "react-icons/fi";
 import { MdDelete } from "react-icons/md";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  insertSelectedAppointment,
+  insertSelectedDoctor,
+} from "@/redux/slices/appointment";
+import { getPageNumber } from "@/redux/slices/workers";
 
 interface Props {
   appointments: AppointmentType[];
   setIdToDelete: (data: string) => void;
+  setOpen: (data: boolean) => void;
+  setId: (data: string) => void;
+  mutate: any;
 }
-const AppointmentTable = ({ appointments, setIdToDelete }: Props) => {
+const AppointmentTable = ({
+  appointments,
+  setIdToDelete,
+  setOpen,
+  setId,
+  mutate,
+}: Props) => {
+  const dispatch = useDispatch();
+  const page = useSelector(getPageNumber);
   const [isCopied, setIsCopied] = useState(false);
   const [copyId, setCopyId] = useState("");
+  const [idsToDelete, setIdsToDelete] = useState<string[]>([]);
+  const [totalCount, setTotalCount] = useState(0);
 
   const handleCopy = async (text: string) => {
     try {
@@ -37,6 +57,7 @@ const AppointmentTable = ({ appointments, setIdToDelete }: Props) => {
       console.error("Failed to copy text:", err);
     }
   };
+
   return (
     <TableContainer className=" border-[0.5px] rounded" sx={{ ml: 2 }}>
       <Table aria-label="collapsible table">
@@ -46,8 +67,18 @@ const AppointmentTable = ({ appointments, setIdToDelete }: Props) => {
               <Checkbox
                 color="primary"
                 className="dark:text-white"
-                checked={false}
-                onChange={() => {}}
+                checked={idsToDelete.length === appointments.length}
+                onChange={() => {
+                  if (idsToDelete.length === appointments.length) {
+                    setIdsToDelete([]);
+                  } else {
+                    setIdsToDelete(
+                      appointments.map(
+                        (appointment) => appointment._id
+                      ) as string[]
+                    );
+                  }
+                }}
               />
             </TableCell>
             <TableCell>
@@ -61,7 +92,7 @@ const AppointmentTable = ({ appointments, setIdToDelete }: Props) => {
             <TableCell>
               <Typography
                 variant="body1"
-                className=" font-semibold text-whiteText dark:text-darkText"
+                className=" font-semibold ml-4 text-whiteText dark:text-darkText"
               >
                 Date
               </Typography>
@@ -70,7 +101,7 @@ const AppointmentTable = ({ appointments, setIdToDelete }: Props) => {
               {" "}
               <Typography
                 variant="body1"
-                className=" font-semibold text-whiteText dark:text-darkText"
+                className=" font-semibold text-whiteText ml-8 dark:text-darkText"
               >
                 Time
               </Typography>
@@ -79,7 +110,7 @@ const AppointmentTable = ({ appointments, setIdToDelete }: Props) => {
               {" "}
               <Typography
                 variant="body1"
-                className=" font-semibold text-whiteText dark:text-darkText"
+                className=" font-semibold ml-4 text-whiteText dark:text-darkText"
               >
                 Doctor
               </Typography>
@@ -96,6 +127,7 @@ const AppointmentTable = ({ appointments, setIdToDelete }: Props) => {
             <TableCell>
               {" "}
               <Typography
+                align="center"
                 variant="body1"
                 className=" font-semibold text-whiteText dark:text-darkText"
               >
@@ -132,27 +164,44 @@ const AppointmentTable = ({ appointments, setIdToDelete }: Props) => {
                       <Checkbox
                         color="primary"
                         className="dark:text-white"
-                        checked={false}
-                        onChange={() => {}}
+                        checked={idsToDelete.includes(
+                          appointment._id as string
+                        )}
+                        onChange={() => {
+                          const alreadyExist = idsToDelete.includes(
+                            appointment._id as string
+                          );
+                          if (alreadyExist) {
+                            setIdsToDelete(
+                              idsToDelete.filter(
+                                (_id) => _id !== appointment._id
+                              )
+                            );
+                          } else {
+                            setIdsToDelete([
+                              ...idsToDelete,
+                              appointment._id as string,
+                            ]);
+                          }
+                        }}
                       />
                     </TableCell>
                     <TableCell>
                       <div className="flex flex-col items-start justify-start">
                         <Typography
-                          variant="body1"
-                          className="font-medium dark:text-darkText"
+                          variant="subtitle2"
+                          className="font-semibold  dark:text-darkText"
                         >
                           {appointment.patient.name}
                         </Typography>
                         <div className="flex items-center  space-x-2">
-                          <span className="dark:text-darkText">
+                          <span className="dark:text-darkText text-[12px]">
                             {appointment.patient.patientId}
                           </span>
                           <div className="relative">
                             <div
                               className={`${
-                                isCopied &&
-                                copyId === appointment.patient.patientId
+                                isCopied && copyId === appointment._id
                                   ? "absolute"
                                   : "hidden"
                               }  p-1 -right-4 -top-8 rounded text-center text-white bg-success`}
@@ -166,7 +215,7 @@ const AppointmentTable = ({ appointments, setIdToDelete }: Props) => {
                             >
                               <button
                                 onClick={() => {
-                                  setCopyId("" + appointment.patient.patientId);
+                                  setCopyId("" + appointment._id);
                                   handleCopy(
                                     "" + appointment.patient.patientId
                                   );
@@ -183,8 +232,8 @@ const AppointmentTable = ({ appointments, setIdToDelete }: Props) => {
                     </TableCell>
                     <TableCell component="th" scope="row">
                       <Typography
-                        variant="body1"
-                        className="font-medium  text-whiteText dark:text-darkText"
+                        variant="subtitle2"
+                        className="font-medium w-[100px] text-whiteText dark:text-darkText"
                       >
                         {" "}
                         {dayjs(appointment.appointmentDate).format(
@@ -194,14 +243,14 @@ const AppointmentTable = ({ appointments, setIdToDelete }: Props) => {
                     </TableCell>
                     <TableCell>
                       <Typography
-                        variant="body1"
-                        className="font-medium  text-whiteText dark:text-darkText"
+                        variant="subtitle2"
+                        className="font-medium w-[160px] text-whiteText dark:text-darkText"
                       >
                         {" "}
                         {dayjs(appointment.appointmentStartTime).format(
                           "hh:mm A"
                         )}
-                        {" >> "}
+                        {" to "}
                         {dayjs(appointment.appointmentEndTime).format(
                           "hh:mm A"
                         )}
@@ -210,31 +259,37 @@ const AppointmentTable = ({ appointments, setIdToDelete }: Props) => {
                     <TableCell className=" ">
                       <div className="flex items-center space-x-2">
                         <Image
-                          src={appointment.doctor.avatarUrl}
+                          src={appointment.doctor.avatarUrl || defaultImage}
                           width={640}
                           height={320}
                           alt=""
                           className="w-[40px] h-[40px] rounded-full"
                         />
-                        <div>
+                        <div className="flex flex-col ">
                           <Typography
-                            variant="body1"
-                            className="font-medium dark:text-darkText"
+                            variant="subtitle2"
+                            className="font-semibold  dark:text-darkText"
                           >
                             {appointment.doctor.name}
+                          </Typography>
+                          <Typography
+                            variant="subtitle2"
+                            className="font-medium dark:text-darkText"
+                          >
+                            {appointment?.doctor?.speciality?.name}
                           </Typography>
                         </div>
                       </div>
                     </TableCell>
                     <TableCell className=" text-whiteText dark:text-darkText">
                       <Typography
-                        variant="body1"
+                        variant="subtitle2"
                         className="font-medium  text-whiteText dark:text-darkText"
                       >
                         {appointment.necessity}
                       </Typography>
                     </TableCell>
-                    <TableCell className=" text-whiteText dark:text-darkText">
+                    <TableCell className="w-[130px] text-whiteText dark:text-darkText">
                       <Typography
                         variant="body2"
                         className={`font-medium border-[1px] cursor-pointer ${
@@ -252,7 +307,13 @@ const AppointmentTable = ({ appointments, setIdToDelete }: Props) => {
                     </TableCell>
                     <TableCell className=" text-whiteText dark:text-darkText">
                       <div className="flex items-center">
-                        <IconButton>
+                        <IconButton
+                          onClick={() => {
+                            setOpen(true);
+                            setId(String(appointment._id));
+                            dispatch(insertSelectedAppointment(appointment));
+                          }}
+                        >
                           <FiEdit3 size={18} />
                         </IconButton>
                         <IconButton

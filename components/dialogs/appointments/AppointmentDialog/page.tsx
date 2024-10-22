@@ -2,9 +2,10 @@ import CloseButton from "@/components/buttons/CloseButton/page";
 import CreateButton from "@/components/buttons/CreateButton/page";
 import {
   createAppointment,
+  getBookedAppointments,
   updateAppointment,
 } from "@/datafetch/appointments/appointment.api";
-import { getDoctors, getSpecialities } from "@/datafetch/doctors/doctors.api";
+import { getDoctor, getDoctors } from "@/datafetch/doctors/doctors.api";
 import { getPatients } from "@/datafetch/patients/patients.api";
 import config from "@/utils/config";
 import {
@@ -21,21 +22,26 @@ import {
   DialogTitle,
   Typography,
 } from "@mui/material";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import useSWR from "swr";
 import useSWRMutation from "swr/mutation";
-import { StaticDateTimePicker } from "@mui/x-date-pickers/StaticDateTimePicker";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import LabelTypography from "@/components/typography/LabelTypography/page";
-import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
-import { TimeField } from "@mui/x-date-pickers/TimeField";
-import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
-import dayjs, { Dayjs } from "dayjs";
 import PlainSelector from "@/components/selectors/PlainSelector/page";
-import AutocompleteSearch from "@/components/input/AutoComplete/page";
 import TestAutocomplete from "@/components/input/TestAutocomplete/page";
+import AppointmentTimePicker from "../AppointmentTimePicker/page";
+import {
+  getSelectedAppointment,
+  insertAvailableDays,
+  insertAvailableSchedules,
+  insertBookedTimeArr,
+  insertSelectedAppointment,
+  insertSelectedDoctor,
+  insertTimeStamps,
+} from "@/redux/slices/appointment";
+import { useDispatch, useSelector } from "react-redux";
+import { getCustomDay } from "@/utils/calculations";
+import dayjs from "dayjs";
 
 interface Props {
   open: boolean;
@@ -60,6 +66,8 @@ const AppointmentDialog = ({
   setAppointment,
   edit,
 }: Props) => {
+  const dispatch = useDispatch();
+  const selectedAppointment = useSelector(getSelectedAppointment);
   //To display patients
   const [patients, setPatients] = useState<PatientType[]>([]);
   const [patientSearch, setPatientSearch] = useState("");
@@ -98,20 +106,22 @@ const AppointmentDialog = ({
 
   const closeDialog = () => {
     handleClose();
+    dispatch(insertSelectedAppointment(null));
+    dispatch(insertSelectedDoctor(null));
+    dispatch(insertAvailableSchedules([]));
+    dispatch(insertAvailableDays([]));
+    dispatch(insertTimeStamps([]));
+    setAppointment(defaultAppointmentData);
   };
 
   // To handle data
-
-  const [date, setDate] = useState<Dayjs | null>(dayjs());
-  const [startTime, setStartTime] = useState<Dayjs | null>(dayjs());
-  const [endTime, setEndTime] = useState<Dayjs | null>(dayjs());
 
   const { trigger, isMutating: createMutating } = useSWRMutation(
     `${config.apiBaseUrl}/${appointmentEndPoint}`,
     createAppointment
   );
   const { trigger: updateTrigger, isMutating: updateMutating } = useSWRMutation(
-    `${config.apiBaseUrl}/${appointmentEndPoint}/`,
+    `${config.apiBaseUrl}/${appointmentEndPoint}/${edit}`,
     updateAppointment
   );
 
@@ -125,7 +135,7 @@ const AppointmentDialog = ({
         mutate();
         toast.success("Successfully created.");
         setAppointment(defaultAppointmentData);
-        handleClose();
+        closeDialog();
       }
     } catch (error) {
       console.log("error", error);
@@ -133,7 +143,58 @@ const AppointmentDialog = ({
     }
   };
 
-  console.log("appointment", appointment);
+  const getDoctorData = async (id: string) => {
+    const data = (await getDoctor(
+      `${config.apiBaseUrl}/${doctorEndPoint}/${id}`
+    )) as DoctorType;
+
+    const bookedData = await getBookedAppointments(
+      `${
+        config.apiBaseUrl
+      }/${appointmentEndPoint}/booked-appointments?doctor=${id}&appointmentDate=${dayjs(
+        selectedAppointment?.appointmentDate
+      ).toISOString()}&_id=${selectedAppointment?._id}`
+    );
+
+    if (data && bookedData) {
+      dispatch(insertSelectedDoctor(data));
+      dispatch(
+        insertAvailableSchedules(
+          data?.schedules?.filter(
+            (schedule) =>
+              Math.floor(schedule.start / 1440) ==
+                getCustomDay(
+                  dayjs(selectedAppointment?.appointmentDate).day()
+                ) ||
+              Math.floor(schedule.end / 1440) ===
+                getCustomDay(dayjs(selectedAppointment?.appointmentDate).day())
+          ) as ScheduleType[]
+        )
+      );
+      dispatch(
+        insertBookedTimeArr(
+          bookedData?.map((idata: AppointmentType) =>
+            dayjs(idata.appointmentStartTime).format("DD MMM YYYY hh:mm a")
+          )
+        )
+      );
+    }
+  };
+
+  useEffect(() => {
+    if (selectedAppointment) {
+      setAppointment({
+        ...appointment,
+        appointmentDate: selectedAppointment?.appointmentDate,
+        appointmentStartTime: selectedAppointment?.appointmentStartTime,
+        appointmentEndTime: selectedAppointment?.appointmentEndTime,
+        necessity: selectedAppointment?.necessity,
+        doctor: selectedAppointment?.doctor._id,
+        patient: selectedAppointment?.patient._id,
+      });
+      getDoctorData(selectedAppointment.doctor._id);
+    }
+  }, [selectedAppointment]);
 
   return (
     <Dialog
@@ -160,7 +221,11 @@ const AppointmentDialog = ({
           <Box className="flex-grow mt-4 md:mt-0">
             <div className="flex flex-col p-1 space-y-2">
               <LabelTypography title="Patient" />
+
               <div className="md:w-[300px]">
+                {/* {edit ? (
+                  <Typography>{appointment.patient}</Typography>
+                ) : ( */}
                 <TestAutocomplete
                   dataArr={patients}
                   dataIndex={"name"}
@@ -172,7 +237,13 @@ const AppointmentDialog = ({
                       patientMutate();
                     }
                   }}
+                  value={
+                    selectedAppointment
+                      ? selectedAppointment.patient
+                      : undefined
+                  }
                 />
+                {/* )} */}
               </div>
             </div>
             <div className="flex flex-col p-1 space-y-2 mb-4">
@@ -182,7 +253,7 @@ const AppointmentDialog = ({
                   dataArr={doctors}
                   dataIndex={"name"}
                   handleChange={async (e: any, newValue: any) => {
-                    console.log("new", newValue);
+                    dispatch(insertSelectedDoctor(newValue));
                     setAppointment({ ...appointment, doctor: newValue._id });
                   }}
                   handleSearch={(e) => {
@@ -190,77 +261,16 @@ const AppointmentDialog = ({
                       doctorMutate();
                     }
                   }}
+                  value={
+                    selectedAppointment ? selectedAppointment.doctor : undefined
+                  }
                 />
               </div>
             </div>
-            <div className="flex flex-col p-1">
-              <LabelTypography title="Appointment Time" />
-              <div className="flex flex-col md:flex-row md:space-x-4 mt-6">
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DateCalendar
-                    className="border border-[#C4C4C4] dark:border-darkText rounded mb-4 md:mb-0 w-full md:w-[300px] h-[300px] md:h-auto"
-                    value={date}
-                    onChange={(newValue) => {
-                      setDate(newValue);
-
-                      setAppointment({
-                        ...appointment,
-                        appointmentDate: dayjs(newValue).toISOString(),
-                        appointmentStartTime: startTime
-                          ?.set("date", newValue.get("date"))
-                          .toISOString(),
-                        appointmentEndTime: endTime
-                          ?.set("date", newValue.get("date"))
-                          .toISOString(),
-                      });
-                    }}
-                  />
-                </LocalizationProvider>
-
-                <div className="flex flex-col w-full md:w-1/2 space-y-4">
-                  <LabelTypography title="From" />
-                  <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <TimeField
-                      value={startTime}
-                      onChange={(newValue) => {
-                        setStartTime(newValue);
-
-                        setAppointment({
-                          ...appointment,
-                          appointmentStartTime: newValue
-                            ?.set(
-                              "date",
-                              date?.get("date") || dayjs().get("date")
-                            )
-                            ?.toISOString(),
-                        });
-                      }}
-                      className="border border-whiteText dark:border-darkText rounded"
-                    />
-                  </LocalizationProvider>
-
-                  <LabelTypography title="To" />
-                  <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <TimeField
-                      value={endTime}
-                      onChange={(newValue) => {
-                        setEndTime(newValue);
-                        setAppointment({
-                          ...appointment,
-                          appointmentEndTime: newValue
-                            ?.set(
-                              "date",
-                              date?.get("date") || dayjs().get("date")
-                            )
-                            ?.toISOString(),
-                        });
-                      }}
-                      className="border border-whiteText dark:border-darkText rounded"
-                    />
-                  </LocalizationProvider>
-                </div>
-              </div>
-            </div>
+            <AppointmentTimePicker
+              appointment={appointment}
+              setAppointment={setAppointment}
+            />
             <div className="flex flex-col p-1 ">
               <LabelTypography title="Necessity" />
               <div className="md:w-[300px] mt-2">
@@ -299,6 +309,7 @@ const AppointmentDialog = ({
             }
             isLoading={createMutating || updateMutating}
             showIcon={true}
+            text={edit ? "Update" : "Create"}
           />
         </div>
       </DialogActions>

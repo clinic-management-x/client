@@ -18,6 +18,7 @@ import storage from "./storage";
 import supplierSlice from "./slices/supplier";
 import inventorySlice from "./slices/inventory";
 import settingsSlice from "./slices/settings";
+import appointmentSlice from "./slices/appointment";
 
 const reducer = combineReducers({
   userSlice: userSlice,
@@ -26,6 +27,7 @@ const reducer = combineReducers({
   supplierSlice: supplierSlice,
   inventorySlice: inventorySlice,
   settingsSlice: settingsSlice,
+  appointmentSlice: appointmentSlice,
 });
 
 const persistConfig = {

@@ -67,8 +67,6 @@ const DisplayAppointments = () => {
     }
   }, [data]);
 
-  console.log("data", appointment);
-
   return (
     <section className="flex flex-col overflow-y-scroll">
       <Box sx={{ mb: 40 }}>
@@ -164,6 +162,9 @@ const DisplayAppointments = () => {
           <AppointmentTable
             appointments={appointments}
             setIdToDelete={setIdToDelete}
+            setOpen={setOpen}
+            setId={setIdToEdit}
+            mutate={mutate}
           />
         ) : (
           <CalendarTable />
@@ -221,9 +222,11 @@ const DisplayAppointments = () => {
             if (data) {
               toast.success("Successfully deleted.");
               setIdToDelete("");
+              setDeleteLoading(false);
               mutate();
             }
           } catch (error) {
+            setDeleteLoading(false);
             toast.error("Something went wrong.");
           }
         }}

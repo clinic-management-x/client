@@ -19,6 +19,7 @@ interface ScheduleType {
 interface DoctorType {
   clinic?: string;
   doctorFee: number;
+  duration: number;
   dateOfBirth: string;
   avatarUrl?: string;
   email: string;
@@ -350,6 +351,10 @@ interface AppointmentType {
     _id: string;
     name: string;
     avatarUrl: string;
+    speciality: {
+      _id: string;
+      name: string;
+    };
   };
 }
 

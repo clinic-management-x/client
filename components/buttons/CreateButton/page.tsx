@@ -7,6 +7,7 @@ interface Props {
   disabled: boolean;
   isLoading?: boolean;
   showIcon: boolean;
+  text?: string;
 }
 
 const CreateButton = ({
@@ -14,6 +15,7 @@ const CreateButton = ({
   disabled,
   isLoading,
   showIcon,
+  text,
 }: Props) => {
   return (
     <Button
@@ -25,7 +27,13 @@ const CreateButton = ({
       onClick={handleClick}
       disabled={disabled}
     >
-      {isLoading ? <CircularProgress color="inherit" size={30} /> : "Create"}
+      {isLoading ? (
+        <CircularProgress color="inherit" size={30} />
+      ) : text ? (
+        text
+      ) : (
+        "Create"
+      )}
     </Button>
   );
 };
