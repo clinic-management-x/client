@@ -264,3 +264,11 @@ export const defaultAppointmentData = {
   patient: "",
   doctor: "",
 };
+
+export const defaultFilter = {
+  nearestAppointment: false,
+  necessity: "",
+  status: "",
+  start: "",
+  end: "",
+};

@@ -10,6 +10,7 @@ interface InitialState {
   openNotification: boolean;
   notificationCount: number;
   appointmentView: string;
+  filterView: boolean;
 }
 
 const initialState: InitialState = {
@@ -21,6 +22,7 @@ const initialState: InitialState = {
   openNotification: false,
   notificationCount: 0,
   appointmentView: "row",
+  filterView: false,
 };
 
 export const layoutSlice = createSlice({
@@ -66,6 +68,9 @@ export const layoutSlice = createSlice({
     ) => {
       state.appointmentView = action.payload;
     },
+    insertFilterView: (state: InitialState, action: PayloadAction<boolean>) => {
+      state.filterView = action.payload;
+    },
   },
 });
 
@@ -78,6 +83,7 @@ export const {
   insertOpenNotification,
   insertNotificationCount,
   insertAppointmentView,
+  insertFilterView,
 } = layoutSlice.actions;
 
 export const getSelectedTab = (state: RootState) =>
@@ -101,6 +107,8 @@ export const getNotificationCount = (state: RootState) =>
   state.layoutSlice.notificationCount;
 
 export const getAppointmentView = (state: RootState) =>
-  state.layoutSlice.appointmentView; // Accessing from state.layout
+  state.layoutSlice.appointmentView;
+
+export const getFilterView = (state: RootState) => state.layoutSlice.filterView;
 
 export default layoutSlice.reducer;

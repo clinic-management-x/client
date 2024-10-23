@@ -367,3 +367,11 @@ interface CrudAppointmentType {
   patient?: string;
   doctor?: string;
 }
+
+interface AdditionalFilter {
+  nearestAppointment: boolean;
+  necessity: string;
+  status: string;
+  start: string;
+  end: string;
+}

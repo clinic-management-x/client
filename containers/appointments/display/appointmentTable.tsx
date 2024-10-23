@@ -314,14 +314,20 @@ const AppointmentTable = ({
                             dispatch(insertSelectedAppointment(appointment));
                           }}
                         >
-                          <FiEdit3 size={18} />
+                          <FiEdit3
+                            size={18}
+                            className=" text-whiteText dark:text-darkText"
+                          />
                         </IconButton>
                         <IconButton
                           onClick={() => {
                             setIdToDelete(appointment._id as string);
                           }}
                         >
-                          <MdDelete size={20} />
+                          <MdDelete
+                            size={20}
+                            className=" text-whiteText dark:text-darkText"
+                          />
                         </IconButton>
                       </div>
                     </TableCell>
