@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../store";
+import { defaultFilter } from "@/utils/staticData";
 
 interface InitialState {
   selectedAppointment: AppointmentType | null;
@@ -8,6 +9,7 @@ interface InitialState {
   availableDays: number[];
   timeStamps: string[];
   bookedTimeArr: string[];
+  filterData: AdditionalFilter;
 }
 
 const initialState: InitialState = {
@@ -17,6 +19,7 @@ const initialState: InitialState = {
   availableDays: [],
   timeStamps: [],
   bookedTimeArr: [],
+  filterData: defaultFilter,
 };
 
 export const appointmentSlice = createSlice({
@@ -59,6 +62,12 @@ export const appointmentSlice = createSlice({
     ) => {
       state.bookedTimeArr = action.payload;
     },
+    insertFilterData: (
+      state: InitialState,
+      action: PayloadAction<AdditionalFilter>
+    ) => {
+      state.filterData = action.payload;
+    },
   },
 });
 
@@ -69,6 +78,7 @@ export const {
   insertAvailableDays,
   insertTimeStamps,
   insertBookedTimeArr,
+  insertFilterData,
 } = appointmentSlice.actions;
 
 export const getSelectedAppointment = (state: RootState) =>
@@ -88,4 +98,8 @@ export const getTimeStamps = (state: RootState) =>
 
 export const getBookedTimeArr = (state: RootState) =>
   state.appointmentSlice.bookedTimeArr;
+
+export const getFilterData = (state: RootState) =>
+  state.appointmentSlice.filterData;
+
 export default appointmentSlice.reducer;

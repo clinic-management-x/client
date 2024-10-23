@@ -3,8 +3,10 @@ import CreateButton from "@/components/buttons/CreateButton/page";
 import SearchBar from "@/components/input/SearchBar/page";
 import {
   getAppointmentView,
+  getFilterView,
   getShowMobileSearchBar,
   insertAppointmentView,
+  insertFilterView,
   insertShowMobileSearchBar,
 } from "@/redux/slices/layout";
 import { getPageNumber, insertPageNumber } from "@/redux/slices/workers";
@@ -13,7 +15,7 @@ import React, { useEffect, useState } from "react";
 import { FiSearch } from "react-icons/fi";
 import { RxCross1 } from "react-icons/rx";
 import { PiSquaresFour } from "react-icons/pi";
-import { IoListSharp } from "react-icons/io5";
+import { IoFilter, IoListSharp } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
 import AppointmentTable from "./appointmentTable";
 import CalendarTable from "./calenderTable";
@@ -29,7 +31,9 @@ import { useTheme } from "next-themes";
 import DeleteDialog from "@/components/dialogs/delete";
 import toast from "react-hot-toast";
 import AppointmentDialog from "@/components/dialogs/appointments/AppointmentDialog/page";
-import { defaultAppointmentData } from "@/utils/staticData";
+import { defaultAppointmentData, defaultFilter } from "@/utils/staticData";
+import FilterDialog from "@/components/dialogs/appointments/FilterDialog/page";
+import { MdFilterListOff } from "react-icons/md";
 
 const DisplayAppointments = () => {
   const dispatch = useDispatch();
@@ -37,8 +41,10 @@ const DisplayAppointments = () => {
   const page = useSelector(getPageNumber);
   const showMobileSearchBar = useSelector(getShowMobileSearchBar);
   const view = useSelector(getAppointmentView);
+  const isFiltered = useSelector(getFilterView);
   const [typeSearch, setTypeSearch] = useState("");
   const [open, setOpen] = useState(false);
+  const [openFilter, setOpenFilter] = useState(false);
   const [idToEdit, setIdToEdit] = useState("");
   const [skip, setSkip] = useState((page - 1) * 8);
   const [search, setSearch] = useState("");
@@ -48,6 +54,8 @@ const DisplayAppointments = () => {
   const [appointment, setAppointment] = useState<CrudAppointmentType>(
     defaultAppointmentData
   );
+  const [filterUrl, setFilterUrl] = useState("");
+  console.log("filter", filterUrl);
 
   const hanldeSearchChange = (e: any) => {
     setTypeSearch(e.target.value);
@@ -57,7 +65,7 @@ const DisplayAppointments = () => {
   const { data, isLoading, mutate } = useSWR(
     `${
       config.apiBaseUrl
-    }/${appointmentEndPoint}?limit=${8}&skip=${skip}&search=${search}`,
+    }/${appointmentEndPoint}?limit=${8}&skip=${skip}&search=${search}${filterUrl}`,
     getAppointments
   );
 
@@ -75,7 +83,7 @@ const DisplayAppointments = () => {
             showMobileSearchBar ? "hidden" : ""
           }  h-[70px] md:h-[80px] mt-16 md:mt-0 w-full flex items-center justify-between md:justify-start `}
         >
-          <div className={`w-[40%] pl-4`}>
+          <div className={`w-[40%] flex items-center space-x-2 pl-4`}>
             <CreateButton
               disabled={false}
               handleClick={() => {
@@ -83,6 +91,35 @@ const DisplayAppointments = () => {
               }}
               showIcon={true}
             />
+            <div className="flex items-center border-[2px] h-[38px] border-primaryBlue-300 rounded-md mr-4">
+              <IconButton
+                sx={{ height: 35, borderRadius: 10 }}
+                onClick={() => {
+                  dispatch(insertFilterView(true));
+                  setOpenFilter(true);
+                }}
+                className={`border-[2px] border-gray-800 rounded-sm ${
+                  isFiltered
+                    ? "bg-primaryBlue-300 hover:bg-primaryBlue-300 text-white "
+                    : "dark:text-[#6B7280]"
+                }`}
+              >
+                <IoFilter size={18} />
+              </IconButton>
+              <IconButton
+                sx={{ height: 35, borderRadius: 10 }}
+                onClick={() => {
+                  dispatch(insertFilterView(false));
+                }}
+                className={`border-[2px] border-gray-800 rounded-sm ${
+                  isFiltered
+                    ? " dark:text-[#6B7280]"
+                    : " bg-primaryBlue-300 hover:bg-primaryBlue-300 text-white"
+                }`}
+              >
+                <MdFilterListOff size={18} />
+              </IconButton>
+            </div>
           </div>
           <div className="w-[60%] flex items-center justify-end mr-4  ">
             <IconButton
@@ -196,6 +233,14 @@ const DisplayAppointments = () => {
           <></>
         )}
       </Box>
+      <FilterDialog
+        open={openFilter}
+        closeDialog={() => {
+          setOpenFilter(false);
+        }}
+        filterUrl={filterUrl}
+        setFilterUrl={setFilterUrl}
+      />
       <AppointmentDialog
         open={open || idToEdit !== ""}
         handleClose={() => {
