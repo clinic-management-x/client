@@ -236,7 +236,7 @@ const AppointmentTable = ({
                         className="font-medium w-[100px] text-whiteText dark:text-darkText"
                       >
                         {" "}
-                        {dayjs(appointment.appointmentDate).format(
+                        {dayjs(appointment.appointmentStartTime).format(
                           "DD MMM YYYY"
                         )}
                       </Typography>

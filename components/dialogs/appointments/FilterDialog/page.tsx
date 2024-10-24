@@ -99,14 +99,6 @@ const FilterDialog = ({
         <Box className="flex flex-col md:flex-row md:space-x-4">
           <CloseButton handleClose={handleClose} />
           <Box className="flex-grow mt-4 md:mt-0">
-            <div className="w-full flex justify-end">
-              <button
-                onClick={clearChecked}
-                className="text-whiteText dark:text-darkText text-[14px] px-1 border-[2px] rounded-md "
-              >
-                Clear Filters
-              </button>
-            </div>
             <FormGroup>
               <FormControlLabel
                 control={
@@ -218,6 +210,11 @@ const FilterDialog = ({
                       if (!e.target.checked) {
                         setStart(null);
                         setEnd(null);
+                        setAdditionalFilter({
+                          ...additionalFilter,
+                          start: "",
+                          end: "",
+                        });
                       }
                     }}
                   />
@@ -265,7 +262,20 @@ const FilterDialog = ({
         </Box>
       </DialogContent>
       <DialogActions className="dark:bg-[#3C3C3C] w-full">
-        <div className="m-auto">
+        <div className="m-auto w-full flex items-center justify-center space-x-2">
+          <CreateButton
+            handleClick={() => {
+              clearChecked();
+              closeDialog();
+              setFilterUrl("");
+              dispatch(insertFilterData(defaultFilter));
+            }}
+            disabled={false}
+            isLoading={false}
+            showIcon={false}
+            text="Clear Filter"
+          />
+
           <CreateButton
             handleClick={() => {
               if (
@@ -276,6 +286,7 @@ const FilterDialog = ({
                 additionalFilter.end == ""
               ) {
                 setFilterUrl("");
+
                 dispatch(insertFilterView(false));
               } else {
                 const queryParams: string[] = [];
@@ -311,7 +322,7 @@ const FilterDialog = ({
             }
             isLoading={false}
             showIcon={false}
-            text="Apply"
+            text="Apply Filter"
           />
         </div>
       </DialogActions>

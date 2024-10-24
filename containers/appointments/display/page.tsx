@@ -98,26 +98,9 @@ const DisplayAppointments = () => {
                   dispatch(insertFilterView(true));
                   setOpenFilter(true);
                 }}
-                className={`border-[2px] border-gray-800 rounded-sm ${
-                  isFiltered
-                    ? "bg-primaryBlue-300 hover:bg-primaryBlue-300 text-white "
-                    : "dark:text-[#6B7280]"
-                }`}
+                className={`border-[2px] border-gray-800 rounded-sm text-primaryBlue-400`}
               >
                 <IoFilter size={18} />
-              </IconButton>
-              <IconButton
-                sx={{ height: 35, borderRadius: 10 }}
-                onClick={() => {
-                  dispatch(insertFilterView(false));
-                }}
-                className={`border-[2px] border-gray-800 rounded-sm ${
-                  isFiltered
-                    ? " dark:text-[#6B7280]"
-                    : " bg-primaryBlue-300 hover:bg-primaryBlue-300 text-white"
-                }`}
-              >
-                <MdFilterListOff size={18} />
               </IconButton>
             </div>
           </div>
