@@ -20,9 +20,11 @@ const CreateButton = ({
   return (
     <Button
       variant="contained"
-      className={`bg-primaryBlue-400 w-[120px] ${
-        disabled ? "bg-yellow-500" : ""
-      }`}
+      className={`${
+        text === "Clear Filter"
+          ? "bg-error hover:bg-error"
+          : "bg-primaryBlue-400"
+      }  min-w-[120px] ${disabled ? "bg-yellow-500" : ""}`}
       startIcon={isLoading || !showIcon ? <></> : <FaPlus size={14} />}
       onClick={handleClick}
       disabled={disabled}
