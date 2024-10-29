@@ -9,6 +9,7 @@ import {
   getSelectedSubcategoryTab,
   getSelectedTab,
   insertAppointmentView,
+  insertSelectedDate,
   insertSelectedSubcategoryTab,
   insertSelectedTab,
 } from "@/redux/slices/layout";
@@ -161,6 +162,7 @@ const SideBar = () => {
                     dispatch(insertSelectedTab(data.title.toLowerCase()));
                     dispatch(insertSelectedSubcategoryTab(""));
                     dispatch(insertAppointmentView("row"));
+                    dispatch(insertSelectedDate(null));
                   } else {
                     setShowSubCategories(!showSubCategories);
                   }

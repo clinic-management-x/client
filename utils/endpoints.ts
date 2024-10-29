@@ -25,3 +25,5 @@ export const telegramEndPoint = "telegram";
 export const patientsEndPoint = "patients";
 
 export const appointmentEndPoint = "appointments";
+
+export const dashboardEndPoint = "analytics";

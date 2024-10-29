@@ -5,6 +5,11 @@ export const getAppointments = async (url: string) => {
   return response.data;
 };
 
+export const getAppointmentsByDate = async (url: string) => {
+  const response = await baseApi.get(url);
+  return response.data;
+};
+
 export const getBookedAppointments = async (url: string) => {
   const response = await baseApi.get(url);
   return response.data;

@@ -272,3 +272,10 @@ export const defaultFilter = {
   start: "",
   end: "",
 };
+
+export const dashboardFilter = [
+  { _id: "1", name: "This Month" },
+  { _id: "2", name: "Last Month" },
+  { _id: "3", name: "This Year" },
+  { _id: "4", name: "Last Year" },
+];

@@ -1,5 +1,6 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../store";
+import { Dayjs } from "dayjs";
 
 interface InitialState {
   selectedTab: string;
@@ -11,6 +12,12 @@ interface InitialState {
   notificationCount: number;
   appointmentView: string;
   filterView: boolean;
+  selectedDoctorAppointment: DoctorByAppointmentDate | null;
+  selectedSchedule: {
+    start: string;
+    end: string;
+  };
+  selectedDate: Dayjs | null;
 }
 
 const initialState: InitialState = {
@@ -23,6 +30,12 @@ const initialState: InitialState = {
   notificationCount: 0,
   appointmentView: "row",
   filterView: false,
+  selectedDoctorAppointment: null,
+  selectedSchedule: {
+    start: "",
+    end: "",
+  },
+  selectedDate: null,
 };
 
 export const layoutSlice = createSlice({
@@ -71,6 +84,24 @@ export const layoutSlice = createSlice({
     insertFilterView: (state: InitialState, action: PayloadAction<boolean>) => {
       state.filterView = action.payload;
     },
+    insertSelectedDoctorAppointment: (
+      state: InitialState,
+      action: PayloadAction<DoctorByAppointmentDate | null>
+    ) => {
+      state.selectedDoctorAppointment = action.payload;
+    },
+    insertSelectedSchedule: (
+      state: InitialState,
+      action: PayloadAction<{ start: string; end: string }>
+    ) => {
+      state.selectedSchedule = action.payload;
+    },
+    insertSelectedDate: (
+      state: InitialState,
+      action: PayloadAction<Dayjs | null>
+    ) => {
+      state.selectedDate = action.payload;
+    },
   },
 });
 
@@ -84,6 +115,9 @@ export const {
   insertNotificationCount,
   insertAppointmentView,
   insertFilterView,
+  insertSelectedDoctorAppointment,
+  insertSelectedSchedule,
+  insertSelectedDate,
 } = layoutSlice.actions;
 
 export const getSelectedTab = (state: RootState) =>
@@ -110,5 +144,14 @@ export const getAppointmentView = (state: RootState) =>
   state.layoutSlice.appointmentView;
 
 export const getFilterView = (state: RootState) => state.layoutSlice.filterView;
+
+export const getSelectedDoctorAppointment = (state: RootState) =>
+  state.layoutSlice.selectedDoctorAppointment;
+
+export const getSelectedSchedule = (state: RootState) =>
+  state.layoutSlice.selectedSchedule;
+
+export const getSelectedDate = (state: RootState) =>
+  state.layoutSlice.selectedDate;
 
 export default layoutSlice.reducer;

@@ -375,3 +375,23 @@ interface AdditionalFilter {
   start: string;
   end: string;
 }
+
+interface DoctorByAppointmentDate {
+  clinic?: string;
+  doctorFee: number;
+  duration: number;
+  dateOfBirth: string;
+  avatarUrl?: string;
+  email: string;
+  gender: string;
+  mobile: string;
+  name: string;
+  speciality: {
+    name: string;
+    _id: string;
+  };
+  appointments: AppointmentType[];
+  schedules: ScheduleType[];
+  _id?: string;
+  __v?: string;
+}
