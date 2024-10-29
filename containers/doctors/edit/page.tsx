@@ -25,7 +25,6 @@ import DeleteMajorInfo from "@/components/dialogs/delete/DeleteMajorInfo";
 
 const EditDoctorPage = ({ id }: { id: string }) => {
   const router = useRouter();
-
   const [doctor, setDoctor] = useState<DoctorType>(defaultInfo);
   const [previewUrl, setPreviewUrl] = useState("");
   const [schedules, setSchedules] = useState<ScheduleType[]>([]);

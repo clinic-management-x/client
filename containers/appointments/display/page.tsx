@@ -55,7 +55,6 @@ const DisplayAppointments = () => {
     defaultAppointmentData
   );
   const [filterUrl, setFilterUrl] = useState("");
-  console.log("filter", filterUrl);
 
   const hanldeSearchChange = (e: any) => {
     setTypeSearch(e.target.value);
@@ -91,18 +90,22 @@ const DisplayAppointments = () => {
               }}
               showIcon={true}
             />
-            <div className="flex items-center border-[2px] h-[38px] border-primaryBlue-300 rounded-md mr-4">
-              <IconButton
-                sx={{ height: 35, borderRadius: 10 }}
-                onClick={() => {
-                  dispatch(insertFilterView(true));
-                  setOpenFilter(true);
-                }}
-                className={`border-[2px] border-gray-800 rounded-sm text-primaryBlue-400`}
-              >
-                <IoFilter size={18} />
-              </IconButton>
-            </div>
+            {view == "row" ? (
+              <div className="flex items-center border-[2px] h-[38px] border-primaryBlue-300 rounded-md mr-4">
+                <IconButton
+                  sx={{ height: 35, borderRadius: 10 }}
+                  onClick={() => {
+                    dispatch(insertFilterView(true));
+                    setOpenFilter(true);
+                  }}
+                  className={`border-[2px] border-gray-800 rounded-sm text-primaryBlue-400`}
+                >
+                  <IoFilter size={18} />
+                </IconButton>
+              </div>
+            ) : (
+              <></>
+            )}
           </div>
           <div className="w-[60%] flex items-center justify-end mr-4  ">
             <IconButton
@@ -176,7 +179,7 @@ const DisplayAppointments = () => {
             <RxCross1 className="text-primaryBlue-300" />
           </IconButton>
         </div>
-        {isLoading ? (
+        {isLoading && view == "row" ? (
           <SkeletonFrame />
         ) : view === "row" ? (
           <AppointmentTable
@@ -187,7 +190,7 @@ const DisplayAppointments = () => {
             mutate={mutate}
           />
         ) : (
-          <CalendarTable />
+          <CalendarTable search={search} />
         )}
         {view === "row" ? (
           <div className="mt-8 w-full m-auto flex items-center justify-center ">
