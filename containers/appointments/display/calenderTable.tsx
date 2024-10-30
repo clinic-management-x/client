@@ -47,7 +47,7 @@ const CalendarTable = ({ search }: Props) => {
     DoctorByAppointmentDate[]
   >([]);
 
-  const { data, isLoading, mutate } = useSWR(
+  const { data, isLoading, mutate, isValidating } = useSWR(
     `${
       config.apiBaseUrl
     }/${appointmentEndPoint}/datefilter?date=${selectedDate?.toISOString()}&search=${search}`,
@@ -78,7 +78,7 @@ const CalendarTable = ({ search }: Props) => {
         </LocalizationProvider>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-3 mx-4">
-        {isLoading
+        {isLoading || isValidating
           ? [1, 2, 3].map((num) => (
               <Card className="mx-2 mb-6  dark:bg-[#171717]" key={num}>
                 <CardHeader

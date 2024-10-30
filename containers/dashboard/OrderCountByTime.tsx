@@ -11,7 +11,6 @@ import {
   PointElement,
   LineController,
   BarController,
-  ChartData,
   ChartOptions,
 } from "chart.js";
 import { Chart } from "react-chartjs-2";
@@ -36,11 +35,11 @@ interface Props {
 
 const OrderCountByTime = ({ chartData }: Props) => {
   const data = {
-    labels: ["Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct"],
+    labels: chartData.labels,
     datasets: [
       {
         label: "Order Count",
-        data: [20, 40, 30, 50, 60, 40, 50],
+        data: chartData.dataArr,
         borderColor: "#D591A5",
 
         tension: 0.4,

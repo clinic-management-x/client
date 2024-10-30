@@ -35,11 +35,11 @@ interface Props {
 }
 const AppointmentByTime = ({ chartData }: Props) => {
   const data = {
-    labels: ["Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct"],
+    labels: chartData.labels,
     datasets: [
       {
         label: "Appointment",
-        data: [20, 40, 30, 50, 60, 40, 50],
+        data: chartData.dataArr,
         borderColor: "rgb(75, 192, 192)",
         tension: 0.4,
       },
@@ -78,7 +78,7 @@ const AppointmentByTime = ({ chartData }: Props) => {
     <div className="flex flex-col items-center ">
       <LabelTypography title="Appointment By Period" />
       <div className="min-w-[300px] w-full px-3">
-        <Chart type="line" data={data} options={options} className="mt-8" />
+        <Chart type="line" data={data} options={options} className="mt-8 " />
       </div>
     </div>
   );
