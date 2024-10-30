@@ -1,6 +1,6 @@
 import baseApi from "../base.api";
 
-export const getClinic = async (url: string) => {
+export const getClinicData = async (url: string) => {
   const response = await baseApi.get(url);
   return response.data;
 };
@@ -33,5 +33,19 @@ export const updateClinic = async (
   }
 ) => {
   const response = await baseApi.patch(url, arg);
+  return response.data;
+};
+
+export const updateClinicPassword = async (
+  url: string,
+  {
+    password,
+    newPassword,
+  }: {
+    password: string;
+    newPassword: string;
+  }
+) => {
+  const response = await baseApi.patch(url, { password, newPassword });
   return response.data;
 };

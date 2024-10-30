@@ -4,15 +4,19 @@ import { getData } from "@/datafetch/dashboard/dashboard.api";
 import config from "@/utils/config";
 import { dashboardEndPoint } from "@/utils/endpoints";
 import { dashboardFilter } from "@/utils/staticData";
-import { Box } from "@mui/material";
+import { Box, Button, CircularProgress } from "@mui/material";
 import dayjs from "dayjs";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import useSWR from "swr";
 import SkeletonFrame from "./SkeletonFrame";
 import AppointmentByTime from "./AppointmentByTime";
 import DoctorsByAppointments from "./DoctorsByAppointments";
 import SuppliersByOrders from "./SuppliersByOrders";
 import OrderCountByTime from "./OrderCountByTime";
+import { FaFileDownload } from "react-icons/fa";
+import toast from "react-hot-toast";
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
 
 export interface IData {
   labels: string[];
@@ -26,6 +30,7 @@ interface IChartData {
   ordersByDate: IData;
 }
 const DashboardDisplay = () => {
+  const contentRef = useRef<HTMLDivElement | null>(null);
   const [selectedValue, setSelectedValue] = useState("1");
   const [start, setStart] = useState(dayjs().set("date", 1));
   const [end, setEnd] = useState(dayjs().set("date", dayjs().daysInMonth()));
@@ -47,6 +52,7 @@ const DashboardDisplay = () => {
       dataArr: [],
     },
   });
+  const [isDownloading, setIsDownloading] = useState(false);
 
   const hanldeDateRange = () => {
     switch (selectedValue) {
@@ -86,7 +92,7 @@ const DashboardDisplay = () => {
     hanldeDateRange();
   }, [selectedValue]);
 
-  const { data, isLoading, mutate } = useSWR(
+  const { data, isLoading, mutate, isValidating } = useSWR(
     `${config.apiBaseUrl}/${dashboardEndPoint}?start=${start
       .startOf("day")
       .toISOString()}&end=${end.endOf("day").toISOString()}`,
@@ -99,13 +105,56 @@ const DashboardDisplay = () => {
     }
   }, [data]);
 
+  const handleDownload = () => {
+    try {
+      if (isDownloading || isLoading || isValidating) return;
+      setIsDownloading(true);
+      const input = contentRef.current;
+      if (input) {
+        html2canvas(input, { scale: 1 }).then((canvas) => {
+          const imgData = canvas.toDataURL("image/png");
+          const pdf = new jsPDF("p", "mm", "a4");
+          const pageWidth = pdf.internal.pageSize.getWidth();
+          const imgWidth = pageWidth - 20;
+          const imgHeight = (canvas.height * imgWidth) / canvas.width;
+          pdf.setFontSize(10);
+          pdf.text(
+            `Clinic Analytics: From ${start.format(
+              "DD MMM YYYY"
+            )} to ${end.format("DD MMM YYYY")}`,
+            10,
+            10
+          );
+
+          const marginTop = 20;
+          pdf.addImage(
+            imgData,
+            "JPEG",
+            10,
+            marginTop,
+            imgWidth,
+            imgHeight,
+            undefined,
+            "FAST"
+          );
+          pdf.save("clinic-analytics.pdf");
+        });
+      }
+      setIsDownloading(false);
+      toast.success("Successfully downloaded.");
+    } catch (error) {
+      setIsDownloading(false);
+      toast.error("Something went wrong.");
+    }
+  };
+
   return (
     <section className="flex flex-col overflow-y-scroll">
       <Box sx={{ mb: 40 }}>
         <div
           className={`h-[70px] md:h-[80px] mt-16 md:mt-0 w-full flex items-center justify-between md:justify-start `}
         >
-          <div className={`w-[40%] pl-4`}>
+          <div className={`w-[40%] pl-4 flex items-center space-x-2`}>
             <BasicSelector
               dataArr={dashboardFilter}
               title={""}
@@ -114,14 +163,30 @@ const DashboardDisplay = () => {
               }}
               selectedValue={selectedValue}
             />
+            <Button
+              variant="contained"
+              className={`bg-primaryBlue-400 min-w-[120px] `}
+              startIcon={isDownloading ? <></> : <FaFileDownload size={14} />}
+              onClick={handleDownload}
+            >
+              {isDownloading ? (
+                <CircularProgress color="inherit" size={30} />
+              ) : (
+                "Download PDF"
+              )}
+            </Button>
           </div>
         </div>
-        <div className="w-full h-full mt-4   px-2 overflow-scroll">
-          {isLoading ? (
+        <div
+          ref={contentRef}
+          className="w-full h-full mt-4   px-2 overflow-scroll"
+        >
+          {isLoading || isValidating ? (
             <SkeletonFrame />
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2">
               <AppointmentByTime chartData={chartData.appointmentByDate} />
+
               <DoctorsByAppointments
                 chartData={chartData.doctorsByAppointment}
               />

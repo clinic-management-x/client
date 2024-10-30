@@ -42,8 +42,6 @@ const AppointmentTable = ({
   const page = useSelector(getPageNumber);
   const [isCopied, setIsCopied] = useState(false);
   const [copyId, setCopyId] = useState("");
-  const [idsToDelete, setIdsToDelete] = useState<string[]>([]);
-  const [totalCount, setTotalCount] = useState(0);
 
   const handleCopy = async (text: string) => {
     try {
@@ -63,24 +61,6 @@ const AppointmentTable = ({
       <Table aria-label="collapsible table">
         <TableHead>
           <TableRow>
-            <TableCell>
-              <Checkbox
-                color="primary"
-                className="dark:text-white"
-                checked={idsToDelete.length === appointments.length}
-                onChange={() => {
-                  if (idsToDelete.length === appointments.length) {
-                    setIdsToDelete([]);
-                  } else {
-                    setIdsToDelete(
-                      appointments.map(
-                        (appointment) => appointment._id
-                      ) as string[]
-                    );
-                  }
-                }}
-              />
-            </TableCell>
             <TableCell>
               <Typography
                 variant="body1"
@@ -160,32 +140,6 @@ const AppointmentTable = ({
                         : "dark:bg-transparent bg-[#FFFFFF]"
                     } `}
                   >
-                    <TableCell>
-                      <Checkbox
-                        color="primary"
-                        className="dark:text-white"
-                        checked={idsToDelete.includes(
-                          appointment._id as string
-                        )}
-                        onChange={() => {
-                          const alreadyExist = idsToDelete.includes(
-                            appointment._id as string
-                          );
-                          if (alreadyExist) {
-                            setIdsToDelete(
-                              idsToDelete.filter(
-                                (_id) => _id !== appointment._id
-                              )
-                            );
-                          } else {
-                            setIdsToDelete([
-                              ...idsToDelete,
-                              appointment._id as string,
-                            ]);
-                          }
-                        }}
-                      />
-                    </TableCell>
                     <TableCell>
                       <div className="flex flex-col items-start justify-start">
                         <Typography
