@@ -1,0 +1,50 @@
+---
+# tasks file for docker
+- name: Docker install
+  ansible.builtin.apt:
+    name: docker.io
+    state: present
+
+- name: Docker service start
+  ansible.builtin.service:
+    name: docker
+    state: started
+    enabled: yes
+
+- name: Login to dockerhub
+  docker_login:
+    username: "{{ DOCKERHUB_USERNAME }}"
+    password: "{{ DOCKERHUB_TOKEN }}"
+
+- name: Pull docker image_name
+  docker_image:
+    name: "{{ IMAGE_NAME }}"
+    source: pull
+    force_source: yes
+
+- name: Remove Docker container if exists
+  docker_container:
+    name: "{{ DOMAIN_NAME }}"
+    state: absent
+
+- name: Run Docker container
+  docker_container:
+    name: "{{ DOMAIN_NAME }}"
+    image: "{{ IMAGE_NAME }}"
+    image_name_mismatch: recreate
+    state: started
+    restart_policy: always
+    ports:
+      - "{{ APP_PORT }}:3000"
+    env:
+      NEXT_PUBLIC_API_BASE_URL: "{{ NEXT_PUBLIC_API_BASE_URL }}"
+      NEXT_PUBLIC_URL: "{{ NEXT_PUBLIC_URL }}"
+      NEXT_PUBLIC_AC_KEY: "{{ NEXT_PUBLIC_AC_KEY }}"
+      NEXT_PUBLIC_API_KEY: "{{ NEXT_PUBLIC_API_KEY }}"
+
+- name: Wait for docker container to start
+  wait_for:
+    host: localhost
+    port: "{{ APP_PORT }}"
+    delay: 5
+    timeout: 60

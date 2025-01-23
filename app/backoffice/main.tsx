@@ -14,6 +14,8 @@ const Main = () => {
   useEffect(() => {
     if (!canAccess) {
       router.push("/login");
+    } else if (clinicState === null || clinicState === "absent") {
+      router.push("/backoffice/account");
     } else {
       router.push("/backoffice/doctors");
     }
@@ -22,7 +24,7 @@ const Main = () => {
     } else {
       dispatch(insertHasClinic(false));
     }
-  }, [canAccess]);
+  }, [canAccess, clinicState]);
   return <div></div>;
 };
 

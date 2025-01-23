@@ -1,0 +1,11 @@
+---
+# vars file for docker
+DOCKER_IMAGE_NAME: "{{ image_name }}"
+DOCKERHUB_USERNAME: "{{ dockerhub_username }}"
+DOCKERHUB_TOKEN: "{{ dockerhub_token }}"
+DOMAIN_NAME: "{{ domain_name }}"
+NEXT_PUBLIC_API_BASE_URL: "{{ next_public_api_base_url }}"
+NEXT_PUBLIC_URL: "{{ next_public_url }}"
+NEXT_PUBLIC_AC_KEY: "{{ next_public_ac_key }}"
+NEXT_PUBLIC_API_KEY: "{{ next_public_api_key }}"
+APP_PORT: 3000

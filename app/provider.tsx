@@ -27,18 +27,20 @@ export default function Providers({ children }: { children: React.ReactNode }) {
             <SWRConfig
               value={{
                 onError: (error, key) => {
-                  const noClincError = error?.response?.data?.response;
+                  const noClincError = error?.response?.data;
+
                   if (noClincError) {
                     if (
                       noClincError.statusCode == 404 &&
                       noClincError.message === "Clinic not found"
                     ) {
                       localStorage.setItem("clinic", "absent");
-                      router.push("/backoffice/settings");
+                      router.push("/backoffice/account");
                     }
-                  }
-
-                  if (error?.response?.status === 404) {
+                  } else if (
+                    error?.response?.status === 404 &&
+                    error?.response?.message !== "Clinic not found"
+                  ) {
                     router.push("/not-found");
                   }
                 },

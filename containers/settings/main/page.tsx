@@ -11,7 +11,7 @@ import Viber from "../display/viber/page";
 import SMS from "../display/sms/page";
 import Telegram from "../display/telegram/page";
 import config from "@/utils/config";
-import { getClinic } from "@/datafetch/clinic/clinic.api";
+import { getClinicData } from "@/datafetch/clinic/clinic.api";
 import useSWR from "swr";
 import { IoIosArrowDropright } from "react-icons/io";
 
@@ -23,7 +23,7 @@ const MainSettingsPage = () => {
 
   const { data, mutate, isLoading } = useSWR(
     `${config.apiBaseUrl}/clinics`,
-    getClinic
+    getClinicData
   );
 
   useEffect(() => {
