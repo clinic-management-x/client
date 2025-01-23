@@ -1,0 +1,8 @@
+- name: Deploy clinic server
+  hosts: all
+  become: true
+  roles:
+      - role: swap
+      - role: apt
+      - role: docker
+      - role: nginx

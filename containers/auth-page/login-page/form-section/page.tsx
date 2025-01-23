@@ -46,7 +46,12 @@ const LoginSection = () => {
       }
     } catch (error: any) {
       const errorMsg = error?.response?.data?.message;
-      errorMsg ? toast.error(errorMsg) : toast.error("Something went wrong.");
+
+      errorMsg
+        ? errorMsg === "Clinic not found"
+          ? ""
+          : toast.error(errorMsg)
+        : toast.error("Something went wrong.");
     }
   };
 
