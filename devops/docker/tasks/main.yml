@@ -27,13 +27,6 @@
     name: "{{ DOMAIN_NAME }}"
     state: absent
 
-- name: Log a message with a variable
-  debug:
-    msg: "The value of {{ item }} is: {{ lookup('vars', item) }}"
-  loop:
-    - NEXT_PUBLIC_API_BASE_URL
-    - NEXT_PUBLIC_URL
-
 - name: Run Docker container
   docker_container:
     name: "{{ DOMAIN_NAME }}"
@@ -43,11 +36,6 @@
     restart_policy: always
     ports:
       - "{{ APP_PORT }}:3000"
-    env:
-      NEXT_PUBLIC_API_BASE_URL: "{{ NEXT_PUBLIC_API_BASE_URL }}"
-      NEXT_PUBLIC_URL: "{{ NEXT_PUBLIC_URL }}"
-      NEXT_PUBLIC_AC_KEY: "{{ NEXT_PUBLIC_AC_KEY }}"
-      NEXT_PUBLIC_API_KEY: "{{ NEXT_PUBLIC_API_KEY }}"
 
 - name: Wait for docker container to start
   wait_for:

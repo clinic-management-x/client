@@ -84,8 +84,4 @@ jobs:
             --extra-vars "dockerhub_username=$DOCKERHUB_USERNAME" \
             --extra-vars "dockerhub_token=$DOCKERHUB_TOKEN" \
             --extra-vars "enable_ssl=$ENABLE_SSL" \
-            --extra-vars "next_public_api_base_url=$NEXT_PUBLIC_API_BASE_URL" \
-            --extra-vars "next_public_url=$NEXT_PUBLIC_URL" \
-            --extra-vars "next_public_ac_key=$NEXT_PUBLIC_AC_KEY" \
-            --extra-vars "next_public_api_key=$NEXT_PUBLIC_API_KEY" \
             devops/playbook.yml
