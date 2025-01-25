@@ -37,12 +37,12 @@ jobs:
         with:
           context: .
           push: true
-          tags: $IMAGE_NAME:latest
+          tags: ${{ env.IMAGE_NAME }}:latest
           build-args: |
-            NEXT_PUBLIC_API_BASE_URL=$NEXT_PUBLIC_API_BASE_URL
-            NEXT_PUBLIC_URL=$NEXT_PUBLIC_URL
-            NEXT_PUBLIC_API_KEY=$NEXT_PUBLIC_API_KEY
-            NEXT_PUBLIC_AC_KEY=$NEXT_PUBLIC_AC_KEY
+            NEXT_PUBLIC_API_BASE_URL=${{ env.NEXT_PUBLIC_API_BASE_URL }}
+            NEXT_PUBLIC_URL=${{ env.NEXT_PUBLIC_URL }}
+            NEXT_PUBLIC_API_KEY=${{ env.NEXT_PUBLIC_API_KEY }}
+            NEXT_PUBLIC_AC_KEY=${{ env.NEXT_PUBLIC_AC_KEY }}
 
   deploy:
     name: Deploying app
