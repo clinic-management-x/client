@@ -17,7 +17,7 @@ import { MdCheck } from "react-icons/md";
 import { RxCross2 } from "react-icons/rx";
 import { useSelector } from "react-redux";
 import useSWRMutation from "swr/mutation";
-import DeleteDialog from "../../delete";
+import DeleteDialog from "../../delete/index";
 
 interface Props {
   activeIngredients: ActiveIngredientCreate[];

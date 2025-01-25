@@ -29,7 +29,6 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import SellPrices from "./SellPrices";
 import DeleteMajorInfo from "@/components/dialogs/delete/DeleteMajorInfo";
-import ImageUploads from "@/components/dialogs/medicine/ImageUploads/page";
 import ImageEdit from "./image";
 import AddButton from "@/components/buttons/AddButton/page";
 import QuantityRealtionsDisplay from "@/components/dialogs/medicine/QuantityRelationsDisplay/page";

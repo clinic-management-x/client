@@ -4,7 +4,7 @@ import { Box, Typography } from "@mui/material";
 import React, { useState } from "react";
 import { contactDataArr } from "../ContactCreate/page";
 import EditButton from "@/components/buttons/EditButton/page";
-import DeleteDialog from "../../delete";
+import DeleteDialog from "../../delete/index";
 import useSWRMutation from "swr/mutation";
 import config from "@/utils/config";
 import { supplierEndPoint } from "@/utils/endpoints";
