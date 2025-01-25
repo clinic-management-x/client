@@ -37,7 +37,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: your-dockerhub-username/your-image-name:latest
+          tags: $IMAGE_NAME:latest
           build-args: |
             NEXT_PUBLIC_API_BASE_URL=$NEXT_PUBLIC_API_BASE_URL
             NEXT_PUBLIC_URL=$NEXT_PUBLIC_URL
