@@ -54,6 +54,7 @@ const LoginSection = () => {
         : toast.error("Something went wrong.");
     }
   };
+  console.log(">>>", config.apiBaseUrl);
 
   return (
     <div className="w-full lg:w-[50%] m-auto text-whiteText  rounded-lg flex flex-col items-center dark:text-darkText h-screen">
