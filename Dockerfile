@@ -1,6 +1,14 @@
 #build
 FROM node:alpine as build
 RUN mkdir -p /home/node/app/node_modules && chown -R node:node /home/node/app
+ARG NEXT_PUBLIC_API_BASE_URL
+ARG NEXT_PUBLIC_URL
+ARG NEXT_PUBLIC_AC_KEY
+ARG NEXT_PUBLIC_API_KEY
+ENV NEXT_PUBLIC_API_BASE_URL=${NEXT_PUBLIC_API_BASE_URL}
+ENV NEXT_PUBLIC_URL=${NEXT_PUBLIC_URL}
+ENV NEXT_PUBLIC_AC_KEY=${NEXT_PUBLIC_AC_KEY}
+ENV NEXT_PUBLIC_API_KEY=${NEXT_PUBLIC_API_KEY}
 WORKDIR /home/node/app
 COPY --chown=node:node package*.json .
 RUN rm -rf .next

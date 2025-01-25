@@ -32,11 +32,17 @@ jobs:
       - name: Login to dockerhub
         run: echo $DOCKERHUB_TOKEN | docker login -u $DOCKERHUB_USERNAME --password-stdin
 
-      - name: Build docker image
-        run: docker build -t $IMAGE_NAME:latest .
-
-      - name: Push docker image
-        run: docker push $IMAGE_NAME:latest
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          push: true
+          tags: your-dockerhub-username/your-image-name:latest
+          build-args: |
+            NEXT_PUBLIC_API_BASE_URL=$NEXT_PUBLIC_API_BASE_URL
+            NEXT_PUBLIC_URL=$NEXT_PUBLIC_URL
+            NEXT_PUBLIC_API_KEY=$NEXT_PUBLIC_API_KEY
+            NEXT_PUBLIC_AC_KEY=$NEXT_PUBLIC_AC_KEY
 
   deploy:
     name: Deploying app
