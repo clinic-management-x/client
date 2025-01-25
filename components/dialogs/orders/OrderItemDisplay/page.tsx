@@ -8,7 +8,7 @@ import { orderEndPoint } from "@/utils/endpoints";
 import { Box, IconButton, Typography } from "@mui/material";
 import React, { useState } from "react";
 import useSWRMutation from "swr/mutation";
-import DeleteDialog from "../../delete/index";
+import DeleteDialog from "@/components/dialogs/delete/index";
 import toast from "react-hot-toast";
 import EditButton from "@/components/buttons/EditButton/page";
 import { RxCross2 } from "react-icons/rx";

@@ -8,7 +8,7 @@ import { MdCheck } from "react-icons/md";
 import toast from "react-hot-toast";
 import CustomTextField from "@/components/input/CustomTextField/page";
 import PlainSelector from "@/components/selectors/PlainSelector/page";
-import DeleteDialog from "../../delete/index";
+import DeleteDialog from "@/components/dialogs/delete/index";
 
 interface Props {
   quantityRelations: QuantityRealtions[];

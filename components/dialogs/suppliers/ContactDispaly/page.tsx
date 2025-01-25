@@ -7,7 +7,7 @@ import EditButton from "@/components/buttons/EditButton/page";
 import { MdCheck } from "react-icons/md";
 import { RxCross2 } from "react-icons/rx";
 import toast from "react-hot-toast";
-import DeleteDialog from "../../delete/index";
+import DeleteDialog from "@/components/dialogs/delete/index";
 import { useTheme } from "next-themes";
 
 interface Props {

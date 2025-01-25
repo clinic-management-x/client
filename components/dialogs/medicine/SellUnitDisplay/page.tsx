@@ -15,7 +15,7 @@ import { MdCheck } from "react-icons/md";
 import { RxCross2 } from "react-icons/rx";
 import { useSelector } from "react-redux";
 import useSWRMutation from "swr/mutation";
-import DeleteDialog from "../../delete/index";
+import DeleteDialog from "@/components/dialogs/delete/index";
 
 interface Props {
   sellPrices: { price: number; unit: string }[];
