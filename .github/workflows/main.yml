@@ -33,7 +33,7 @@ jobs:
         run: echo $DOCKERHUB_TOKEN | docker login -u $DOCKERHUB_USERNAME --password-stdin
 
       - name: Remove docker cache
-        run: docker builder prune --all
+        run: docker builder prune --all -f
 
       - name: Build docker image
         run: docker build -t $IMAGE_NAME:latest .
