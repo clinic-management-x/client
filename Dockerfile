@@ -3,6 +3,7 @@ FROM node:alpine as build
 RUN mkdir -p /home/node/app/node_modules && chown -R node:node /home/node/app
 WORKDIR /home/node/app
 COPY --chown=node:node package*.json .
+RUN rm -rf .next
 RUN npm ci --legacy-peer-deps
 COPY --chown=node:node . .
 RUN npm run build
