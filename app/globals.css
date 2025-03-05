@@ -33,9 +33,19 @@ body {
   }
 }
 
+@keyframes gradientShift {
+  0% {
+    background: linear-gradient(135deg, #add8e6, #ffb6c1);
+  }
+  50% {
+    background: linear-gradient(135deg, #b0e0e6, #ffcccb);
+  }
+  100% {
+    background: linear-gradient(135deg, #add8e6, #ffb6c1);
+  }
+}
+
 .bg-auth {
-  background-image: url("/bg.avif");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+  animation: gradientShift 6s infinite alternate;
+  background-size: 200% 200%;
 }
