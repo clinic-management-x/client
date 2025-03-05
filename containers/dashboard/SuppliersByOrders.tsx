@@ -7,15 +7,29 @@ import { IData } from "./page";
 
 interface Props {
   chartData: IData;
+  selectedValue: string;
 }
 
-const SuppliersByOrders = ({ chartData }: Props) => {
+const SuppliersByOrders = ({ chartData, selectedValue }: Props) => {
+  const mutilpliedValue =
+    selectedValue === "1" || selectedValue === "2" ? 70 : 100;
   const data = {
-    labels: chartData.labels,
+    // labels: chartData.labels,
+    labels: [
+      "Clinico",
+      "TrustCare",
+      "Evergreen",
+      "Medico",
+      "Feme",
+      "Meca group",
+    ],
     datasets: [
       {
         label: "Order Count",
-        data: chartData.dataArr,
+        //chartData.dataArr
+        data: [0, 1, 2, 3, 4, 5, 6].map(
+          (num) => Math.floor(Math.random() * mutilpliedValue) + 1
+        ),
         backgroundColor: "#FFDDE4",
         borderColor: "#D591A5",
         borderWidth: 1,

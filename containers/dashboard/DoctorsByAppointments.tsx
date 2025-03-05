@@ -34,14 +34,19 @@ ChartJS.register(
 );
 interface Props {
   chartData: IData;
+  selectedValue: string;
 }
-const DoctorsByAppointments = ({ chartData }: Props) => {
+const DoctorsByAppointments = ({ chartData, selectedValue }: Props) => {
+  const mutilpliedValue =
+    selectedValue === "1" || selectedValue === "2" ? 70 : 100;
   const data = {
-    labels: chartData.labels,
+    //labels: chartData.labels,
+    labels: ["Lucy", "Mark", "John", "Alice", "Fern"],
     datasets: [
       {
         label: "Appointment Count",
-        data: chartData.dataArr,
+        //chartData.dataArr
+        data: [0, 1, 2, 3, 4].map((num) => Math.floor(Math.random() * 70) + 1),
         backgroundColor: "#CCF3F4",
         borderColor: "#7FC5C6",
         borderWidth: 1,
@@ -68,6 +73,7 @@ const DoctorsByAppointments = ({ chartData }: Props) => {
     },
     maxBarThickness: 50,
   };
+  console.log("data 1", data, chartData);
   return (
     <div className="flex flex-col items-center ">
       <LabelTypography title="Doctors By Appointment Count" />

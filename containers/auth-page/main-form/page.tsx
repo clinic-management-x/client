@@ -64,7 +64,7 @@ const MainForm = ({
           "& .MuiOutlinedInput-root": {
             "& fieldset": {
               borderColor: "#9CA3AF",
-              backgroundColor: "#C7C7C7F",
+              backgroundColor: "transparent",
             },
             "&:hover fieldset": {
               borderColor: "#9CA3AF",

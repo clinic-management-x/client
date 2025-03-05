@@ -31,15 +31,20 @@ ChartJS.register(
 );
 interface Props {
   chartData: IData;
+  selectedValue: string;
 }
 
-const OrderCountByTime = ({ chartData }: Props) => {
+const OrderCountByTime = ({ chartData, selectedValue }: Props) => {
+  const mutilpliedValue =
+    selectedValue === "1" || selectedValue === "2" ? 80 : 100;
   const data = {
     labels: chartData.labels,
     datasets: [
       {
         label: "Order Count",
-        data: chartData.dataArr,
+        data: chartData.dataArr.map(
+          (num) => Math.floor(Math.random() * mutilpliedValue) + 1
+        ),
         borderColor: "#D591A5",
 
         tension: 0.4,

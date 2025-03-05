@@ -1,6 +1,5 @@
 "use client";
 import React, { useState } from "react";
-import ThemeSwitcherButton from "@/components/buttons/ThemeSwitcherButton";
 import { Button, CircularProgress, Divider, Typography } from "@mui/material";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
@@ -33,13 +32,15 @@ const LoginSection = () => {
       const response: any = await trigger(userInfo);
 
       if (response) {
-        console.log("response", response);
         const ac = encryptData(response.accessToken);
         const rf = encryptData(response.refreshToken);
 
         localStorage.setItem("access-x", ac);
         localStorage.setItem("refresh-x", rf);
         dispatch(insertClinicId(response.clinicId));
+        if (response.clinicId) {
+          localStorage.setItem("clinic", "present");
+        }
         router.push("/backoffice");
       } else {
         toast.error("Email or password incorrect.");
@@ -54,13 +55,12 @@ const LoginSection = () => {
         : toast.error("Something went wrong.");
     }
   };
-  console.log(">>>", config.apiBaseUrl);
 
   return (
     <div className="w-full lg:w-[50%] m-auto text-whiteText  rounded-lg flex flex-col items-center dark:text-darkText h-screen">
-      <ThemeSwitcherButton isAuth={true} />
+      {/* <ThemeSwitcherButton isAuth={true} /> */}
 
-      <Typography variant="h4" className="font-bold mt-8">
+      <Typography variant="h4" className="font-bold mt-28">
         Sign in
       </Typography>
       <Typography variant="body1" className="mt-4">
@@ -85,13 +85,13 @@ const LoginSection = () => {
         )}
       </Button>
 
-      <Divider sx={{ width: "80%", my: 6 }} className="">
+      {/* <Divider sx={{ width: "80%", my: 6 }} className="">
         {" "}
         <Typography variant="body1" className="font-bold">
           Or
         </Typography>
-      </Divider>
-      <GoogleAuth />
+      </Divider> */}
+      {/* <GoogleAuth /> */}
       <div className="flex items-center mt-4 space-x-2">
         <Typography>Don't have an account?</Typography>
         <Link href={"/signup"}>

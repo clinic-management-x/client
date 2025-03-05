@@ -68,10 +68,10 @@ const SignUpSection = () => {
 
   return (
     <div className="w-full lg:w-[50%] m-auto text-whiteText  rounded-lg flex flex-col items-center dark:text-darkText h-screen">
-      <div className="mt-2">
+      {/* <div className="mt-2">
         <ThemeSwitcherButton isAuth={true} />
-      </div>
-      <Typography variant="h4" className="font-bold mt-8">
+      </div> */}
+      <Typography variant="h4" className="font-bold mt-28">
         Sign up
       </Typography>
       <Typography variant="body1" className="mt-4">
@@ -97,13 +97,13 @@ const SignUpSection = () => {
         )}
       </Button>
 
-      <Divider sx={{ width: "80%", my: 6 }} className="">
+      {/* <Divider sx={{ width: "80%", my: 6 }} className="">
         {" "}
         <Typography variant="body1" className="font-bold">
           Or
         </Typography>
       </Divider>
-      <GoogleAuth />
+      <GoogleAuth /> */}
       <div className="flex items-center mt-4 space-x-2">
         <Typography>Already have an account?</Typography>
         <Link href={"/login"}>

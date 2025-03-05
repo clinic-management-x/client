@@ -73,7 +73,9 @@ const CreateSupplierDialog = ({ open, handleClose, mutate }: Props) => {
 
   const handleCreate = async () => {
     try {
-      basicSupplierInfo.mobile = `+959` + basicSupplierInfo.mobile;
+      basicSupplierInfo.mobile = basicSupplierInfo.mobile.includes(`+959`)
+        ? basicSupplierInfo.mobile
+        : `+959` + basicSupplierInfo.mobile;
       if (contacts) {
         basicSupplierInfo.contacts = contacts;
       }

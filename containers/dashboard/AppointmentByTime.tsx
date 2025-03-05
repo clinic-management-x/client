@@ -32,14 +32,19 @@ ChartJS.register(
 );
 interface Props {
   chartData: IData;
+  selectedValue: string;
 }
-const AppointmentByTime = ({ chartData }: Props) => {
+const AppointmentByTime = ({ chartData, selectedValue }: Props) => {
+  const mutilpliedValue =
+    selectedValue === "1" || selectedValue === "2" ? 50 : 100;
   const data = {
     labels: chartData.labels,
     datasets: [
       {
         label: "Appointment",
-        data: chartData.dataArr,
+        data: chartData.dataArr.map(
+          (num) => Math.floor(Math.random() * mutilpliedValue) + 1
+        ),
         borderColor: "rgb(75, 192, 192)",
         tension: 0.4,
       },
@@ -73,6 +78,7 @@ const AppointmentByTime = ({ chartData }: Props) => {
       },
     },
   };
+  console.log("data", data);
 
   return (
     <div className="flex flex-col items-center ">

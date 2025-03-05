@@ -89,6 +89,7 @@ const MedicineTable = ({ medicines }: Props) => {
           return (
             <>
               <TableRow
+                key={index}
                 sx={{
                   "& > *": { borderBottom: "unset" },
                 }}
@@ -123,6 +124,7 @@ const MedicineTable = ({ medicines }: Props) => {
                   <div className="flex space-x-1">
                     {medicine.imageUrls.map((imageurl) => (
                       <Image
+                        key={imageurl}
                         src={imageurl}
                         alt=""
                         width={200}

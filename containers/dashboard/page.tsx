@@ -185,13 +185,23 @@ const DashboardDisplay = () => {
             <SkeletonFrame />
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2">
-              <AppointmentByTime chartData={chartData.appointmentByDate} />
+              <AppointmentByTime
+                chartData={chartData.appointmentByDate}
+                selectedValue={selectedValue}
+              />
 
               <DoctorsByAppointments
                 chartData={chartData.doctorsByAppointment}
+                selectedValue={selectedValue}
               />
-              <OrderCountByTime chartData={chartData.ordersByDate} />
-              <SuppliersByOrders chartData={chartData.suppliersByOrder} />
+              <OrderCountByTime
+                chartData={chartData.ordersByDate}
+                selectedValue={selectedValue}
+              />
+              <SuppliersByOrders
+                chartData={chartData.suppliersByOrder}
+                selectedValue={selectedValue}
+              />
             </div>
           )}
         </div>

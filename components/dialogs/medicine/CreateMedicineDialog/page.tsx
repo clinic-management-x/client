@@ -137,6 +137,7 @@ const CreateMedicineDialog = ({ open, handleClose, mutate }: Props) => {
   const closeDialog = () => {
     handleClose();
     setBasicMedicineInfo(defaultMedicinData);
+    setQuantityRelations([]);
   };
 
   return (

@@ -4,7 +4,7 @@ import React from "react";
 
 const Page = () => {
   return (
-    <main className="w-full h-full flex  bg-white dark:bg-black">
+    <main className="w-full h-full flex bg-auth">
       <SignUpSection />
     </main>
   );

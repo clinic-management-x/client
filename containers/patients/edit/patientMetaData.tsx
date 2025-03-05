@@ -22,7 +22,7 @@ const PatientMetaData = ({ patient }: Props) => {
   };
   return (
     <div className="flex flex-col items-center mb-4">
-      <Typography
+      {/* <Typography
         variant="h5"
         className="font-bold text-whiteText dark:text-darkText"
       >
@@ -34,7 +34,7 @@ const PatientMetaData = ({ patient }: Props) => {
         height={320}
         alt="patient"
         className="w-[150px] h-[150px]"
-      />
+      /> */}
       <div className="mt-4 flex border-[1px] p-2 border-whiteText dark:border-darkText rounded w-[300px] items-center justify-between">
         <Typography className="text-whiteText dark:text-darkText">
           {patient.patientId}

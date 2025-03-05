@@ -18,6 +18,7 @@
 
 body {
   color: rgb(var(--foreground-rgb));
+
   background: linear-gradient(
       to bottom,
       transparent,
@@ -30,4 +31,11 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+}
+
+.bg-auth {
+  background-image: url("/bg.avif");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
